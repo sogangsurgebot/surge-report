@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>급등주 알림 | Surge Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans KR', -apple-system, sans-serif;
+            background: linear-gradient(135deg, #fef5f5 0%, #f5f3ff 50%, #f0f9ff 100%);
+            min-height: 100vh;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 20px 20px 40px;
+        }
+        
+        /* 헤더 */
+        header {
+            text-align: center;
+            padding: 50px 0 30px;
+        }
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        header h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 50%, #a18cd1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
+        }
+        header p { 
+            color: #a0aec0; 
+            font-size: 1rem;
+            font-weight: 300;
+        }
+        
+        /* 업데이트 시간 */
+        .update-time {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.6);
+            border-radius: 20px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* 카드 공통 스타일 */
+        .card {
+            background: rgba(255,255,255,0.7);
+            border-radius: 24px;
+            padding: 28px;
+            margin: 20px 0;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+        }
+        
+        /* 유튜브 분석기 카드 */
+        .analyzer-card {
+            background: linear-gradient(135deg, rgba(255,183,178,0.15) 0%, rgba(255,218,193,0.15) 100%);
+            border: 2px solid rgba(255,183,178,0.3);
+        }
+        .analyzer-card h2 {
+            color: #ff8fa3;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .analyzer-card .subtitle {
+            color: #b8b8b8;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        .analyzer-input {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .analyzer-input input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid rgba(255,183,178,0.3);
+            border-radius: 14px;
+            background: rgba(255,255,255,0.8);
+            color: #4a5568;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        .analyzer-input input:focus {
+            outline: none;
+            border-color: #ff8fa3;
+            box-shadow: 0 0 0 4px rgba(255,143,163,0.1);
+        }
+        .analyzer-input input::placeholder {
+            color: #c0c0c0;
+        }
+        .analyzer-btn {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #ff9a9e 0%, #ff8fa3 100%);
+            border: none;
+            border-radius: 14px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255,143,163,0.3);
+        }
+        .analyzer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255,143,163,0.4);
+        }
+        .analyzer-btn:disabled {
+            background: #e0e0e0;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        
+        /* 로딩 상태 */
+        .analyzing-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,248,250,0.9) 100%);
+            border: 2px dashed rgba(255,143,163,0.4);
+            border-radius: 20px;
+            padding: 40px 30px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .simple-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,143,163,0.2);
+            border-top-color: #ff8fa3;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .analyzing-text {
+            color: #ff8fa3;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .analyzing-subtext {
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+        .analyzing-dots::after {
+            content: '';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        @keyframes dots {
+            0% { content: ''; }
+            25% { content: '.'; }
+            50% { content: '..'; }
+            75% { content: '...'; }
+            100% { content: ''; }
+        }
+        
+        /* 분석 결과 카드 슬라이더 */
+        .insights-slider-container {
+            margin-top: 24px;
+            position: relative;
+        }
+        
+        .insights-slider-title {
+            font-size: 1rem;
+            color: #ff8fa3;
+            font-weight: 600;
+            margin-bottom: 16px;
+            padding-left: 8px;
+            border-left: 3px solid #ff8fa3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .insights-count {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            font-weight: 400;
+        }
+        
+        .slider-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+        }
+        
+        .slider-track {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+        
+        .insight-slide {
+            min-width: 100%;
+            padding: 0 4px;
+        }
+        
+        .insight-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,248,245,0.95) 100%);
+            border: 2px solid rgba(255,183,178,0.3);
+            border-radius: 20px;
+            padding: 24px;
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .insight-card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px dashed rgba(255,183,178,0.3);
+        }
+        .insight-card-header h4 {
+            color: #ff8fa3;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        .insight-meta {
+            color: #a0aec0;
+            font-size: 0.8rem;
+            margin-left: auto;
+        }
+        
+        .insight-summary {
+            background: linear-gradient(135deg, rgba(255,183,178,0.1) 0%, rgba(168,237,234,0.1) 100%);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+        .summary-title {
+            color: #ff8fa3;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .summary-text {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .insight-content-grid {
+            display: grid;
+            gap: 10px;
+        }
+        .insight-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+        .insight-row:last-child {
+            border-bottom: none;
+        }
+        .insight-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .insight-icon.main { background: rgba(255,143,163,0.15); }
+        .insight-icon.stock { background: rgba(168,237,234,0.3); }
+        .insight-icon.idea { background: rgba(254,202,202,0.3); }
+        .insight-icon.risk { background: rgba(226,232,240,0.5); }
+        .insight-text {
+            flex: 1;
+        }
+        .insight-label {
+            color: #ff8fa3;
+            font-weight: 600;
+            font-size: 0.8rem;
+            margin-bottom: 3px;
+        }
+        .insight-value {
+            color: #4a5568;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .slider-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+        }
+        
+        .slider-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #ff9a9e 0%, #ff8fa3 100%);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(255,143,163,0.3);
+        }
+        .slider-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 5px 15px rgba(255,143,163,0.4);
+        }
+        .slider-btn:disabled {
+            background: #e0e0e0;
+            cursor: not-allowed;
+            box-shadow: none;
+            transform: none;
+        }
+        
+        .slider-dots {
+            display: flex;
+            gap: 8px;
+        }
+        .slider-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,143,163,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .slider-dot.active {
+            background: #ff8fa3;
+            transform: scale(1.2);
+        }
+        
+        /* 오일전문가 카드 */
+        .expert-card {
+            background: linear-gradient(135deg, rgba(168,237,234,0.15) 0%, rgba(254,214,227,0.15) 100%);
+            border: 2px solid rgba(168,237,234,0.3);
+        }
+        .expert-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        .expert-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(168,237,234,0.3);
+        }
+        .expert-info h2 {
+            font-size: 1.3rem;
+            color: #5a67d8;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .expert-info p {
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+        
+        /* 포트폴리오 그리드 */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+        @media (min-width: 640px) {
+            .portfolio-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        .portfolio-item {
+            background: rgba(255,255,255,0.8);
+            padding: 16px;
+            border-radius: 14px;
+            text-align: center;
+            border: 1px solid rgba(168,237,234,0.2);
+            transition: all 0.3s;
+        }
+        .portfolio-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .portfolio-label {
+            color: #a0aec0;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+            font-weight: 400;
+        }
+        .portfolio-value {
+            color: #4a5568;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .portfolio-value.positive {
+            color: #48bb78;
+        }
+        .portfolio-value.negative {
+            color: #f56565;
+        }
+        
+        /* TOP 3 보유 종목 */
+        .top-holdings {
+            background: linear-gradient(135deg, rgba(254,202,202,0.2) 0%, rgba(251,211,141,0.2) 100%);
+            border: 1px solid rgba(254,202,202,0.3);
+            padding: 18px;
+            border-radius: 16px;
+            margin: 16px 0;
+        }
+        .top-holdings h3 {
+            color: #f6ad55;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .holding-list {
+            list-style: none;
+        }
+        .holding-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.05);
+        }
+        .holding-item:last-child {
+            border-bottom: none;
+        }
+        .holding-rank {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .holding-rank.gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb800 100%);
+            color: #fff;
+        }
+        .holding-rank.silver {
+            background: linear-gradient(135deg, #c0c0c0 0%, #a0a0a0 100%);
+            color: #fff;
+        }
+        .holding-rank.bronze {
+            background: linear-gradient(135deg, #cd7f32 0%, #b87333 100%);
+            color: #fff;
+        }
+        .holding-name {
+            flex: 1;
+            margin-left: 12px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+        .holding-code {
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+        
+        /* 투자 철학 */
+        .philosophy {
+            background: rgba(255,255,255,0.6);
+            padding: 18px;
+            border-radius: 14px;
+            margin: 16px 0;
+            border-left: 4px solid #a8edea;
+        }
+        .philosophy h4 {
+            color: #38b2ac;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        .philosophy p {
+            color: #718096;
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+        
+        /* 기준일 표시 */
+        .as-of-date {
+            text-align: right;
+            color: #a0aec0;
+            font-size: 0.75rem;
+            margin-top: 8px;
+        }
+        
+        /* 유튜브 업데이트 */
+        .youtube-section {
+            background: rgba(255,245,245,0.6);
+            padding: 18px;
+            border-radius: 14px;
+            margin: 16px 0;
+            border: 1px solid rgba(255,183,178,0.2);
+        }
+        .youtube-section h4 {
+            color: #ff8fa3;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .youtube-list {
+            list-style: none;
+        }
+        .youtube-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            color: #718096;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .youtube-list li:last-child {
+            border-bottom: none;
+        }
+        .new-badge {
+            background: linear-gradient(135deg, #ff9a9e 0%, #ff8fa3 100%);
+            color: #fff;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 600;
+        }
+        .youtube-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 12px;
+            color: #ff8fa3;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .youtube-link:hover {
+            color: #ff6b6b;
+            transform: translateX(4px);
+        }
+        
+        /* 소스 링크 */
+        .source-link {
+            text-align: right;
+            margin-top: 16px;
+        }
+        .source-link a {
+            color: #38b2ac;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+        .source-link a:hover {
+            color: #2c7a7b;
+        }
+        
+        /* 주식 카드 */
+        .stock-card {
+            background: rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .stock-card:hover {
+            border-color: rgba(255,154,158,0.3);
+        }
+        .stock-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .stock-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .stock-code {
+            color: #a0aec0;
+            font-size: 0.85rem;
+            margin-top: 2px;
+        }
+        .surge-badge {
+            background: linear-gradient(135deg, #ff9a9e 0%, #ff8fa3 100%);
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            box-shadow: 0 3px 10px rgba(255,143,163,0.3);
+        }
+        .price-info {
+            display: flex;
+            gap: 24px;
+            margin-top: 18px;
+        }
+        .price-item {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            background: rgba(0,0,0,0.02);
+            border-radius: 12px;
+        }
+        .price-label {
+            color: #a0aec0;
+            font-size: 0.75rem;
+            margin-bottom: 6px;
+        }
+        .price-value {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+        .price-value.up {
+            color: #f56565;
+        }
+        .price-value.down {
+            color: #48bb78;
+        }
+        .reason {
+            margin-top: 16px;
+            padding: 14px;
+            background: rgba(168,237,234,0.1);
+            border-radius: 10px;
+            color: #718096;
+            font-size: 0.9rem;
+            border-left: 3px solid #a8edea;
+        }
+        
+        /* 빈 상태 */
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: #a0aec0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">📈</div>
+            <h1>급등주 알림</h1>
+            <p>실시간 급등 종목 정보</p>
+        </header>
+        
+        <div style="text-align: center;">
+            <div class="update-time">
+                🕐 마지막 업데이트: 2026-04-17 10:30
+            </div>
+        </div>
+        
+        <!-- 유튜브 인사이트 분석기 -->
+        <div class="card analyzer-card">
+            <h2>🎬 유튜브 인사이트 분석기</h2>
+            <p class="subtitle">관심있는 유튜브 URL을 입력하면 AI가 영상 내용을 분석해 드립니다</p>
+            <div class="analyzer-input">
+                <input type="text" id="youtubeUrl" placeholder="https://youtube.com/watch?v=... 또는 https://youtu.be/...">
+                <button class="analyzer-btn" onclick="analyzeYouTube()">분석하기</button>
+            </div>
+            
+            <div id="analysisLoading" class="analyzing-card" style="display: none;">
+                <div class="simple-spinner"></div>
+                <div class="analyzing-text">영상을 분석 중입니다<span class="analyzing-dots"></span></div>
+                <div class="analyzing-subtext">AI가 영상 내용을 파악하고 인사이트를 추출하고 있어요</div>
+            </div>
+            
+            <div id="insightsSliderContainer" class="insights-slider-container" style="display: none;">
+                <div class="insights-slider-title">
+                    <span>📋 분석된 인사이트</span>
+                    <span id="insightsCount" class="insights-count">1/1</span>
+                </div>
+                <div class="slider-wrapper">
+                    <div id="sliderTrack" class="slider-track"></div>
+                </div>
+                <div class="slider-nav">
+                    <button class="slider-btn" id="prevBtn" onclick="goToSlide(-1)" disabled>◀</button>
+                    <div class="slider-dots" id="sliderDots"></div>
+                    <button class="slider-btn" id="nextBtn" onclick="goToSlide(1)">▶</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 오일전문가 포트폴리오 -->
+        <div class="card expert-card" id="expertSection">
+            <div class="expert-header">
+                <div class="expert-avatar">🛢️</div>
+                <div class="expert-info">
+                    <h2>오일전문가 (임인홍)</h2>
+                    <p>10년 연평균 24% 수익률 · 80억 자산 보유</p>
+                </div>
+            </div>
+            
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-label">총 주식 자산</div>
+                    <div class="portfolio-value positive">80억+</div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-label">국내 주식</div>
+                    <div class="portfolio-value">금융·에너지</div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-label">해외 주식</div>
+                    <div class="portfolio-value">오일 메이저</div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-label">6년 성과</div>
+                    <div class="portfolio-value positive">10억→80억</div>
+                </div>
+            </div>
+            
+            <div class="top-holdings">
+                <h3>🏆 보유종목 TOP 3</h3>
+                <ul class="holding-list">
+                    <li class="holding-item">
+                        <div class="holding-rank gold">1</div>
+                        <span class="holding-name">하나금융지주</span>
+                        <span class="holding-code">압도적 1위</span>
+                    </li>
+                    <li class="holding-item">
+                        <div class="holding-rank silver">2</div>
+                        <span class="holding-name">엑슨모빌 (XOM)</span>
+                        <span class="holding-code">해외 에너지</span>
+                    </li>
+                    <li class="holding-item">
+                        <div class="holding-rank bronze">3</div>
+                        <span class="holding-name">현대차2우</span>
+                        <span class="holding-code">제조·수출</span>
+                    </li>
+                </ul>
+                <div class="as-of-date">📅 기준일: 2026년 3월 말</div>
+            </div>
+            
+            <div class="philosophy">
+                <h4>📚 투자 철학</h4>
+                <p>"황금알을 낳는 거위를 사고, 황금 알로는 다시 저렴한 거위를 사면서 거위 수를 계속 늘린다" — 배당금 전액 재투자를 통한 복리 가속화 전략</p>
+            </div>
+            
+            <div class="youtube-section">
+                <h4>📺 유튜브 주식 현황</h4>
+                <ul class="youtube-list">
+                    <li><span class="new-badge">NEW</span>2026년 3월 마지막 주 - 정제마진 현황</li>
+                    <li><span class="new-badge">NEW</span>2026년 2월 마지막 주 - 정제마진 현황</li>
+                    <li>2026년 1월 마지막 주 - 정제마진 현황</li>
+                </ul>
+                <a href="https://youtube.com/@oilprof" class="youtube-link" target="_blank">
+                    ▶ 채널 바로가기
+                </a>
+            </div>
+            
+            <div class="source-link">
+                <a href="https://blog.naver.com/oilpro1" target="_blank">
+                    📎 네이버 블로그
+                </a>
+            </div>
+        </div>
+
+        <!-- 급등주 카드 -->
+        <div class="card stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">삼성전자</div>
+                    <div class="stock-code">005930</div>
+                </div>
+                <span class="surge-badge">급등 🔥</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item">
+                    <div class="price-label">현재가</div>
+                    <div class="price-value">72,300</div>
+                </div>
+                <div class="price-item">
+                    <div class="price-label">등락률</div>
+                    <div class="price-value up">+5.2%</div>
+                </div>
+                <div class="price-item">
+                    <div class="price-label">거래량</div>
+                    <div class="price-value">15.2M</div>
+                </div>
+            </div>
+            <div class="reason">
+                📊 AI 반도체 수주 증가 소식
+            </div>
+        </div>
+
+        <div class="card stock-card">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">SK하이닉스</div>
+                    <div class="stock-code">000660</div>
+                </div>
+                <span class="surge-badge">급등 🔥</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item">
+                    <div class="price-label">현재가</div>
+                    <div class="price-value">145,000</div>
+                </div>
+                <div class="price-item">
+                    <div class="price-label">등락률</div>
+                    <div class="price-value up">+8.1%</div>
+                </div>
+                <div class="price-item">
+                    <div class="price-label">거래량</div>
+                    <div class="price-value">8.1M</div>
+                </div>
+            </div>
+            <div class="reason">
+                📊 HBM3E 공급 확대 기대감
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        let slides = [];
+        
+        function analyzeYouTube() {
+            const url = document.getElementById('youtubeUrl').value;
+            if (!url) {
+                alert('유튜브 URL을 입력해주세요!');
+                return;
+            }
+            
+            if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                alert('올바른 유튜브 URL을 입력해주세요!');
+                return;
+            }
+            
+            const btn = document.querySelector('.analyzer-btn');
+            btn.disabled = true;
+            btn.textContent = '분석 중...';
+            
+            document.getElementById('analysisLoading').style.display = 'block';
+            document.getElementById('analysisLoading').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                document.getElementById('analysisLoading').style.display = 'none';
+                
+                btn.disabled = false;
+                btn.textContent = '분석하기';
+                
+                const now = new Date();
+                const timeStr = now.getFullYear() + '.' + (now.getMonth()+1) + '.' + now.getDate() + ' ' + 
+                               String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+                
+                const slideHTML = `
+                    <div class="insight-slide">
+                        <div class="insight-card">
+                            <div class="insight-card-header">
+                                <h4>📊 분석된 인사이트</h4>
+                                <span class="insight-meta">${timeStr}</span>
+                            </div>
+                            
+                            <div class="insight-summary">
+                                <div class="summary-title">📝 한 줄 요약</div>
+                                <div class="summary-text">영상의 핵심 투자 메시지를 간단히 요약합니다. 장기투자 관점에서의 핵심 전략과 주요 인사이트를 파악할 수 있습니다.</div>
+                            </div>
+                            
+                            <div class="insight-content-grid">
+                                <div class="insight-row">
+                                    <div class="insight-icon main">🎯</div>
+                                    <div class="insight-text">
+                                        <div class="insight-label">핵심 주장</div>
+                                        <div class="insight-value">영상의 주요 투자 메시지를 분석합니다. 장기투자 관점에서의 핵심 전략을 파악합니다.</div>
+                                    </div>
+                                </div>
+                                <div class="insight-row">
+                                    <div class="insight-icon stock">📈</div>
+                                    <div class="insight-text">
+                                        <div class="insight-label">언급 종목</div>
+                                        <div class="insight-value">영상에서 언급된 주식 종목 목록 및 분석 의견</div>
+                                    </div>
+                                </div>
+                                <div class="insight-row">
+                                    <div class="insight-icon idea">💡</div>
+                                    <div class="insight-text">
+                                        <div class="insight-label">투자 인사이트</div>
+                                        <div class="insight-value">AI가 추출한 핵심 투자 인사이트 및 전략적 제안</div>
+                                    </div>
+                                </div>
+                                <div class="insight-row">
+                                    <div class="insight-icon risk">⚠️</div>
+                                    <div class="insight-text">
+                                        <div class="insight-label">리스크 요인</div>
+                                        <div class="insight-value">영상에서 언급된 주의사항 및 잠재적 리스크</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="source-link" style="margin-top: 12px;">
+                                <a href="${url}" target="_blank">📎 원본 영상 보기</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                slides.push(slideHTML);
+                
+                document.getElementById('insightsSliderContainer').style.display = 'block';
+                
+                updateSliderTrack();
+                
+                currentSlide = slides.length - 1;
+                updateSliderPosition();
+                updateDots();
+                updateNavButtons();
+                
+                updateCount();
+                
+                document.getElementById('youtubeUrl').value = '';
+                
+                document.getElementById('insightsSliderContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+            }, 2000);
+        }
+        
+        function updateSliderTrack() {
+            document.getElementById('sliderTrack').innerHTML = slides.join('');
+        }
+        
+        function updateSliderPosition() {
+            const track = document.getElementById('sliderTrack');
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+        
+        function goToSlide(direction) {
+            currentSlide += direction;
+            
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= slides.length) currentSlide = slides.length - 1;
+            
+            updateSliderPosition();
+            updateDots();
+            updateNavButtons();
+            updateCount();
+        }
+        
+        function goToSlideIndex(index) {
+            currentSlide = index;
+            updateSliderPosition();
+            updateDots();
+            updateNavButtons();
+            updateCount();
+        }
+        
+        function updateDots() {
+            const dotsContainer = document.getElementById('sliderDots');
+            dotsContainer.innerHTML = '';
+            
+            for (let i = 0; i < slides.length; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'slider-dot' + (i === currentSlide ? ' active' : '');
+                dot.onclick = () => goToSlideIndex(i);
+                dotsContainer.appendChild(dot);
+            }
+        }
+        
+        function updateNavButtons() {
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === slides.length - 1;
+        }
+        
+        function updateCount() {
+            document.getElementById('insightsCount').textContent = `${currentSlide + 1}/${slides.length}`;
+        }
+    </script>
+</body>
+</html>
