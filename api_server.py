@@ -1,23 +1,14 @@
 #!/usr/bin/env python3
-"""YouTube Insight Analyzer API Server with yt-dlp integration"""
+"""YouTube Insight Analyzer API Server - YouTube Data API v3"""
 
 import json
 import re
+import urllib.request
+import os
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Optional, List
-import sys
-import os
-
-# yt-dlp를 Python 모듈로 직접 사용
-try:
-    from yt_dlp import YoutubeDL
-except ImportError:
-    print("yt-dlp not installed. Installing...")
-    import subprocess
-    subprocess.check_call([sys.executable, "-m", "pip", "install", "yt-dlp"])
-    from yt_dlp import YoutubeDL
 
 app = FastAPI(title="YouTube Insight Analyzer API")
 
@@ -29,6 +20,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# YouTube Data API 키 (Render Environment Variable)
+YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY', '')
 
 class AnalyzeRequest(BaseModel):
     url: str
@@ -59,49 +53,84 @@ def extract_video_id(url: str) -> Optional[str]:
             return match.group(1)
     return None
 
-def get_video_info_with_ytdlp(url: str) -> dict:
-    """Extract video info using yt-dlp Python module"""
+def get_video_info_youtube_api(url: str) -> dict:
+    """Extract video info using YouTube Data API v3"""
     try:
-        ydl_opts = {
-            'quiet': True,
-            'no_warnings': True,
-            'skip_download': True,
+        video_id = extract_video_id(url)
+        if not video_id:
+            return {'success': False, 'error': 'Invalid video ID'}
+        
+        if not YOUTUBE_API_KEY:
+            return {'success': False, 'error': 'YOUTUBE_API_KEY not set'}
+        
+        # YouTube Data API 호출
+        api_url = f'https://www.googleapis.com/youtube/v3/videos?id={video_id}&key={YOUTUBE_API_KEY}&part=snippet,statistics,contentDetails'
+        
+        req = urllib.request.Request(api_url)
+        with urllib.request.urlopen(req, timeout=10) as response:
+            data = json.loads(response.read().decode('utf-8'))
+        
+        if not data.get('items'):
+            return {'success': False, 'error': 'Video not found or private'}
+        
+        video = data['items'][0]
+        snippet = video.get('snippet', {})
+        stats = video.get('statistics', {})
+        content = video.get('contentDetails', {})
+        
+        # 업로드 날짜 포맷팅
+        published_at = snippet.get('publishedAt', '')
+        if published_at:
+            upload_date = published_at.split('T')[0]
+        else:
+            upload_date = ''
+        
+        # 조회수 포맷팅
+        view_count = stats.get('viewCount', 0)
+        try:
+            view_count = int(view_count)
+            if view_count >= 10000:
+                view_count_str = f"{view_count/10000:.1f}만"
+            else:
+                view_count_str = f"{view_count:,}"
+        except:
+            view_count_str = str(view_count)
+        
+        # 영상 길이 파싱 (ISO 8601 -> readable)
+        duration = content.get('duration', '')
+        duration_str = ''
+        if duration:
+            match = re.match(r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?', duration)
+            if match:
+                hours, minutes, seconds = match.groups()
+                parts = []
+                if hours:
+                    parts.append(f"{int(hours)}시간")
+                if minutes:
+                    parts.append(f"{int(minutes)}분")
+                if seconds:
+                    parts.append(f"{int(seconds)}초")
+                duration_str = ' '.join(parts) if parts else duration
+        
+        return {
+            'success': True,
+            'title': snippet.get('title', 'Unknown'),
+            'channel': snippet.get('channelTitle', 'Unknown'),
+            'channel_id': snippet.get('channelId', ''),
+            'upload_date': upload_date,
+            'duration': duration_str,
+            'view_count': view_count_str,
+            'description': snippet.get('description', ''),
+            'tags': snippet.get('tags', []),
+            'categories': [snippet.get('categoryId', '')],
         }
         
-        with YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(url, download=False)
-            
-            if info:
-                # 업로드 날짜 포맷팅
-                upload_date = info.get('upload_date', '')
-                if upload_date and len(upload_date) == 8:
-                    upload_date = f"{upload_date[:4]}-{upload_date[4:6]}-{upload_date[6:]}"
-                
-                # 조회수 포맷팅
-                view_count = info.get('view_count', 0)
-                if view_count:
-                    if view_count >= 10000:
-                        view_count_str = f"{view_count/10000:.1f}만"
-                    else:
-                        view_count_str = f"{view_count:,}"
-                else:
-                    view_count_str = None
-                
-                return {
-                    'success': True,
-                    'title': info.get('title', 'Unknown'),
-                    'channel': info.get('channel', info.get('uploader', 'Unknown')),
-                    'channel_id': info.get('channel_id', ''),
-                    'upload_date': upload_date,
-                    'duration': info.get('duration_string', ''),
-                    'view_count': view_count_str,
-                    'description': info.get('description', ''),
-                    'tags': info.get('tags', []),
-                    'categories': info.get('categories', []),
-                }
-            
-        return {'success': False, 'error': 'Failed to extract video info'}
-        
+    except urllib.error.HTTPError as e:
+        if e.code == 403:
+            return {'success': False, 'error': 'API quota exceeded or invalid API key'}
+        elif e.code == 404:
+            return {'success': False, 'error': 'Video not found'}
+        return {'success': False, 'error': f'HTTP Error {e.code}'}
     except Exception as e:
         return {'success': False, 'error': str(e)}
 
@@ -165,13 +194,13 @@ def analyze_content(video_info: dict) -> dict:
         'summary': f'{channel} 채널의 투자 콘텐츠. {"투자 관련 키워드 감지됨" if is_investment else "투자 주제 확인 필요"}.',
         'key_claims': '• 영상의 핵심 주장을 분석합니다\n• 투자 전략 및 관점 파악\n• 시장 전망 및 섹터 의견' if is_investment else '• 콘텐츠 주제 분석 필요\n• 투자 관련성 확인',
         'mentioned_stocks': '\n'.join([f'• {m}' for m in mentioned]) if mentioned else '• 특정 종목 언급 확인 필요',
-        'insights': '• 투자 인사이트 추출\n• 전략적 제안 및 고려사항\n• 장기/단기 관점 분석' if is_investment else '• 콘텐츠 분석 후 인사이트 도출 가능',
+        'insights': '• 투자 인사이트 추출\n• 전략적 제안 및 고려사항\n• 장기/단기 관점 분석' if is_investment else '• �텐츠 분석 후 인사이트 도출 가능',
         'risks': '• 잠재적 리스크 요인\n• 주의사항 및 한계점\n• 투자 결정 시 고려사항'
     }
 
 @app.post("/api/analyze", response_model=AnalyzeResponse)
 async def analyze_youtube(request: AnalyzeRequest):
-    """Analyze YouTube video and return investment insights using yt-dlp"""
+    """Analyze YouTube video and return investment insights using YouTube Data API"""
     
     # Validate URL
     video_id = extract_video_id(request.url)
@@ -189,8 +218,8 @@ async def analyze_youtube(request: AnalyzeRequest):
             error="유효하지 않은 YouTube URL입니다. youtube.com 또는 youtu.be URL을 입력해주세요."
         )
     
-    # Get video info using yt-dlp
-    video_info = get_video_info_with_ytdlp(request.url)
+    # Get video info using YouTube Data API
+    video_info = get_video_info_youtube_api(request.url)
     
     if not video_info.get('success'):
         return AnalyzeResponse(
@@ -226,19 +255,15 @@ async def analyze_youtube(request: AnalyzeRequest):
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    try:
-        from yt_dlp import version
-        ytdlp_status = version.__version__
-    except:
-        ytdlp_status = "not available"
-    
     return {
         "status": "ok",
-        "yt_dlp": ytdlp_status
+        "youtube_api": "connected" if YOUTUBE_API_KEY else "not configured",
+        "api_key_prefix": YOUTUBE_API_KEY[:10] + "..." if YOUTUBE_API_KEY else "none"
     }
 
 if __name__ == "__main__":
     import uvicorn
     print("Starting YouTube Insight Analyzer API Server...")
+    print(f"YouTube API Key: {'Configured' if YOUTUBE_API_KEY else 'NOT SET!'}")
     print("API docs: http://localhost:8000/docs")
     uvicorn.run(app, host="0.0.0.0", port=8000)
