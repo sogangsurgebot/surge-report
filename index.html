@@ -872,10 +872,8 @@
         let currentSlide = 0;
         let slides = [];
         
-        // API 기본 URL (로컬 서버 또는 GitHub Pages 배포 시)
-        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
-            ? 'http://localhost:8000' 
-            : 'https://surge-report.onrender.com';
+        // API 기본 URL (Cloudflare Tunnel)
+        const API_BASE_URL = 'https://slide-finding-dozen-eval.trycloudflare.com';
         
         async function analyzeYouTube() {
             const url = document.getElementById('youtubeUrl').value;
