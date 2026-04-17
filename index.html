@@ -890,8 +890,21 @@
         let currentSlide = 0;
         let slides = [];
         
-        // API 기본 URL (Cloudflare Tunnel)
-        const API_BASE_URL = 'https://slide-finding-dozen-eval.trycloudflare.com';
+        // YouTube API Key
+        const YOUTUBE_API_KEY = 'AIzaSyDuwN8xYiZpSvXtBjcwAM-8o7khit1H62U';
+        
+        // Extract video ID from URL
+        function extractVideoId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
+                /youtube\.com\/shorts\/([a-zA-Z0-9_-]{11})/,
+            ];
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
+        }
         
         async function analyzeYouTube() {
             const url = document.getElementById('youtubeUrl').value;
