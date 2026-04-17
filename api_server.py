@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """YouTube Insight Analyzer API Server with yt-dlp integration"""
 
-import subprocess
 import json
 import re
 from fastapi import FastAPI, HTTPException
@@ -10,6 +9,15 @@ from pydantic import BaseModel
 from typing import Optional, List
 import sys
 import os
+
+# yt-dlp를 Python 모듈로 직접 사용
+try:
+    from yt_dlp import YoutubeDL
+except ImportError:
+    print("yt-dlp not installed. Installing...")
+    import subprocess
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "yt-dlp"])
+    from yt_dlp import YoutubeDL
 
 app = FastAPI(title="YouTube Insight Analyzer API")
 
@@ -52,51 +60,48 @@ def extract_video_id(url: str) -> Optional[str]:
     return None
 
 def get_video_info_with_ytdlp(url: str) -> dict:
-    """Extract video info using yt-dlp"""
+    """Extract video info using yt-dlp Python module"""
     try:
-        cmd = [
-            'yt-dlp',
-            '--dump-json',
-            '--no-download',
-            '--skip-download',
-            url
-        ]
+        ydl_opts = {
+            'quiet': True,
+            'no_warnings': True,
+            'skip_download': True,
+        }
         
-        result = subprocess.run(
-            cmd,
-            capture_output=True,
-            text=True,
-            timeout=30
-        )
-        
-        if result.returncode == 0 and result.stdout:
-            # yt-dlp outputs JSON for each video (can be multiple lines for playlists)
-            lines = result.stdout.strip().split('\n')
-            for line in lines:
-                try:
-                    data = json.loads(line)
-                    if data.get('id'):  # Valid video entry
-                        return {
-                            'success': True,
-                            'title': data.get('title', 'Unknown'),
-                            'channel': data.get('channel', data.get('uploader', 'Unknown')),
-                            'channel_id': data.get('channel_id', ''),
-                            'upload_date': data.get('upload_date', ''),
-                            'duration': data.get('duration_string', ''),
-                            'view_count': data.get('view_count', 0),
-                            'description': data.get('description', ''),
-                            'tags': data.get('tags', []),
-                            'categories': data.get('categories', []),
-                        }
-                except json.JSONDecodeError:
-                    continue
-        
+        with YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=False)
+            
+            if info:
+                # 업로드 날짜 포맷팅
+                upload_date = info.get('upload_date', '')
+                if upload_date and len(upload_date) == 8:
+                    upload_date = f"{upload_date[:4]}-{upload_date[4:6]}-{upload_date[6:]}"
+                
+                # 조회수 포맷팅
+                view_count = info.get('view_count', 0)
+                if view_count:
+                    if view_count >= 10000:
+                        view_count_str = f"{view_count/10000:.1f}만"
+                    else:
+                        view_count_str = f"{view_count:,}"
+                else:
+                    view_count_str = None
+                
+                return {
+                    'success': True,
+                    'title': info.get('title', 'Unknown'),
+                    'channel': info.get('channel', info.get('uploader', 'Unknown')),
+                    'channel_id': info.get('channel_id', ''),
+                    'upload_date': upload_date,
+                    'duration': info.get('duration_string', ''),
+                    'view_count': view_count_str,
+                    'description': info.get('description', ''),
+                    'tags': info.get('tags', []),
+                    'categories': info.get('categories', []),
+                }
+            
         return {'success': False, 'error': 'Failed to extract video info'}
         
-    except subprocess.TimeoutExpired:
-        return {'success': False, 'error': 'Request timeout'}
-    except FileNotFoundError:
-        return {'success': False, 'error': 'yt-dlp not found. Please install yt-dlp first.'}
     except Exception as e:
         return {'success': False, 'error': str(e)}
 
@@ -204,42 +209,26 @@ async def analyze_youtube(request: AnalyzeRequest):
     # Analyze content
     analysis = analyze_content(video_info)
     
-    # Format upload date
-    upload_date = video_info.get('upload_date', '')
-    if upload_date and len(upload_date) == 8:
-        upload_date = f"{upload_date[:4]}-{upload_date[4:6]}-{upload_date[6:]}"
-    
-    # Format view count
-    view_count = video_info.get('view_count', 0)
-    if view_count:
-        if view_count >= 10000:
-            view_count_str = f"{view_count/10000:.1f}만"
-        else:
-            view_count_str = f"{view_count:,}"
-    else:
-        view_count_str = None
-    
     return AnalyzeResponse(
         success=True,
         title=analysis['title'],
         channel=analysis['channel'],
-        upload_date=upload_date,
+        upload_date=video_info.get('upload_date'),
         summary=analysis['summary'],
         key_claims=analysis['key_claims'],
         mentioned_stocks=analysis['mentioned_stocks'],
         insights=analysis['insights'],
         risks=analysis['risks'],
         video_duration=video_info.get('duration'),
-        view_count=view_count_str
+        view_count=video_info.get('view_count')
     )
 
 @app.get("/health")
 async def health_check():
     """Health check endpoint"""
-    # Check if yt-dlp is available
     try:
-        result = subprocess.run(['yt-dlp', '--version'], capture_output=True, text=True, timeout=5)
-        ytdlp_status = result.stdout.strip() if result.returncode == 0 else "not available"
+        from yt_dlp import version
+        ytdlp_status = version.__version__
     except:
         ytdlp_status = "not available"
     
