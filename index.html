@@ -872,7 +872,12 @@
         let currentSlide = 0;
         let slides = [];
         
-        function analyzeYouTube() {
+        // API 기본 URL (로컬 서버 또는 GitHub Pages 배포 시)
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:8000' 
+            : 'https://api-youtube-analyzer.onrender.com'; // 배포 시 변경 필요
+        
+        async function analyzeYouTube() {
             const url = document.getElementById('youtubeUrl').value;
             if (!url) {
                 alert('유튜브 URL을 입력해주세요!');
@@ -891,27 +896,50 @@
             document.getElementById('analysisLoading').style.display = 'block';
             document.getElementById('analysisLoading').scrollIntoView({ behavior: 'smooth', block: 'center' });
             
-            setTimeout(() => {
-                document.getElementById('analysisLoading').style.display = 'none';
+            try {
+                // 실제 API 호출
+                const response = await fetch(`${API_BASE_URL}/api/analyze`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url })
+                });
                 
+                const data = await response.json();
+                
+                document.getElementById('analysisLoading').style.display = 'none';
                 btn.disabled = false;
                 btn.textContent = '분석하기';
+                
+                if (!data.success) {
+                    alert('분석 실패: ' + (data.error || '알 수 없는 오류'));
+                    return;
+                }
                 
                 const now = new Date();
                 const timeStr = now.getFullYear() + '.' + (now.getMonth()+1) + '.' + now.getDate() + ' ' + 
                                String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
                 
+                const metaInfo = [];
+                if (data.channel) metaInfo.push(`채널: ${data.channel}`);
+                if (data.upload_date) metaInfo.push(`업로드: ${data.upload_date}`);
+                if (data.video_duration) metaInfo.push(`길이: ${data.video_duration}`);
+                if (data.view_count) metaInfo.push(`조회수: ${data.view_count}`);
+                
                 const slideHTML = `
                     <div class="insight-slide">
                         <div class="insight-card">
                             <div class="insight-card-header">
-                                <h4>📊 분석된 인사이트</h4>
+                                <h4>📊 ${data.title || '분석된 인사이트'}</h4>
                                 <span class="insight-meta">${timeStr}</span>
                             </div>
                             
+                            ${metaInfo.length > 0 ? `<div class="insight-meta" style="margin-bottom: 12px; color: #718096; font-size: 0.85rem;">${metaInfo.join(' • ')}</div>` : ''}
+                            
                             <div class="insight-summary">
                                 <div class="summary-title">📝 한 줄 요약</div>
-                                <div class="summary-text">영상의 핵심 투자 메시지를 간단히 요약합니다. 장기투자 관점에서의 핵심 전략과 주요 인사이트를 파악할 수 있습니다.</div>
+                                <div class="summary-text">${data.summary || '요약 정보 없음'}</div>
                             </div>
                             
                             <div class="insight-content-grid">
@@ -919,28 +947,28 @@
                                     <div class="insight-icon main">🎯</div>
                                     <div class="insight-text">
                                         <div class="insight-label">핵심 주장</div>
-                                        <div class="insight-value">영상의 주요 투자 메시지를 분석합니다. 장기투자 관점에서의 핵심 전략을 파악합니다.</div>
+                                        <div class="insight-value" style="white-space: pre-line;">${data.key_claims || '정보 없음'}</div>
                                     </div>
                                 </div>
                                 <div class="insight-row">
                                     <div class="insight-icon stock">📈</div>
                                     <div class="insight-text">
                                         <div class="insight-label">언급 종목</div>
-                                        <div class="insight-value">영상에서 언급된 주식 종목 목록 및 분석 의견</div>
+                                        <div class="insight-value" style="white-space: pre-line;">${data.mentioned_stocks || '정보 없음'}</div>
                                     </div>
                                 </div>
                                 <div class="insight-row">
                                     <div class="insight-icon idea">💡</div>
                                     <div class="insight-text">
                                         <div class="insight-label">투자 인사이트</div>
-                                        <div class="insight-value">AI가 추출한 핵심 투자 인사이트 및 전략적 제안</div>
+                                        <div class="insight-value" style="white-space: pre-line;">${data.insights || '정보 없음'}</div>
                                     </div>
                                 </div>
                                 <div class="insight-row">
                                     <div class="insight-icon risk">⚠️</div>
                                     <div class="insight-text">
                                         <div class="insight-label">리스크 요인</div>
-                                        <div class="insight-value">영상에서 언급된 주의사항 및 잠재적 리스크</div>
+                                        <div class="insight-value" style="white-space: pre-line;">${data.risks || '정보 없음'}</div>
                                     </div>
                                 </div>
                             </div>
@@ -968,7 +996,13 @@
                 
                 document.getElementById('insightsSliderContainer').scrollIntoView({ behavior: 'smooth', block: 'center' });
                 
-            }, 2000);
+            } catch (error) {
+                document.getElementById('analysisLoading').style.display = 'none';
+                btn.disabled = false;
+                btn.textContent = '분석하기';
+                alert('분석 중 오류가 발생했습니다: ' + error.message);
+                console.error('Analysis error:', error);
+            }
         }
         
         function updateSliderTrack() {
