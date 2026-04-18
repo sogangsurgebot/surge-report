@@ -127,7 +127,7 @@
             font-size: 0.8rem;
         }
         
-        /* 투자 고수 섹션 */
+        /* 투자 고수 섹션 - 카드 형식 */
         .gurus-section {
             margin: 30px 0;
         }
@@ -149,14 +149,12 @@
         }
         @media (min-width: 768px) {
             .gurus-grid {
-                grid-template-columns: 3fr 2fr;
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         
-        /* 오일전문가 - 원래 디자인 */
+        /* 전문가 카드 공통 스타일 */
         .expert-card {
-            background: linear-gradient(135deg, rgba(168,237,234,0.15) 0%, rgba(254,214,227,0.15) 100%);
-            border: 2px solid rgba(168,237,234,0.3);
             border-radius: 24px;
             padding: 28px;
         }
@@ -170,21 +168,18 @@
             width: 64px;
             height: 64px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
-            box-shadow: 0 4px 15px rgba(168,237,234,0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
         }
         .expert-info h2 {
             font-size: 1.3rem;
-            color: #5a67d8;
             font-weight: 600;
             margin-bottom: 4px;
         }
         .expert-info p {
-            color: #a0aec0;
             font-size: 0.85rem;
         }
         
@@ -205,7 +200,6 @@
             padding: 16px;
             border-radius: 14px;
             text-align: center;
-            border: 1px solid rgba(168,237,234,0.2);
             transition: all 0.3s;
         }
         .portfolio-item:hover {
@@ -213,12 +207,10 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
         .portfolio-label {
-            color: #a0aec0;
             font-size: 0.75rem;
             margin-bottom: 6px;
         }
         .portfolio-value {
-            color: #4a5568;
             font-size: 1.1rem;
             font-weight: 600;
         }
@@ -228,14 +220,11 @@
         
         /* TOP 3 보유 종목 */
         .top-holdings {
-            background: linear-gradient(135deg, rgba(254,202,202,0.2) 0%, rgba(251,211,141,0.2) 100%);
-            border: 1px solid rgba(254,202,202,0.3);
             padding: 18px;
             border-radius: 16px;
             margin: 16px 0;
         }
         .top-holdings h3 {
-            color: #f6ad55;
             font-size: 0.95rem;
             font-weight: 600;
             margin-bottom: 12px;
@@ -278,11 +267,9 @@
         .holding-name {
             flex: 1;
             margin-left: 12px;
-            color: #4a5568;
             font-weight: 500;
         }
         .holding-code {
-            color: #a0aec0;
             font-size: 0.8rem;
         }
         
@@ -292,16 +279,14 @@
             padding: 18px;
             border-radius: 14px;
             margin: 16px 0;
-            border-left: 4px solid #a8edea;
+            border-left: 4px solid;
         }
         .philosophy h4 {
-            color: #38b2ac;
             font-size: 0.9rem;
             font-weight: 600;
             margin-bottom: 10px;
         }
         .philosophy p {
-            color: #718096;
             font-size: 0.9rem;
             line-height: 1.7;
         }
@@ -312,122 +297,109 @@
             margin-top: 16px;
         }
         .source-link a {
-            color: #38b2ac;
             font-size: 0.85rem;
             font-weight: 500;
             text-decoration: none;
         }
         
-        /* 세상학개론 - 컴팩트 */
+        /* 오일전문가 - 민트/핑크 테마 */
+        .oil-card {
+            background: linear-gradient(135deg, rgba(168,237,234,0.15) 0%, rgba(254,214,227,0.15) 100%);
+            border: 2px solid rgba(168,237,234,0.3);
+        }
+        .oil-card .expert-avatar {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            box-shadow: 0 4px 15px rgba(168,237,234,0.3);
+        }
+        .oil-card .expert-info h2 {
+            color: #5a67d8;
+        }
+        .oil-card .expert-info p {
+            color: #a0aec0;
+        }
+        .oil-card .portfolio-item {
+            border: 1px solid rgba(168,237,234,0.2);
+        }
+        .oil-card .portfolio-label {
+            color: #a0aec0;
+        }
+        .oil-card .portfolio-value {
+            color: #4a5568;
+        }
+        .oil-card .top-holdings {
+            background: linear-gradient(135deg, rgba(254,202,202,0.2) 0%, rgba(251,211,141,0.2) 100%);
+            border: 1px solid rgba(254,202,202,0.3);
+        }
+        .oil-card .top-holdings h3 {
+            color: #f6ad55;
+        }
+        .oil-card .holding-name {
+            color: #4a5568;
+        }
+        .oil-card .holding-code {
+            color: #a0aec0;
+        }
+        .oil-card .philosophy {
+            border-color: #a8edea;
+        }
+        .oil-card .philosophy h4 {
+            color: #38b2ac;
+        }
+        .oil-card .philosophy p {
+            color: #718096;
+        }
+        .oil-card .source-link a {
+            color: #38b2ac;
+        }
+        
+        /* 세상학개론 - 퍼플/블루 테마 */
         .sesang-card {
             background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(118,75,162,0.15) 100%);
             border: 2px solid rgba(102,126,234,0.3);
-            border-radius: 24px;
-            padding: 24px;
         }
-        .sesang-header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 18px;
-        }
-        .sesang-avatar {
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
+        .sesang-card .expert-avatar {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
             box-shadow: 0 4px 15px rgba(102,126,234,0.3);
         }
-        .sesang-info h2 {
-            font-size: 1.2rem;
+        .sesang-card .expert-info h2 {
             color: #667eea;
-            font-weight: 600;
-            margin-bottom: 4px;
         }
-        .sesang-info p {
+        .sesang-card .expert-info p {
             color: #a0aec0;
-            font-size: 0.8rem;
         }
-        .sesang-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin: 14px 0;
-        }
-        .sesang-stat {
-            background: rgba(255,255,255,0.7);
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-        }
-        .sesang-stat-label {
-            color: #a0aec0;
-            font-size: 0.65rem;
-            margin-bottom: 3px;
-        }
-        .sesang-stat-value {
-            color: #2d3748;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .sesang-content h4 {
-            font-size: 0.8rem;
-            color: #718096;
-            margin: 12px 0 8px;
-        }
-        .content-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-        }
-        .content-tag {
-            padding: 4px 10px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 12px;
-            font-size: 0.75rem;
-            color: #4a5568;
-            border: 1px solid rgba(102,126,234,0.15);
-        }
-        .content-tag.hot {
-            background: linear-gradient(135deg, #ff9a9e 0%, #ff8fa3 100%);
-            color: #fff;
-            font-weight: 600;
-        }
-        .sesang-philosophy {
-            background: rgba(255,255,255,0.5);
-            border-radius: 12px;
-            padding: 12px;
-            margin: 12px 0;
-            border-left: 3px solid #667eea;
-        }
-        .sesang-philosophy p {
-            font-size: 0.8rem;
-            color: #718096;
-            line-height: 1.6;
-            font-style: italic;
-        }
-        .sesang-links {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-        }
-        .sesang-links a {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            padding: 6px 12px;
-            background: rgba(255,255,255,0.8);
-            border-radius: 16px;
-            color: #667eea;
-            font-size: 0.75rem;
-            font-weight: 500;
-            text-decoration: none;
+        .sesang-card .portfolio-item {
             border: 1px solid rgba(102,126,234,0.2);
+        }
+        .sesang-card .portfolio-label {
+            color: #a0aec0;
+        }
+        .sesang-card .portfolio-value {
+            color: #4a5568;
+        }
+        .sesang-card .top-holdings {
+            background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(167,139,250,0.15) 100%);
+            border: 1px solid rgba(102,126,234,0.2);
+        }
+        .sesang-card .top-holdings h3 {
+            color: #7c3aed;
+        }
+        .sesang-card .holding-name {
+            color: #4a5568;
+        }
+        .sesang-card .holding-code {
+            color: #a0aec0;
+        }
+        .sesang-card .philosophy {
+            border-color: #667eea;
+        }
+        .sesang-card .philosophy h4 {
+            color: #667eea;
+        }
+        .sesang-card .philosophy p {
+            color: #718096;
+        }
+        .sesang-card .source-link a {
+            color: #667eea;
         }
         
         /* 주식 카드 그리드 */
@@ -534,13 +506,13 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.fe9f3d6 | 2026-04-18 22:30</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.8340693 | 2026-04-18 22:56</a>
             </div>
         </header>
         
         <div style="text-align: center;">
             <div class="update-time">
-                🕐 마지막 업데이트: 2026-04-18 22:47 📋 샘플 데이터
+                🕐 마지막 업데이트: 2026-04-18 23:00 📋 샘플 데이터
             </div>
         </div>
         
@@ -565,12 +537,12 @@
             </div>
         </div>
 
-        <!-- 투자 고수 섹션 -->
-        <div class="gurus-section">
+        <!-- 투자 고수 섹션 - 카드 형식 -->
+        <div class="card gurus-section">
             <h2 class="gurus-title">🏆 투자 고수 인사이트</h2>
             <div class="gurus-grid">
-                <!-- 오일전문가 - 원래 디자인 -->
-                <div class="expert-card" id="expertSection">
+                <!-- 오일전문가 -->
+                <div class="expert-card oil-card" id="expertSection">
                     <div class="expert-header">
                         <div class="expert-avatar">🛢️</div>
                         <div class="expert-info">
@@ -630,43 +602,64 @@
                     </div>
                 </div>
 
-                <!-- 세상학개론 - 컴팩트 -->
-                <div class="sesang-card" id="sesangSection">
-                    <div class="sesang-header">
-                        <div class="sesang-avatar">🎓</div>
-                        <div class="sesang-info">
+                <!-- 세상학개론 - 오일전문가와 동일한 형식 -->
+                <div class="expert-card sesang-card" id="sesangSection">
+                    <div class="expert-header">
+                        <div class="expert-avatar">🎓</div>
+                        <div class="expert-info">
                             <h2>세상학개론 (한정수)</h2>
                             <p>경제·투자 유튜버 · 시사·재테크 인플루언서</p>
                         </div>
                     </div>
                     
-                    <div class="sesang-stats">
-                        <div class="sesang-stat">
-                            <div class="sesang-stat-label">콘텐츠</div>
-                            <div class="sesang-stat-value">시사·경제 분석</div>
+                    <div class="portfolio-grid">
+                        <div class="portfolio-item">
+                            <div class="portfolio-label">총 콘텐츠</div>
+                            <div class="portfolio-value">500+</div>
                         </div>
-                        <div class="sesang-stat">
-                            <div class="sesang-stat-label">전략</div>
-                            <div class="sesang-stat-value">성장주+가치주</div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-label">주요 분야</div>
+                            <div class="portfolio-value">시사·경제</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-label">투자 스타일</div>
+                            <div class="portfolio-value">성장+가치</div>
+                        </div>
+                        <div class="portfolio-item">
+                            <div class="portfolio-label">핵심 콘텐츠</div>
+                            <div class="portfolio-value positive">급등주분석</div>
                         </div>
                     </div>
                     
-                    <div class="sesang-content">
-                        <h4>📺 인기 콘텐츠</h4>
-                        <div class="content-tags">
-                            <span class="content-tag hot">🔥 급등주 분석</span>
-                            <span class="content-tag">📈 시장 전망</span>
-                            <span class="content-tag">💡 투자 인사이트</span>
-                        </div>
+                    <div class="top-holdings">
+                        <h3>🔥 인기 콘텐츠 TOP 3</h3>
+                        <ul class="holding-list">
+                            <li class="holding-item">
+                                <div class="holding-rank gold">1</div>
+                                <span class="holding-name">급등주 예측 분석</span>
+                                <span class="holding-code">핵심 시리즈</span>
+                            </li>
+                            <li class="holding-item">
+                                <div class="holding-rank silver">2</div>
+                                <span class="holding-name">시장 전망 총정리</span>
+                                <span class="holding-code">주간 리포트</span>
+                            </li>
+                            <li class="holding-item">
+                                <div class="holding-rank bronze">3</div>
+                                <span class="holding-name">기업 펀더멘털 분석</span>
+                                <span class="holding-code">심층 리서치</span>
+                            </li>
+                        </ul>
+                        <div style="text-align: right; color: #a0aec0; font-size: 0.75rem; margin-top: 8px;">📅 기준: 2026년 4월</div>
                     </div>
                     
-                    <div class="sesang-philosophy">
-                        <p>"세상의 흐름을 읽고, 불확실성 속에서 기회를 발견하라" — 거시경제와 기업 펀더멘털을 연결한 실전 투자</p>
+                    <div class="philosophy">
+                        <h4>📚 투자 철학</h4>
+                        <p>"세상의 흐름을 읽고, 불확실성 속에서 기회를 발견하라" — 거시경제와 기업 펀더멘털을 연결한 실전 투자 인사이트</p>
                     </div>
                     
-                    <div class="sesang-links">
+                    <div class="source-link">
                         <a href="https://youtube.com/@sesang101" target="_blank">📺 유튜브</a>
-                        <a href="https://instagram.com/junxoo" target="_blank">📸 인스타그램</a>
                     </div>
                 </div>
             </div>
