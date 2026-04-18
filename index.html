@@ -436,6 +436,197 @@
             font-size: 0.8rem;
             line-height: 1.5;
         }
+        
+        /* 투자 고수 섹션 */
+        .gurus-section {
+            margin: 30px 0;
+        }
+        .gurus-title {
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .gurus-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        @media (min-width: 768px) {
+            .gurus-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        /* 전문가 카드 공통 */
+        .guru-card {
+            background: rgba(255,255,255,0.8);
+            border-radius: 20px;
+            padding: 24px;
+            border: 2px solid rgba(0,0,0,0.05);
+        }
+        .guru-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+        .guru-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+        }
+        .guru-info h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        .guru-info p {
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+        
+        /* 오일전문가 */
+        .oil-card {
+            background: linear-gradient(135deg, rgba(168,237,234,0.15) 0%, rgba(254,214,227,0.15) 100%);
+            border-color: rgba(168,237,234,0.4);
+        }
+        .oil-card .guru-avatar {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            box-shadow: 0 4px 15px rgba(168,237,234,0.3);
+        }
+        .oil-card .guru-info h3 {
+            color: #38b2ac;
+        }
+        
+        /* 세상학개론 */
+        .sesang-card-new {
+            background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(118,75,162,0.15) 100%);
+            border-color: rgba(102,126,234,0.4);
+        }
+        .sesang-card-new .guru-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+        .sesang-card-new .guru-info h3 {
+            color: #667eea;
+        }
+        
+        /* Guru Stats */
+        .guru-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 16px 0;
+        }
+        .guru-stat {
+            background: rgba(255,255,255,0.7);
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .guru-stat-label {
+            color: #a0aec0;
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+        }
+        .guru-stat-value {
+            color: #2d3748;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        
+        /* Guru Holdings */
+        .guru-holdings {
+            background: rgba(255,255,255,0.6);
+            border-radius: 14px;
+            padding: 14px;
+            margin: 12px 0;
+        }
+        .guru-holdings h4 {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .holding-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .holding-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #4a5568;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .holding-tag.gold {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb800 100%);
+            color: #fff;
+            font-weight: 600;
+        }
+        
+        /* Guru Philosophy */
+        .guru-philosophy {
+            background: rgba(255,255,255,0.5);
+            border-radius: 12px;
+            padding: 14px;
+            margin: 12px 0;
+            border-left: 3px solid;
+        }
+        .oil-card .guru-philosophy {
+            border-color: #a8edea;
+        }
+        .sesang-card-new .guru-philosophy {
+            border-color: #667eea;
+        }
+        .guru-philosophy p {
+            font-size: 0.8rem;
+            color: #718096;
+            line-height: 1.6;
+            font-style: italic;
+        }
+        
+        /* Guru Links */
+        .guru-links {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+        }
+        .guru-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 16px;
+            font-size: 0.75rem;
+            text-decoration: none;
+            border: 1px solid rgba(0,0,0,0.08);
+        }
+        .oil-card .guru-link {
+            color: #38b2ac;
+        }
+        .sesang-card-new .guru-link {
+            color: #667eea;
+        }
     </style>
 </head>
 <body>
@@ -445,13 +636,13 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.cdc7fab | 2026-04-18 22:00</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.cae7963 | 2026-04-18 22:15</a>
             </div>
         </header>
         
         <div style="text-align: center;">
             <div class="update-time">
-                🕐 마지막 업데이트: 2026-04-18 22:15 🔴 실제 데이터 | 실전
+                🕐 마지막 업데이트: 2026-04-18 22:25 📋 샘플 데이터
             </div>
         </div>
         
@@ -476,80 +667,88 @@
             </div>
         </div>
 
-        <!-- 오일전문가 포트폴리오 -->
-        <div class="card expert-card" id="expertSection">
-            <div class="expert-header">
-                <div class="expert-avatar">🛢️</div>
-                <div class="expert-info">
-                    <h2>오일전문가 (임인홍)</h2>
-                    <p>10년 연평균 24% 수익률 · 80억 자산 보유</p>
+        <!-- 투자 고수 섹션 -->
+        <div class="gurus-section">
+            <h2 class="gurus-title">🏆 투자 고수 인사이트</h2>
+            <div class="gurus-grid">
+                <!-- 오일전문가 -->
+                <div class="guru-card oil-card">
+                    <div class="guru-header">
+                        <div class="guru-avatar">🛢️</div>
+                        <div class="guru-info">
+                            <h3>오일전문가 (임인홍)</h3>
+                            <p>배당금 재투자의 귀재 · 10년 연평균 24%</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guru-stats">
+                        <div class="guru-stat">
+                            <div class="guru-stat-label">총 자산</div>
+                            <div class="guru-stat-value">80억+</div>
+                        </div>
+                        <div class="guru-stat">
+                            <div class="guru-stat-label">6년 수익</div>
+                            <div class="guru-stat-value">10억→80억</div>
+                        </div>
+                    </div>
+                    
+                    <div class="guru-holdings">
+                        <h4>🎯 핵심 보유종목</h4>
+                        <div class="holding-tags">
+                            <span class="holding-tag gold">🥇 하나금융지주</span>
+                            <span class="holding-tag">🥈 엑슨모빌</span>
+                            <span class="holding-tag">🥉 현대차2우</span>
+                        </div>
+                    </div>
+                    
+                    <div class="guru-philosophy">
+                        <p>"황금알을 낳는 거위를 사고, 황금 알로는 다시 저렴한 거위를 사면서 거위 수를 계속 늘린다" — 배당금 전액 재투자 복리 전략</p>
+                    </div>
+                    
+                    <div class="guru-links">
+                        <a href="https://blog.naver.com/oilpro1" target="_blank" class="guru-link">📎 네이버 블로그</a>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-label">총 주식 자산</div>
-                    <div class="portfolio-value positive">80억+</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">국내 주식</div>
-                    <div class="portfolio-value">금융·에너지</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">해외 주식</div>
-                    <div class="portfolio-value">오일 메이저</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">6년 성과</div>
-                    <div class="portfolio-value positive">10억→80억</div>
-                </div>
-            </div>
-            
-            <div class="top-holdings">
-                <h3>🏆 보유종목 TOP 3</h3>
-                <ul class="holding-list">
-                    <li class="holding-item">
-                        <div class="holding-rank gold">1</div>
-                        <span class="holding-name">하나금융지주</span>
-                        <span class="holding-code">압도적 1위</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank silver">2</div>
-                        <span class="holding-name">엑슨모빌 (XOM)</span>
-                        <span class="holding-code">해외 에너지</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank bronze">3</div>
-                        <span class="holding-name">현대차2우</span>
-                        <span class="holding-code">제조·수출</span>
-                    </li>
-                </ul>
-                <div style="text-align: right; color: #a0aec0; font-size: 0.75rem; margin-top: 8px;">📅 기준일: 2026년 3월 말</div>
-            </div>
-            
-            <div class="philosophy">
-                <h4>📚 투자 철학</h4>
-                <p>"황금알을 낳는 거위를 사고, 황금 알로는 다시 저렴한 거위를 사면서 거위 수를 계속 늘린다" — 배당금 전액 재투자를 통한 복리 가속화 전략</p>
-            </div>
-            
-            <div class="source-link">
-                <a href="https://blog.naver.com/oilpro1" target="_blank">📎 네이버 블로그</a>
-            </div>
-        </div>
 
-        <!-- 세상학개론 포트폴리오 -->
-        <div class="card sesang-card" id="sesangSection">
-            <div class="sesang-header">
-                <div class="sesang-avatar">🎓</div>
-                <div class="sesang-info">
-                    <h2>세상학개론 (한정수)</h2>
-                    <p>경제·투자 유튜버 · 인플루언서</p>
+                <!-- 세상학개론 -->
+                <div class="guru-card sesang-card-new">
+                    <div class="guru-header">
+                        <div class="guru-avatar">🎓</div>
+                        <div class="guru-info">
+                            <h3>세상학개론 (한정수)</h3>
+                            <p>경제·투자 유튜버 · 시사·재테크 인플루언서</p>
+                        </div>
+                    </div>
+                    
+                    <div class="guru-stats">
+                        <div class="guru-stat">
+                            <div class="guru-stat-label">콘텐츠</div>
+                            <div class="guru-stat-value">시사·경제 분석</div>
+                        </div>
+                        <div class="guru-stat">
+                            <div class="guru-stat-label">전략</div>
+                            <div class="guru-stat-value">성장주+가치주</div>
+                        </div>
+                    </div>
+                    
+                    <div class="guru-holdings">
+                        <h4>📺 인기 콘텐츠</h4>
+                        <div class="holding-tags">
+                            <span class="holding-tag gold">🔥 급등주 분석</span>
+                            <span class="holding-tag">📈 시장 전망</span>
+                            <span class="holding-tag">💡 투자 인사이트</span>
+                        </div>
+                    </div>
+                    
+                    <div class="guru-philosophy">
+                        <p>"세상의 흐름을 읽고, 불확실성 속에서 기회를 발견하라" — 거시경제와 기업 펀더멘털을 연결한 실전 투자</p>
+                    </div>
+                    
+                    <div class="guru-links">
+                        <a href="https://youtube.com/@sesang101" target="_blank" class="guru-link">📺 유튜브</a>
+                        <a href="https://instagram.com/junxoo" target="_blank" class="guru-link">📸 인스타그램</a>
+                    </div>
                 </div>
-            </div>
-            
-            <div class="sesang-links">
-                <a href="https://youtube.com/@sesang101" target="_blank">📺 유튜브 @sesang101</a>
-                <a href="https://instagram.com/junxoo" target="_blank">📸 인스타그램 @junxoo</a>
             </div>
         </div>
 
@@ -558,163 +757,47 @@
         <div class="card stock-card">
             <div class="stock-header">
                 <div>
-                    <div class="stock-name">기가레인</div>
-                    <div class="stock-code">049080</div>
+                    <div class="stock-name">삼성전자</div>
+                    <div class="stock-code">005930</div>
                 </div>
                 <span class="surge-badge">급등 🔥</span>
             </div>
             <div class="price-info">
                 <div class="price-item">
                     <div class="price-label">현재가</div>
-                    <div class="price-value">2,600</div>
+                    <div class="price-value">72,300</div>
                 </div>
                 <div class="price-item">
                     <div class="price-label">등락률</div>
-                    <div class="price-value up">+30.00%</div>
+                    <div class="price-value up">+5.2%</div>
                 </div>
                 <div class="price-item">
                     <div class="price-label">거래량</div>
-                    <div class="price-value">79,261,765</div>
+                    <div class="price-value">15,234,567</div>
                 </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">반도체/장비</div>
-                <div class="company-desc">반도체 테스트 소켓 전문기업</div>
             </div>
         </div>
         <div class="card stock-card">
             <div class="stock-header">
                 <div>
-                    <div class="stock-name">빛과전자</div>
-                    <div class="stock-code">069540</div>
+                    <div class="stock-name">SK하이닉스</div>
+                    <div class="stock-code">000660</div>
                 </div>
                 <span class="surge-badge">급등 🔥</span>
             </div>
             <div class="price-info">
                 <div class="price-item">
                     <div class="price-label">현재가</div>
-                    <div class="price-value">5,860</div>
+                    <div class="price-value">145,000</div>
                 </div>
                 <div class="price-item">
                     <div class="price-label">등락률</div>
-                    <div class="price-value up">+29.93%</div>
+                    <div class="price-value up">+8.1%</div>
                 </div>
                 <div class="price-item">
                     <div class="price-label">거래량</div>
-                    <div class="price-value">71,152,970</div>
+                    <div class="price-value">8,123,456</div>
                 </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">전자/광학</div>
-                <div class="company-desc">LED 및 광학 부품 제조</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">후성</div>
-                    <div class="stock-code">093370</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">13,820</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+22.30%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">31,327,210</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">반도체/소재</div>
-                <div class="company-desc">반도체 장비 및 부품 제조</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">랩지노믹스</div>
-                    <div class="stock-code">084650</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">1,803</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+18.38%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">47,034,223</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">기타</div>
-                <div class="company-desc">거래량 급등</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">퍼스텍</div>
-                    <div class="stock-code">010820</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">13,480</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+14.92%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">26,713,797</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">기타</div>
-                <div class="company-desc">거래량 급등</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">파인텍</div>
-                    <div class="stock-code">131760</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">1,210</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+12.35%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">88,262,546</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">기타</div>
-                <div class="company-desc">거래량 급등</div>
             </div>
         </div>
 </div>
