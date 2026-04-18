@@ -10,8 +10,8 @@ fi
 
 echo "🚀 $(date): 급등주 데이터 업데이트 시작"
 
-# 1. 데이터 수집 및 HTML 업데이트 (API 버전)
-python3 update_stocks_with_api.py
+# 1. 데이터 수집 및 HTML 업데이트 (섹션 조합 방식)
+python3 update_stocks.py
 
 # 2. Git 변경사항 확인
 if git diff --quiet; then
