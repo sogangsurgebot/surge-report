@@ -90,8 +90,9 @@ def update_html(data):
     # 주식 카드 HTML 생성
     stock_cards = generate_stock_cards(data["stocks"])
     
-    # 플레이스홀더 치환
-    html_content = template.replace('{{UPDATE_DATE}}', data["date"] + ' 08:00')
+    # 플레이스홀더 치환 (현재 시간으로 업데이트)
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
+    html_content = template.replace('{{UPDATE_DATE}}', current_time)
     html_content = html_content.replace('{{STOCK_CARDS}}', stock_cards)
     
     # index.html 저장
