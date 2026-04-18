@@ -233,10 +233,24 @@
             line-height: 1.7;
         }
         
+        /* 주식 카드 그리드 */
+        .stocks-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        @media (min-width: 768px) {
+            .stocks-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
         /* 주식 카드 */
         .stock-card {
             background: rgba(255,255,255,0.8);
             border: 1px solid rgba(0,0,0,0.05);
+            margin: 0; /* 그리드에서 간격 조정 */
         }
         .stock-card:hover {
             border-color: rgba(255,154,158,0.3);
@@ -324,7 +338,7 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 surge-report</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 {{VERSION_INFO}}</a>
             </div>
         </header>
         

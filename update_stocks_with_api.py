@@ -6,6 +6,7 @@
 
 import os
 import requests
+import subprocess
 from datetime import datetime
 
 # 환경변수 로드
@@ -152,15 +153,14 @@ def get_sample_data():
     }
 
 def generate_stock_cards(stocks):
-    """주식 카드 HTML 생성"""
+    """주식 카드 HTML 생성 - 그리드 레이아웃용으로 래핑"""
     if not stocks:
         return '<div class="empty">현재 급등 종목이 없습니다.</div>'
     
-    cards_html = ""
+    cards_html = '<div class="stocks-grid">\n'
     for stock in stocks:
         change_class = "up" if "+" in stock["change"] else "down"
-        cards_html += f'''
-        <div class="card stock-card">
+        cards_html += f'''        <div class="card stock-card">
             <div class="stock-header">
                 <div>
                     <div class="stock-name">{stock["name"]}</div>
@@ -187,7 +187,29 @@ def generate_stock_cards(stocks):
             </div>
         </div>
 '''
+    cards_html += '</div>'
     return cards_html
+
+def get_git_version_info():
+    """Git 커밋 해시와 시간 가져오기"""
+    try:
+        # 커밋 해시 (짧은 버전)
+        commit_hash = subprocess.check_output(
+            ['git', 'rev-parse', '--short', 'HEAD'],
+            cwd=os.path.dirname(__file__),
+            stderr=subprocess.DEVNULL
+        ).decode().strip()
+        
+        # 커밋 시간
+        commit_time = subprocess.check_output(
+            ['git', 'log', '-1', '--format=%cd', '--date=format:%Y-%m-%d %H:%M'],
+            cwd=os.path.dirname(__file__),
+            stderr=subprocess.DEVNULL
+        ).decode().strip()
+        
+        return f"v.{commit_hash} | {commit_time}"
+    except:
+        return "v.unknown | unknown"
 
 def update_html(data):
     """템플릿 파일을 읽어서 데이터 치환 후 HTML 생성"""
@@ -209,10 +231,14 @@ def update_html(data):
         source_indicator += f" | {server_type}"
     html_content = html_content.replace('{{DATA_SOURCE}}', source_indicator)
     
+    # Git 버전 정보
+    version_info = get_git_version_info()
+    html_content = html_content.replace('{{VERSION_INFO}}', version_info)
+    
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-    print(f"✅ HTML 업데이트 완료: {len(data['stocks'])}개 종목 | {source_indicator}")
+    print(f"✅ HTML 업데이트 완료: {len(data['stocks'])}개 종목 | {source_indicator} | {version_info}")
 
 def fetch_surge_stocks():
     """급등주 데이터 수집 메인 함수"""
