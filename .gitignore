@@ -16,3 +16,4 @@ index.html.csv
 *.swp
 *.swo
 Thumbs.db
+.env
