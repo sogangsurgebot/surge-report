@@ -1,4 +1,71 @@
         
     </div>
+    
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // Swiper 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            const swiper = new Swiper('.expert-swiper', {
+                // 기본 설정
+                slidesPerView: 1,
+                spaceBetween: 20,
+                
+                // 루프
+                loop: true,
+                
+                // 자동 재생
+                autoplay: {
+                    delay: 5000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true
+                },
+                
+                // 페이지네이션 (dots)
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    bulletActiveClass: 'swiper-pagination-bullet-active'
+                },
+                
+                // 네비게이션 화살표
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev'
+                },
+                
+                // 효과
+                effect: 'slide',
+                speed: 500,
+                
+                // 반응형
+                breakpoints: {
+                    // 모바일 (기본)
+                    320: {
+                        slidesPerView: 1,
+                        spaceBetween: 16
+                    },
+                    // 태블릿 이상
+                    768: {
+                        slidesPerView: 1,
+                        spaceBetween: 20
+                    }
+                },
+                
+                // 키보드 네비게이션
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true
+                },
+                
+                // 스와이프
+                touchRatio: 1,
+                touchAngle: 45,
+                simulateTouch: true,
+                allowTouchMove: true,
+                threshold: 10
+            });
+        });
+    </script>
 </body>
 </html>
