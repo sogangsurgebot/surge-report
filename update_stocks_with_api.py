@@ -17,6 +17,31 @@ BASE_URL = os.getenv("KIS_BASE_URL", "https://openapivts.koreainvestment.com:294
 # 서버 타입 표시용
 SERVER_TYPE = "모의투자" if "openapivts" in BASE_URL else "실전"
 
+# 종목별 회사 정보 매핑 (업종 및 간단 설명)
+COMPANY_INFO = {
+    "005930": {"industry": "반도체/전자", "desc": "세계 최대 메모리 반도체 기업"},
+    "000660": {"industry": "반도체/전자", "desc": "HBM 메모리 전문 글로벌 선도기업"},
+    "035420": {"industry": "인터넷/플랫폼", "desc": "국내 대표 포털 및 검색 플랫폼"},
+    "035720": {"industry": "인터넷/플랫폼", "desc": "카카오톡 메신저 플랫폼 기업"},
+    "051910": {"industry": "화학/배터리", "desc": "전기차 배터리 소재 글로벌 1위"},
+    "006400": {"industry": "배터리/전자", "desc": "전기차 배터리 및 소재 전문기업"},
+    "373220": {"industry": "배터리/전자", "desc": "세계 2위 전기차 배터리 제조사"},
+    "105560": {"industry": "금융/은행", "desc": "국내 대표 금융지주사"},
+    "086790": {"industry": "금융/은행", "desc": "하나금융그룹 지주사"},
+    "000270": {"industry": "자동차/제조", "desc": "글로벌 완성차 제조 기업"},
+    "005380": {"industry": "자동차/제조", "desc": "세계 3위 규모 완성차 기업"},
+    "012330": {"industry": "전자/디스플레이", "desc": "세계 최대 TV/디스플레이 패널"},
+    "247540": {"industry": "바이오/제약", "desc": "혁신신약 개발 바이오 기업"},
+    "207940": {"industry": "바이오/제약", "desc": "글로벌 바이오시밀러 선도기업"},
+    "068270": {"industry": "바이오/제약", "desc": "셀트리온 그룹 지주사"},
+    "196490": {"industry": "리조트/서비스", "desc": "강원랜드 카지노 리조트"},
+    "049080": {"industry": "반도체/장비", "desc": "반도체 테스트 소켓 전문기업"},
+    "069540": {"industry": "전자/광학", "desc": "LED 및 광학 부품 제조"},
+    "093370": {"industry": "반도체/소재", "desc": "반도체 장비 및 부품 제조"},
+    "084370": {"industry": "바이오/진단", "desc": "유전자 분석 및 진단키트"},
+    "134790": {"industry": "전자/부품", "desc": "전자부품 및 전원공급장치"},
+}
+
 def get_access_token():
     """Access Token 발급"""
     if not APP_KEY or not APP_SECRET:
@@ -95,14 +120,20 @@ def get_volume_rank_surge_stocks(token):
                     if change_rate >= 5.0:
                         price = int(item.get('stck_prpr', 0))
                         volume = int(item.get('acml_vol', 0))
+                        code = item.get("mksc_shrn_iscd", "")
+                        
+                        # 회사 정보 조회
+                        company = COMPANY_INFO.get(code, {"industry": "기타", "desc": "거래량 급등"})
                         
                         surge_stocks.append({
                             "name": item.get("hts_kor_isnm", ""),
-                            "code": item.get("mksc_shrn_iscd", ""),
+                            "code": code,
                             "price": f"{price:,}",
                             "change": f"{change_rate:+.2f}%",
                             "volume": f"{volume:,}",
-                            "reason": "거래량 급등"
+                            "reason": "거래량 급등",
+                            "industry": company["industry"],
+                            "desc": company["desc"]
                         })
                 except (ValueError, TypeError):
                     continue
@@ -117,7 +148,7 @@ def get_volume_rank_surge_stocks(token):
             for s in surge_stocks[:5]:
                 print(f"      - {s['name']}: {s['change']}")
             
-            return surge_stocks[:10]  # 상위 10개
+            return surge_stocks[:6]  # 상위 6개만
         else:
             print(f"   ❌ API 오류: {data.get('msg1', 'Unknown error')}")
             
@@ -160,6 +191,18 @@ def generate_stock_cards(stocks):
     cards_html = '<div class="stocks-grid">\n'
     for stock in stocks:
         change_class = "up" if "+" in stock["change"] else "down"
+        industry = stock.get("industry", "")
+        desc = stock.get("desc", "")
+        
+        # 회사 정보 표시
+        company_info_html = ""
+        if industry or desc:
+            company_info_html = f'''            <div class="company-info">
+                <div class="company-industry">{industry}</div>
+                <div class="company-desc">{desc}</div>
+            </div>
+'''
+        
         cards_html += f'''        <div class="card stock-card">
             <div class="stock-header">
                 <div>
@@ -182,10 +225,7 @@ def generate_stock_cards(stocks):
                     <div class="price-value">{stock["volume"]}</div>
                 </div>
             </div>
-            <div class="reason">
-                📊 {stock["reason"]}
-            </div>
-        </div>
+{company_info_html}        </div>
 '''
     cards_html += '</div>'
     return cards_html

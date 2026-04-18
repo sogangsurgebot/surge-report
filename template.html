@@ -318,16 +318,123 @@
             border-left: 3px solid #a8edea;
         }
         
-        /* 소스 링크 */
-        .source-link {
-            text-align: right;
-            margin-top: 16px;
+        /* 급등주 판단 기준 */
+        .criteria-card {
+            background: linear-gradient(135deg, rgba(255,154,158,0.1) 0%, rgba(250,208,196,0.1) 100%);
+            border: 2px solid rgba(255,154,158,0.2);
         }
-        .source-link a {
-            color: #38b2ac;
+        .criteria-title {
+            color: #ff6b6b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (min-width: 640px) {
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 14px;
+            border: 1px solid rgba(255,154,158,0.15);
+        }
+        .criteria-icon {
+            font-size: 1.5rem;
+        }
+        .criteria-text strong {
+            display: block;
+            color: #2d3748;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        .criteria-text span {
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+        
+        /* 세상학개론 카드 */
+        .sesang-card {
+            background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(118,75,162,0.15) 100%);
+            border: 2px solid rgba(102,126,234,0.3);
+        }
+        .sesang-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .sesang-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+        .sesang-info h2 {
+            font-size: 1.3rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .sesang-info p {
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+        .sesang-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .sesang-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 20px;
+            color: #667eea;
             font-size: 0.85rem;
             font-weight: 500;
             text-decoration: none;
+            border: 1px solid rgba(102,126,234,0.2);
+        }
+        .sesang-links a:hover {
+            background: rgba(102,126,234,0.1);
+        }
+        
+        /* 주식 카드 회사 정보 */
+        .company-info {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: rgba(102,126,234,0.05);
+            border-radius: 10px;
+            border-left: 3px solid #667eea;
+        }
+        .company-industry {
+            color: #667eea;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .company-desc {
+            color: #718096;
+            font-size: 0.8rem;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -427,6 +534,22 @@
             
             <div class="source-link">
                 <a href="https://blog.naver.com/oilpro1" target="_blank">📎 네이버 블로그</a>
+            </div>
+        </div>
+
+        <!-- 세상학개론 포트폴리오 -->
+        <div class="card sesang-card" id="sesangSection">
+            <div class="sesang-header">
+                <div class="sesang-avatar">🎓</div>
+                <div class="sesang-info">
+                    <h2>세상학개론 (한정수)</h2>
+                    <p>경제·투자 유튜버 · 인플루언서</p>
+                </div>
+            </div>
+            
+            <div class="sesang-links">
+                <a href="https://youtube.com/@sesang101" target="_blank">📺 유튜브 @sesang101</a>
+                <a href="https://instagram.com/junxoo" target="_blank">📸 인스타그램 @junxoo</a>
             </div>
         </div>
 

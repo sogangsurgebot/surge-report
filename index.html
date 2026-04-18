@@ -318,16 +318,123 @@
             border-left: 3px solid #a8edea;
         }
         
-        /* 소스 링크 */
-        .source-link {
-            text-align: right;
-            margin-top: 16px;
+        /* 급등주 판단 기준 */
+        .criteria-card {
+            background: linear-gradient(135deg, rgba(255,154,158,0.1) 0%, rgba(250,208,196,0.1) 100%);
+            border: 2px solid rgba(255,154,158,0.2);
         }
-        .source-link a {
-            color: #38b2ac;
+        .criteria-title {
+            color: #ff6b6b;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        @media (min-width: 640px) {
+            .criteria-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 14px;
+            border: 1px solid rgba(255,154,158,0.15);
+        }
+        .criteria-icon {
+            font-size: 1.5rem;
+        }
+        .criteria-text strong {
+            display: block;
+            color: #2d3748;
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+        .criteria-text span {
+            color: #a0aec0;
+            font-size: 0.8rem;
+        }
+        
+        /* 세상학개론 카드 */
+        .sesang-card {
+            background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(118,75,162,0.15) 100%);
+            border: 2px solid rgba(102,126,234,0.3);
+        }
+        .sesang-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .sesang-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
+        }
+        .sesang-info h2 {
+            font-size: 1.3rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .sesang-info p {
+            color: #a0aec0;
+            font-size: 0.85rem;
+        }
+        .sesang-links {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .sesang-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 20px;
+            color: #667eea;
             font-size: 0.85rem;
             font-weight: 500;
             text-decoration: none;
+            border: 1px solid rgba(102,126,234,0.2);
+        }
+        .sesang-links a:hover {
+            background: rgba(102,126,234,0.1);
+        }
+        
+        /* 주식 카드 회사 정보 */
+        .company-info {
+            margin-top: 12px;
+            padding: 10px 14px;
+            background: rgba(102,126,234,0.05);
+            border-radius: 10px;
+            border-left: 3px solid #667eea;
+        }
+        .company-industry {
+            color: #667eea;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .company-desc {
+            color: #718096;
+            font-size: 0.8rem;
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -338,13 +445,13 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.5dd0e42 | 2026-04-18 21:40</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.cdc7fab | 2026-04-18 22:00</a>
             </div>
         </header>
         
         <div style="text-align: center;">
             <div class="update-time">
-                🕐 마지막 업데이트: 2026-04-18 22:00 🔴 실제 데이터 | 실전
+                🕐 마지막 업데이트: 2026-04-18 22:15 🔴 실제 데이터 | 실전
             </div>
         </div>
         
@@ -430,6 +537,22 @@
             </div>
         </div>
 
+        <!-- 세상학개론 포트폴리오 -->
+        <div class="card sesang-card" id="sesangSection">
+            <div class="sesang-header">
+                <div class="sesang-avatar">🎓</div>
+                <div class="sesang-info">
+                    <h2>세상학개론 (한정수)</h2>
+                    <p>경제·투자 유튜버 · 인플루언서</p>
+                </div>
+            </div>
+            
+            <div class="sesang-links">
+                <a href="https://youtube.com/@sesang101" target="_blank">📺 유튜브 @sesang101</a>
+                <a href="https://instagram.com/junxoo" target="_blank">📸 인스타그램 @junxoo</a>
+            </div>
+        </div>
+
         <!-- 급등주 카드 -->
         <div class="stocks-grid">
         <div class="card stock-card">
@@ -454,8 +577,9 @@
                     <div class="price-value">79,261,765</div>
                 </div>
             </div>
-            <div class="reason">
-                📊 거래량 급등
+            <div class="company-info">
+                <div class="company-industry">반도체/장비</div>
+                <div class="company-desc">반도체 테스트 소켓 전문기업</div>
             </div>
         </div>
         <div class="card stock-card">
@@ -480,8 +604,9 @@
                     <div class="price-value">71,152,970</div>
                 </div>
             </div>
-            <div class="reason">
-                📊 거래량 급등
+            <div class="company-info">
+                <div class="company-industry">전자/광학</div>
+                <div class="company-desc">LED 및 광학 부품 제조</div>
             </div>
         </div>
         <div class="card stock-card">
@@ -506,8 +631,9 @@
                     <div class="price-value">31,327,210</div>
                 </div>
             </div>
-            <div class="reason">
-                📊 거래량 급등
+            <div class="company-info">
+                <div class="company-industry">반도체/소재</div>
+                <div class="company-desc">반도체 장비 및 부품 제조</div>
             </div>
         </div>
         <div class="card stock-card">
@@ -532,8 +658,9 @@
                     <div class="price-value">47,034,223</div>
                 </div>
             </div>
-            <div class="reason">
-                📊 거래량 급등
+            <div class="company-info">
+                <div class="company-industry">기타</div>
+                <div class="company-desc">거래량 급등</div>
             </div>
         </div>
         <div class="card stock-card">
@@ -558,8 +685,9 @@
                     <div class="price-value">26,713,797</div>
                 </div>
             </div>
-            <div class="reason">
-                📊 거래량 급등
+            <div class="company-info">
+                <div class="company-industry">기타</div>
+                <div class="company-desc">거래량 급등</div>
             </div>
         </div>
         <div class="card stock-card">
@@ -584,112 +712,9 @@
                     <div class="price-value">88,262,546</div>
                 </div>
             </div>
-            <div class="reason">
-                📊 거래량 급등
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">아주IB투자</div>
-                    <div class="stock-code">027360</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">11,930</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+8.75%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">40,311,238</div>
-                </div>
-            </div>
-            <div class="reason">
-                📊 거래량 급등
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">프로이천</div>
-                    <div class="stock-code">321260</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">3,030</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+7.26%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">31,613,440</div>
-                </div>
-            </div>
-            <div class="reason">
-                📊 거래량 급등
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">광전자</div>
-                    <div class="stock-code">017900</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">13,810</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+7.05%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">59,933,313</div>
-                </div>
-            </div>
-            <div class="reason">
-                📊 거래량 급등
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">서울전자통신</div>
-                    <div class="stock-code">027040</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">737</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+6.66%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">42,158,594</div>
-                </div>
-            </div>
-            <div class="reason">
-                📊 거래량 급등
+            <div class="company-info">
+                <div class="company-industry">기타</div>
+                <div class="company-desc">거래량 급등</div>
             </div>
         </div>
 </div>
