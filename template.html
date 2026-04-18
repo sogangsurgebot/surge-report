@@ -330,7 +330,7 @@
         
         <div style="text-align: center;">
             <div class="update-time">
-                🕐 마지막 업데이트: 2026-04-17 08:00
+                🕐 마지막 업데이트: {{UPDATE_DATE}}
             </div>
         </div>
         
@@ -396,61 +396,7 @@
         </div>
 
         <!-- 급등주 카드 -->
-        
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">삼성전자</div>
-                    <div class="stock-code">005930</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">72,300</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+5.2%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">15.2M</div>
-                </div>
-            </div>
-            <div class="reason">
-                📊 AI 반도체 수주 증가 소식
-            </div>
-        </div>
-
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">SK하이닉스</div>
-                    <div class="stock-code">000660</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">145,000</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+8.1%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">8.1M</div>
-                </div>
-            </div>
-            <div class="reason">
-                📊 HBM3E 공급 확대 기대감
-            </div>
-        </div>
-
+        {{STOCK_CARDS}}
         
     </div>
 </body>
