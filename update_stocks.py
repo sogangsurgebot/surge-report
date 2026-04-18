@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 급등주 데이터 수집 스크립트 (한국투자증권 KIS API)
-거래량 순위 API 활용 - 모의투자/실전 모두 지원
+섹션별 분리된 템플릿 조합 방식
 """
 
 import os
@@ -33,7 +33,10 @@ BASE_URL = os.getenv("KIS_BASE_URL", "https://openapivts.koreainvestment.com:294
 # 서버 타입 표시용
 SERVER_TYPE = "모의투자" if "openapivts" in BASE_URL else "실전"
 
-# 종목별 회사 정보 매핑 (업종 및 간단 설명)
+# 섹션 파일 경로
+SECTIONS_DIR = Path(__file__).parent / 'sections'
+
+# 종목별 회사 정보 매핑
 COMPANY_INFO = {
     "005930": {"industry": "반도체/전자", "desc": "세계 최대 메모리 반도체 기업"},
     "000660": {"industry": "반도체/전자", "desc": "HBM 메모리 전문 글로벌 선도기업"},
@@ -86,10 +89,7 @@ def get_access_token():
     return None
 
 def get_volume_rank_surge_stocks(token):
-    """
-    거래량 순위 API로 급등주 조회
-    모의투자/실전 모두 지원 (TR_ID: FHPST01710000)
-    """
+    """거래량 순위 API로 급등주 조회"""
     
     url = f"{BASE_URL}/uapi/domestic-stock/v1/quotations/volume-rank"
     
@@ -98,16 +98,16 @@ def get_volume_rank_surge_stocks(token):
         "Authorization": f"Bearer {token}",
         "appkey": APP_KEY,
         "appsecret": APP_SECRET,
-        "tr_id": "FHPST01710000",  # 모의투자/실전 공용
+        "tr_id": "FHPST01710000",
         "custtype": "P"
     }
     
     params = {
         "FID_COND_MRKT_DIV_CODE": "J",
         "FID_COND_SCR_DIV_CODE": "20171",
-        "FID_INPUT_ISCD": "0000",  # 전체
-        "FID_DIV_CLS_CODE": "0",   # 전체
-        "FID_BLNG_CLS_CODE": "0",  # 평균거래량
+        "FID_INPUT_ISCD": "0000",
+        "FID_DIV_CLS_CODE": "0",
+        "FID_BLNG_CLS_CODE": "0",
         "FID_TRGT_CLS_CODE": "111111111",
         "FID_TRGT_EXLS_CLS_CODE": "000000",
         "FID_INPUT_PRICE_1": "",
@@ -132,13 +132,11 @@ def get_volume_rank_surge_stocks(token):
                 try:
                     change_rate = float(item.get("prdy_ctrt", 0))
                     
-                    # 급등주 조건: 등락률 +5% 이상
                     if change_rate >= 5.0:
                         price = int(item.get('stck_prpr', 0))
                         volume = int(item.get('acml_vol', 0))
                         code = item.get("mksc_shrn_iscd", "")
                         
-                        # 회사 정보 조회
                         company = COMPANY_INFO.get(code, {"industry": "기타", "desc": "거래량 급등"})
                         
                         surge_stocks.append({
@@ -154,7 +152,6 @@ def get_volume_rank_surge_stocks(token):
                 except (ValueError, TypeError):
                     continue
             
-            # 등락률 높은 순 정렬
             surge_stocks.sort(
                 key=lambda x: float(x["change"].replace('%', '').replace('+', '')),
                 reverse=True
@@ -164,7 +161,7 @@ def get_volume_rank_surge_stocks(token):
             for s in surge_stocks[:5]:
                 print(f"      - {s['name']}: {s['change']}")
             
-            return surge_stocks[:6]  # 상위 6개만
+            return surge_stocks[:6]
         else:
             print(f"   ❌ API 오류: {data.get('msg1', 'Unknown error')}")
             
@@ -204,7 +201,7 @@ def get_sample_data():
     }
 
 def generate_stock_cards(stocks):
-    """주식 카드 HTML 생성 - 그리드 레이아웃용으로 래핑"""
+    """주식 카드 HTML 생성"""
     if not stocks:
         return '<div class="empty">현재 급등 종목이 없습니다.</div>'
     
@@ -214,7 +211,6 @@ def generate_stock_cards(stocks):
         industry = stock.get("industry", "")
         desc = stock.get("desc", "")
         
-        # 회사 정보 표시
         company_info_html = ""
         if industry or desc:
             company_info_html = f'''            <div class="company-info">
@@ -253,14 +249,12 @@ def generate_stock_cards(stocks):
 def get_git_version_info():
     """Git 커밋 해시와 시간 가져오기"""
     try:
-        # 커밋 해시 (짧은 버전)
         commit_hash = subprocess.check_output(
             ['git', 'rev-parse', '--short', 'HEAD'],
             cwd=os.path.dirname(__file__),
             stderr=subprocess.DEVNULL
         ).decode().strip()
         
-        # 커밋 시간
         commit_time = subprocess.check_output(
             ['git', 'log', '-1', '--format=%cd', '--date=format:%Y-%m-%d %H:%M'],
             cwd=os.path.dirname(__file__),
@@ -271,30 +265,44 @@ def get_git_version_info():
     except:
         return "v.unknown | unknown"
 
+def load_section(filename):
+    """섹션 파일 로드"""
+    section_path = SECTIONS_DIR / filename
+    if section_path.exists():
+        with open(section_path, 'r', encoding='utf-8') as f:
+            return f.read()
+    return ""
+
 def update_html(data):
-    """템플릿 파일을 읽어서 데이터 치환 후 HTML 생성"""
+    """섹션 파일을 조합해서 HTML 생성"""
     
-    template_path = os.path.join(os.path.dirname(__file__), 'template.html')
-    with open(template_path, 'r', encoding='utf-8') as f:
-        template = f.read()
+    # 섹션 파일 로드
+    header = load_section('header.html')
+    criteria = load_section('criteria.html')
+    experts = load_section('experts.html')
+    footer = load_section('footer.html')
     
+    # 주식 카드 HTML 생성
     stock_cards = generate_stock_cards(data["stocks"])
     
+    # 플레이스홀더 치환
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
-    html_content = template.replace('{{UPDATE_DATE}}', current_time)
-    html_content = html_content.replace('{{STOCK_CARDS}}', stock_cards)
+    version_info = get_git_version_info()
     
-    # 데이터 소스 표시 (실제 vs 샘플, 서버 타입)
     source_indicator = data.get("source", f"🔴 실제 데이터")
     server_type = data.get("server", SERVER_TYPE)
     if server_type and server_type != "N/A":
         source_indicator += f" | {server_type}"
-    html_content = html_content.replace('{{DATA_SOURCE}}', source_indicator)
     
-    # Git 버전 정보
-    version_info = get_git_version_info()
-    html_content = html_content.replace('{{VERSION_INFO}}', version_info)
+    # 헤더 섹션 치환
+    header = header.replace('{{UPDATE_DATE}}', current_time)
+    header = header.replace('{{DATA_SOURCE}}', source_indicator)
+    header = header.replace('{{VERSION_INFO}}', version_info)
     
+    # HTML 조합
+    html_content = header + criteria + experts + stock_cards + footer
+    
+    # index.html 저장
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
     
@@ -307,7 +315,6 @@ def fetch_surge_stocks():
     if not token:
         return get_sample_data()
     
-    # 거래량 순위 API로 급등주 조회
     stocks = get_volume_rank_surge_stocks(token)
     
     if stocks:
@@ -318,7 +325,6 @@ def fetch_surge_stocks():
             "stocks": stocks
         }
     
-    # API 실패 시 샘플 데이터
     print("⚠️ API 실패, 샘플 데이터 사용")
     return get_sample_data()
 
