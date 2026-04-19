@@ -1155,6 +1155,34 @@
     opacity: 0.8;
 }
 
+/* 빈 상태 스타일 */
+.empty-state {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    background: rgba(255,255,255,0.6);
+    border-radius: var(--card-radius);
+    border: 2px dashed rgba(160, 174, 192, 0.4);
+    margin: var(--space-md) 0;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-sm);
+    opacity: 0.6;
+}
+
+.empty-text {
+    font-size: var(--font-md);
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+}
+
+.empty-hint {
+    font-size: var(--font-xs);
+    color: var(--color-text-light);
+}
+
 .stock-reason {
     margin-top: 8px;
     padding: 8px 12px;
@@ -1173,13 +1201,13 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.a3d5e0c | 2026-04-19 18:00</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.f8fe137 | 2026-04-19 18:30</a>
             </div>
         </header>
         
         <div class="update-time-wrapper">
             <div class="update-time">
-                <span>🕐 마지막 업데이트: 2026-04-19 18:30</span>
+                <span>🕐 마지막 업데이트: 2026-04-19 18:52</span>
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
         </div>
@@ -1513,7 +1541,25 @@
                 <span style="margin: 0 0.5rem; color: #ccc;">|</span>
                 <span style="font-size: var(--font-sm); color: var(--color-text-light);">📊 데이터: 2026년 4월 시장 기준</span>
             </div>
-        </div><div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2></div>        
+        </div><div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2><div class="market-section market-section-primary" data-market="kospi">
+    <div class="market-header" style="border-left: 4px solid #ff6b6b;">
+        <h3 class="market-title">📈 KOSPI <span class="market-count">0개</span></h3>
+    </div>
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-text">📊 현재 KOSPI 시장에서 급등주(+5% 이상)가 감지되지 않았습니다</div>
+        <div class="empty-hint">장중에 다시 확인해주세요 (30분마다 자동 갱신)</div>
+    </div>
+</div><div class="market-section market-section-primary" data-market="kosdaq">
+    <div class="market-header" style="border-left: 4px solid #4ecdc4;">
+        <h3 class="market-title">🚀 KOSDAQ <span class="market-count">0개</span></h3>
+    </div>
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-text">🚀 현재 KOSDAQ 시장에서 급등주(+5% 이상)가 감지되지 않았습니다</div>
+        <div class="empty-hint">장중에 다시 확인해주세요 (30분마다 자동 갱신)</div>
+    </div>
+</div></div>        
     </div>
     
     <!-- Swiper JS -->

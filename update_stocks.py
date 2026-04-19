@@ -408,8 +408,36 @@ def get_sample_data():
 
 def generate_stock_section(stocks, title, market_type, is_primary=False):
     """주식 섹션 HTML 생성"""
+    
+    # 시장별 테두리 색상
+    border_colors = {
+        "kospi": "#ff6b6b", "kosdaq": "#4ecdc4", "nasdaq": "#667eea"
+    }
+    border_color = border_colors.get(market_type, "#667eea")
+    
+    # 주요 섹션 여부에 따른 스타일
+    section_class = "market-section-primary" if is_primary else "market-section-secondary"
+    
+    # 빈 상태 메시지
     if not stocks:
-        return ''
+        empty_messages = {
+            "kospi": "📊 현재 KOSPI 시장에서 급등주(+5% 이상)가 감지되지 않았습니다",
+            "kosdaq": "🚀 현재 KOSDAQ 시장에서 급등주(+5% 이상)가 감지되지 않았습니다",
+            "nasdaq": "🇺🇸 현재 나스닥 시장이 마감되었거나 급등주가 없습니다"
+        }
+        empty_msg = empty_messages.get(market_type, "현재 급등주가 없습니다")
+        
+        return f'''<div class="market-section {section_class}" data-market="{market_type}">
+    <div class="market-header" style="border-left: 4px solid {border_color};">
+        <h3 class="market-title">{title} <span class="market-count">0개</span></h3>
+    </div>
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-text">{empty_msg}</div>
+        <div class="empty-hint">장중에 다시 확인해주세요 (30분마다 자동 갱신)</div>
+    </div>
+</div>'''
+
     
     # 시장별 테두리 색상
     border_colors = {
@@ -697,6 +725,34 @@ def update_html(data):
     color: #667eea;
     margin-top: 4px;
     opacity: 0.8;
+}
+
+/* 빈 상태 스타일 */
+.empty-state {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    background: rgba(255,255,255,0.6);
+    border-radius: var(--card-radius);
+    border: 2px dashed rgba(160, 174, 192, 0.4);
+    margin: var(--space-md) 0;
+}
+
+.empty-icon {
+    font-size: 3rem;
+    margin-bottom: var(--space-sm);
+    opacity: 0.6;
+}
+
+.empty-text {
+    font-size: var(--font-md);
+    color: var(--color-text);
+    font-weight: 500;
+    margin-bottom: var(--space-xs);
+}
+
+.empty-hint {
+    font-size: var(--font-xs);
+    color: var(--color-text-light);
 }
 
 .stock-reason {
