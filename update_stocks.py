@@ -764,6 +764,77 @@ def update_html(data):
     color: #667eea;
     font-weight: 600;
 }
+/* 판별로직 접기/펼치기 스타일 */
+.logic-details {
+    background: rgba(255,255,255,0.6);
+    border-radius: var(--card-radius);
+    border: 1px solid rgba(255,255,255,0.8);
+    overflow: hidden;
+    margin: var(--space-md) 0;
+}
+
+.logic-summary {
+    padding: var(--space-md);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: none;
+    transition: background 0.2s;
+}
+
+.logic-summary:hover {
+    background: rgba(255,255,255,0.8);
+}
+
+.logic-summary::-webkit-details-marker {
+    display: none;
+}
+
+.summary-title {
+    font-size: var(--font-lg);
+    font-weight: 700;
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.summary-title::before {
+    content: '▶';
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+    color: var(--color-accent);
+}
+
+.logic-details[open] .summary-title::before {
+    transform: rotate(90deg);
+}
+
+.summary-hint {
+    font-size: var(--font-sm);
+    color: var(--color-text-light);
+}
+
+.logic-content {
+    padding: 0 var(--space-md) var(--space-md);
+}
+
+/* details 애니메이션 */
+.logic-details[open] .logic-content {
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 </style>
 '''
     
