@@ -69,6 +69,69 @@
                         </div>
                     </div>
                     
+                    <!-- 오일전문가 추천 종목 슬라이드 -->
+                    <div class="swiper-slide">
+                        <div class="expert-card oil-card" id="oilPicksSection">
+                            <div class="expert-header">
+                                <div class="expert-avatar">🎯</div>
+                                <div class="expert-info">
+                                    <h2>오일전문가 추천 종목</h2>
+                                    <p>배당+성장 전략 기반 선별 종목 · 오일전문가 투자 인사이트 적용</p>
+                                </div>
+                            </div>
+                            
+                            <div class="portfolio-grid">
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">추천 섹터</div>
+                                    <div class="portfolio-value">금융·에너지</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">선별 기준</div>
+                                    <div class="portfolio-value">배당수익률 3%+</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">투자 스타일</div>
+                                    <div class="portfolio-value">장기 보유</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">리스크 관리</div>
+                                    <div class="portfolio-value positive">분산 투자</div>
+                                </div>
+                            </div>
+                            
+                            <div class="top-holdings">
+                                <h3>⭐ 오일전문가 추천 TOP 3</h3>
+                                <ul class="holding-list">
+                                    <li class="holding-item">
+                                        <div class="holding-rank gold">1</div>
+                                        <span class="holding-name">하나금융지주</span>
+                                        <span class="holding-code">대형 금융주</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank silver">2</div>
+                                        <span class="holding-name">SK가스</span>
+                                        <span class="holding-code">에너지·유틸리티</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank bronze">3</div>
+                                        <span class="holding-name">LG화학</span>
+                                        <span class="holding-code">배터리 소재</span>
+                                    </li>
+                                </ul>
+                                <div class="date-note">📅 기준일: 2026년 4월 | ⚠️ 투자 유의사항 참고</div>
+                            </div>
+                            
+                            <div class="philosophy">
+                                <h4>📚 선별 기준</h4>
+                                <p>"황금알을 낳는 거위를 선별하라" — 배당 안정성(5년 이상 연속), 성장성(연평균 10%+), PER 15배 미만 종목 중심으로 선별</p>
+                            </div>
+                            
+                            <div class="source-link">
+                                <a href="https://blog.naver.com/oilpro1" target="_blank">📎 오일전문가 블로그</a>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- 세상학개론 슬라이드 -->
                     <div class="swiper-slide">
                         <div class="expert-card sesang-card" id="sesangSection">
@@ -140,61 +203,5 @@
                 <!-- 네비게이션 화살표 -->
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
-            </div>
-        </div>
-        
-        <!-- 오일전문가 추천 종목 - 별도 섹션 -->
-        <div class="card picks-section" id="oilPicksStandalone">
-            <h2 class="gurus-title">🎯 오일전문가 추천 종목</h2>
-            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">배당+성장 전략 기반 선별 종목 · 투자 인사이트 적용</p>
-            
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-label">추천 섹터</div>
-                    <div class="portfolio-value">금융·에너지·화학</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">선별 기준</div>
-                    <div class="portfolio-value">배당수익률 3%+</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">투자 스타일</div>
-                    <div class="portfolio-value">장기 보유</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">리스크 관리</div>
-                    <div class="portfolio-value positive">분산 투자</div>
-                </div>
-            </div>
-            
-            <div class="top-holdings" style="background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(250,208,196,0.15) 100%); border: 1px solid rgba(255,154,158,0.3);">
-                <h3 style="color: #ff6b6b;">⭐ 오일전문가 추천 TOP 3</h3>
-                <ul class="holding-list">
-                    <li class="holding-item">
-                        <div class="holding-rank gold">1</div>
-                        <span class="holding-name">하나금융지주</span>
-                        <span class="holding-code">대형 금융주 · 배당수익률 4.2%</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank silver">2</div>
-                        <span class="holding-name">SK가스</span>
-                        <span class="holding-code">에너지·유틸리티 · 배당수익률 3.8%</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank bronze">3</div>
-                        <span class="holding-name">LG화학</span>
-                        <span class="holding-code">배터리 소재 · 배당수익률 3.1%</span>
-                    </li>
-                </ul>
-                <div class="date-note">📅 기준일: 2026년 4월 | ⚠️ 투자 유의사항 참고</div>
-            </div>
-            
-            <div class="philosophy" style="border-left-color: #ff9a9e;">
-                <h4 style="color: #ff6b6b;">📚 선별 기준</h4>
-                <p>"황금알을 낳는 거위를 선별하라" — 배당 안정성(5년 이상 연속), 성장성(연평균 10%+), PER 15배 미만 종목 중심으로 선별. 오일전문가의 "황금 거위" 전략을 적용하여 장기적 복리 효과를 노립니다.</p>
-            </div>
-            
-            <div class="source-link">
-                <a href="https://blog.naver.com/oilpro1" target="_blank" style="color: #ff6b6b;">📎 출처: 오일전문가 네이버 블로그</a>
             </div>
         </div>
