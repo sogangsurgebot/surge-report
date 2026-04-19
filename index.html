@@ -1004,6 +1004,167 @@
             }
         }
     </style>
+
+<style>
+/* KOSDAQ 가시성 개선 - 추가 CSS */
+.section-main-title {
+    font-size: var(--font-xl);
+    font-weight: 700;
+    text-align: center;
+    margin: var(--space-xl) 0 var(--space-md);
+    color: #2d3748;
+}
+
+.domestic-section {
+    margin-bottom: var(--space-xl);
+}
+
+.market-section-primary {
+    margin-bottom: var(--space-lg);
+}
+
+.market-section-primary .market-header {
+    background: rgba(255,255,255,0.9);
+    padding: var(--space-md);
+    border-radius: 12px;
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.market-count {
+    font-size: var(--font-sm);
+    color: var(--color-text-light);
+    font-weight: 500;
+    background: rgba(0,0,0,0.05);
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.market-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 6px;
+    font-weight: 600;
+}
+
+.market-badge.kospi {
+    background: #ff6b6b;
+    color: white;
+}
+
+.market-badge.kosdaq {
+    background: #4ecdc4;
+    color: white;
+}
+
+.stocks-grid-3col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+    .stocks-grid-3col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .stocks-grid-3col {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.stocks-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-md);
+}
+
+@media (min-width: 640px) {
+    .stocks-grid-2col {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 해외 주식 접기 섹션 */
+.international-section {
+    margin-top: var(--space-xl);
+}
+
+.collapse-section {
+    background: rgba(255,255,255,0.6);
+    border-radius: var(--card-radius);
+    border: 1px solid rgba(255,255,255,0.8);
+    overflow: hidden;
+}
+
+.collapse-header {
+    padding: var(--space-md);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: #2d3748;
+    list-style: none;
+    transition: background 0.2s;
+}
+
+.collapse-header:hover {
+    background: rgba(255,255,255,0.8);
+}
+
+.collapse-header::-webkit-details-marker {
+    display: none;
+}
+
+.collapse-hint {
+    font-size: var(--font-xs);
+    color: var(--color-text-light);
+    font-weight: 400;
+}
+
+.collapse-content {
+    padding: 0 var(--space-md) var(--space-md);
+}
+
+/* 알림 뱃지 스타일 */
+.badge-strong {
+    background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+    color: white;
+}
+
+.badge-normal {
+    background: linear-gradient(135deg, #ffa502 0%, #ffb74d 100%);
+    color: white;
+}
+
+.badge-watch {
+    background: linear-gradient(135deg, #747d8c 0%, #95a5a6 100%);
+    color: white;
+}
+
+.score-detail {
+    font-size: 0.75rem;
+    color: #667eea;
+    margin-top: 4px;
+    opacity: 0.8;
+}
+
+.stock-reason {
+    margin-top: 8px;
+    padding: 8px 12px;
+    background: rgba(102,126,234,0.08);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #667eea;
+    font-weight: 600;
+}
+</style>
 </head>
 <body>
     <div class="container">
@@ -1012,13 +1173,13 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.a46dc99 | 2026-04-19 15:30</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.cfc8391 | 2026-04-19 15:48</a>
             </div>
         </header>
         
         <div class="update-time-wrapper">
             <div class="update-time">
-                <span>🕐 마지막 업데이트: 2026-04-19 15:48</span>
+                <span>🕐 마지막 업데이트: 2026-04-19 15:53</span>
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
         </div>
@@ -1352,179 +1513,7 @@
                 <span style="margin: 0 0.5rem; color: #ccc;">|</span>
                 <span style="font-size: var(--font-sm); color: var(--color-text-light);">📊 데이터: 2026년 4월 시장 기준</span>
             </div>
-        </div><div class="markets-container">
-    <div class="market-section korea">
-    <h3 class="market-title">🇰🇷 국내 급등주</h3>
-    <div class="stocks-grid">
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">기가레인</div>
-                    <div class="stock-code">049080</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">2,600</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+30.00%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">79,261,765</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">반도체/장비</div>
-                <div class="company-desc">반도체 테스트 소켓 전문기업</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">빛과전자</div>
-                    <div class="stock-code">069540</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">5,860</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+29.93%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">71,152,970</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">전자/광학</div>
-                <div class="company-desc">LED 및 광학 부품 제조</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">후성</div>
-                    <div class="stock-code">093370</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">13,820</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+22.30%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">31,327,210</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">반도체/소재</div>
-                <div class="company-desc">반도체 장비 및 부품 제조</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">랩지노믹스</div>
-                    <div class="stock-code">084650</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">1,803</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+18.38%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">47,034,223</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">기타</div>
-                <div class="company-desc">거래량 급등</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">퍼스텍</div>
-                    <div class="stock-code">010820</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">13,480</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+14.92%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">26,713,797</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">기타</div>
-                <div class="company-desc">거래량 급등</div>
-            </div>
-        </div>
-        <div class="card stock-card">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">파인텍</div>
-                    <div class="stock-code">131760</div>
-                </div>
-                <span class="surge-badge">급등 🔥</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item">
-                    <div class="price-label">현재가</div>
-                    <div class="price-value">1,210</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">등락률</div>
-                    <div class="price-value up">+12.35%</div>
-                </div>
-                <div class="price-item">
-                    <div class="price-label">거래량</div>
-                    <div class="price-value">88,262,546</div>
-                </div>
-            </div>
-            <div class="company-info">
-                <div class="company-industry">기타</div>
-                <div class="company-desc">거래량 급등</div>
-            </div>
-        </div>
-    </div>
-</div>
-    <div class="market-section nasdaq">
-        <h3 class="market-title">🇺🇸 나스닥 급등주</h3>
-        <div class="empty">현재 급등 종목이 없습니다.</div>
-    </div>
-</div>        
+        </div><div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2></div>        
     </div>
     
     <!-- Swiper JS -->
