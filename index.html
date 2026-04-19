@@ -788,6 +788,12 @@
         @media (min-width: 640px) {
             .stocks-grid {
                 grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-md);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .stocks-grid {
                 gap: var(--space-lg);
             }
         }
@@ -854,23 +860,35 @@
         
         .price-info {
             display: flex;
-            gap: 10px;
+            gap: 6px;
             margin-top: var(--space-md);
         }
         
         @media (min-width: 480px) {
             .price-info {
-                gap: var(--space-md);
+                gap: 10px;
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .price-info {
+                gap: 8px;
             }
         }
         
         .price-item {
             flex: 1;
             text-align: center;
-            padding: 12px 8px;
+            padding: 10px 4px;
             background: rgba(0,0,0,0.02);
-            border-radius: 12px;
+            border-radius: 10px;
             min-width: 0;
+        }
+        
+        @media (min-width: 480px) {
+            .price-item {
+                padding: 12px 6px;
+            }
         }
         
         .price-label {
@@ -886,21 +904,24 @@
         }
         
         .price-value {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 700;
             color: #2d3748;
             word-break: keep-all;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
         
         @media (min-width: 480px) {
             .price-value {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
         }
         
         @media (min-width: 640px) {
             .price-value {
-                font-size: 1.3rem;
+                font-size: 1.1rem;
             }
         }
         
@@ -982,13 +1003,13 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.ca5cc5b | 2026-04-19 07:36</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.37fdbcb | 2026-04-19 09:45</a>
             </div>
         </header>
         
         <div class="update-time-wrapper">
             <div class="update-time">
-                <span>🕐 마지막 업데이트: 2026-04-19 09:45</span>
+                <span>🕐 마지막 업데이트: 2026-04-19 09:54</span>
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
         </div>
