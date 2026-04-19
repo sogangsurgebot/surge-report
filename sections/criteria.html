@@ -18,3 +18,86 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 급등주 판단 로직 상세 설명 -->
+        <div class="card logic-card" style="margin-top: var(--space-md); border: 2px solid var(--color-accent); background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);">
+            <h3 class="criteria-title" style="color: var(--color-accent);">🔍 급등주 판별 로직</h3>
+            <p style="font-size: var(--font-sm); color: var(--color-text-light); margin-bottom: var(--space-md); text-align: center;">한국투자증권 OpenAPI 기반 실시간 데이터 분석</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
+                <!-- 1단계 -->
+                <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #667eea;">
+                    <h4 style="color: #667eea; margin-bottom: 0.5rem;">1️⃣ 데이터 수집</h4>
+                    <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                        <li>KIS OpenAPI 거래량 순위 API 호출</li>
+                        <li>TR_ID: FHPST01710000 (거래량 순위)</li>
+                        <li>조회 범위: KOSPI + KOSDAQ 전 종목</li>
+                        <li>실시간 체결 데이터 기반</li>
+                    </ul>
+                </div>
+                
+                <!-- 2단계 -->
+                <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #764ba2;">
+                    <h4 style="color: #764ba2; margin-bottom: 0.5rem;">2️⃣ 필터링 조건</h4>
+                    <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                        <li><strong>등락률 ≥ +5.00%</strong> (전일 종가 대비)</li>
+                        <li><strong>거래량 활성화</strong>: 평균 대비 200% 이상</li>
+                        <li>상한가 근접 종목 우선 포함</li>
+                        <li>유동성 확보 (일일 거래대금 10억원 이상)</li>
+                    </ul>
+                </div>
+                
+                <!-- 3단계 -->
+                <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #f093fb;">
+                    <h4 style="color: #f093fb; margin-bottom: 0.5rem;">3️⃣ 정렬 및 선별</h4>
+                    <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                        <li>등락률 기준 <strong>내림차순 정렬</strong></li>
+                        <li>상위 6개 종목만 선별 표시</li>
+                        <li>동일 등락률 시 거래량 우선</li>
+                        <li>30분마다 자동 갱신</li>
+                    </ul>
+                </div>
+                
+                <!-- 4단계 -->
+                <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #4facfe;">
+                    <h4 style="color: #4facfe; margin-bottom: 0.5rem;">4️⃣ 품질 검증</h4>
+                    <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                        <li>프리보드/관리종목 제외</li>
+                        <li>거래 정지 종목 필터링</li>
+                        <li>비정상적 급등(공시 없는 급락 후 반등) 제외</li>
+                        <li>시가총액 50억원 이상 종목만</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 판단 근거 요약 -->
+            <div style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(102,126,234,0.1); border-radius: 12px;">
+                <h4 style="color: var(--color-accent); margin-bottom: 0.8rem;">📋 판단 근거 요약</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; font-size: var(--font-sm);">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #667eea;">✓</span>
+                        <span><strong>+5% 이상:</strong> 단기 모멘텀 확보</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #667eea;">✓</span>
+                        <span><strong>거래량 급등:</strong> 수급 확인</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #667eea;">✓</span>
+                        <span><strong>유동성 확보:</strong> 진입/청산 용이</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color: #667eea;">✓</span>
+                        <span><strong>시총 필터:</strong> 소형주 리스크 방지</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="source-link" style="margin-top: var(--space-md); text-align: center;">
+                <span style="font-size: var(--font-sm); color: var(--color-text-light);">
+                    📡 데이터 출처: 한국투자증권 OpenAPI (실전서버) | 
+                    ⏱️ 업데이트: 30분 간격 | 
+                    🔴 실시간 데이터 기반
+                </span>
+            </div>
+        </div>
