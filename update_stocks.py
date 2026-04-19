@@ -170,13 +170,96 @@ def get_volume_rank_surge_stocks(token):
     
     return []
 
+def get_nasdaq_surge_stocks(token):
+    """나스닥 등락률 순위 API로 급등주 조회"""
+    
+    url = f"{BASE_URL}/uapi/overseas-price/v1/ranking/fluctuation"
+    
+    headers = {
+        "Content-Type": "application/json; charset=utf-8",
+        "Authorization": f"Bearer {token}",
+        "appkey": APP_KEY,
+        "appsecret": APP_SECRET,
+        "tr_id": "HHDFS76310001",
+        "custtype": "P"
+    }
+    
+    params = {
+        "AUTH": "",
+        "EXCD": "NAS",
+        "SYMB": "",
+        "GB1": "0",
+        "GB2": "1",
+        "GB3": "0",
+        "GB4": "0",
+        "GB5": "0",
+        "GB6": "0",
+        "GB7": "0",
+        "GB8": "0",
+        "GB9": "0",
+        "GB10": "0",
+        "GB11": "0",
+        "GB12": "0",
+        "GB13": "0",
+        "PAGE_SIZE": "20"
+    }
+    
+    try:
+        print(f"🔍 나스닥 등락률 순위 API 호출 ({SERVER_TYPE})...")
+        resp = requests.get(url, headers=headers, params=params, timeout=15)
+        data = resp.json()
+        
+        print(f"   응답 코드: {data.get('rt_cd')} | {data.get('msg1', '')}")
+        
+        if data.get("rt_cd") == "0":
+            outputs = data.get("output", [])
+            print(f"   총 {len(outputs)}개 종목 조회됨")
+            
+            surge_stocks = []
+            for item in outputs:
+                try:
+                    change_rate = float(item.get("rate", 0))
+                    
+                    if change_rate >= 5.0:
+                        price = float(item.get('clos', 0))
+                        volume = int(item.get('tvol', 0))
+                        code = item.get("symb", "")
+                        name = item.get("name", "")
+                        
+                        surge_stocks.append({
+                            "name": name,
+                            "code": code,
+                            "price": f"${price:.2f}",
+                            "change": f"{change_rate:+.2f}%",
+                            "volume": f"{volume:,}",
+                            "reason": "나스닥 급등",
+                            "industry": "미국 기술주",
+                            "desc": f"나스닥 상장 {name}",
+                            "market": "nasdaq"
+                        })
+                except (ValueError, TypeError) as e:
+                    continue
+            
+            print(f"   🔥 나스닥 급등주 (+5% 이상): {len(surge_stocks)}개")
+            for s in surge_stocks[:5]:
+                print(f"      - {s['name']}: {s['change']}")
+            
+            return surge_stocks[:6]
+        else:
+            print(f"   ⚠️ API 오류: {data.get('msg1', 'Unknown error')}")
+            
+    except Exception as e:
+        print(f"❌ 나스닥 API 오류: {e}")
+    
+    return []
+
 def get_sample_data():
     """샘플 데이터 (API 실패 시 폴백)"""
     return {
         "date": datetime.now().strftime("%Y-%m-%d"),
         "source": "📋 샘플 데이터",
         "server": "N/A",
-        "stocks": [
+        "kr_stocks": [
             {
                 "name": "삼성전자",
                 "code": "005930",
@@ -197,15 +280,38 @@ def get_sample_data():
                 "industry": "반도체/전자",
                 "desc": "HBM 메모리 전문 글로벌 선도기업"
             }
-        ]
+        ],
+        "us_stocks": []
     }
 
-def generate_stock_cards(stocks):
-    """주식 카드 HTML 생성"""
-    if not stocks:
-        return '<div class="empty">현재 급등 종목이 없습니다.</div>'
+def generate_stock_cards(kr_stocks, us_stocks=None):
+    """국내/해외 주식 카드 HTML 생성"""
+    us_stocks = us_stocks or []
     
-    cards_html = '<div class="stocks-grid">\n'
+    # 국내 주식 섹션
+    kr_html = generate_single_market_cards(kr_stocks, "🇰🇷 국내 급등주", "korea")
+    
+    # 해외 주식 섹션  
+    us_html = generate_single_market_cards(us_stocks, "🇺🇸 나스닥 급등주", "nasdaq")
+    
+    return f"""<div class="markets-container">
+    {kr_html}
+    {us_html}
+</div>"""
+
+def generate_single_market_cards(stocks, title, market_type):
+    """개별 시장 카드 생성"""
+    if not stocks:
+        return f'''<div class="market-section {market_type}">
+        <h3 class="market-title">{title}</h3>
+        <div class="empty">현재 급등 종목이 없습니다.</div>
+    </div>'''
+    
+    cards_html = f'''<div class="market-section {market_type}">
+    <h3 class="market-title">{title}</h3>
+    <div class="stocks-grid">
+'''
+    
     for stock in stocks:
         change_class = "up" if "+" in stock["change"] else "down"
         industry = stock.get("industry", "")
@@ -243,7 +349,8 @@ def generate_stock_cards(stocks):
             </div>
 {company_info_html}        </div>
 '''
-    cards_html += '</div>'
+    cards_html += '''    </div>
+</div>'''
     return cards_html
 
 def get_git_version_info():
@@ -282,8 +389,10 @@ def update_html(data):
     experts = load_section('experts.html')
     footer = load_section('footer.html')
     
-    # 주식 카드 HTML 생성
-    stock_cards = generate_stock_cards(data["stocks"])
+    # 주식 카드 HTML 생성 (국내/해외)
+    kr_stocks = data.get("kr_stocks", data.get("stocks", []))
+    us_stocks = data.get("us_stocks", [])
+    stock_cards = generate_stock_cards(kr_stocks, us_stocks)
     
     # 플레이스홀더 치환
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
@@ -306,7 +415,7 @@ def update_html(data):
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
     
-    print(f"✅ HTML 업데이트 완료: {len(data['stocks'])}개 종목 | {source_indicator} | {version_info}")
+    print(f"✅ HTML 업데이트 완료: 국내 {len(data.get('kr_stocks', []))}개 / 해외 {len(data.get('us_stocks', []))}개 | {source_indicator} | {version_info}")
 
 def fetch_surge_stocks():
     """급등주 데이터 수집 메인 함수"""
@@ -315,14 +424,19 @@ def fetch_surge_stocks():
     if not token:
         return get_sample_data()
     
-    stocks = get_volume_rank_surge_stocks(token)
+    # 국내 주식
+    kr_stocks = get_volume_rank_surge_stocks(token)
     
-    if stocks:
+    # 해외 주식 (나스닥)
+    us_stocks = get_nasdaq_surge_stocks(token)
+    
+    if kr_stocks or us_stocks:
         return {
             "date": datetime.now().strftime("%Y-%m-%d"),
             "source": "🔴 실제 데이터",
             "server": SERVER_TYPE,
-            "stocks": stocks
+            "kr_stocks": kr_stocks,
+            "us_stocks": us_stocks
         }
     
     print("⚠️ API 실패, 샘플 데이터 사용")
@@ -330,12 +444,9 @@ def fetch_surge_stocks():
 
 def main():
     print(f"🚀 급등주 데이터 수집 시작: {datetime.now()}")
-    print(f"   서버: {BASE_URL} ({SERVER_TYPE})")
-    
     data = fetch_surge_stocks()
     update_html(data)
-    
-    print("✨ 작업 완료!")
+    print(f"✨ 작업 완료!")
 
 if __name__ == "__main__":
     main()

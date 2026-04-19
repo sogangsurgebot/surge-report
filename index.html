@@ -734,6 +734,48 @@
         .sesang-card .source-link a:hover { background: rgba(102,126,234,0.1); }
         
         /* ============================================
+           국내/해외 시장 컨테이너
+           ============================================ */
+        .markets-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+        }
+        
+        @media (min-width: 768px) {
+            .markets-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-xl);
+            }
+        }
+        
+        .market-section {
+            background: rgba(255,255,255,0.5);
+            border-radius: var(--card-radius);
+            padding: var(--space-md);
+        }
+        
+        .market-title {
+            font-size: var(--font-lg);
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: var(--space-md);
+            text-align: center;
+            padding: var(--space-sm);
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+        }
+        
+        .market-section.korea .market-title {
+            border-left: 4px solid #ff9a9e;
+        }
+        
+        .market-section.nasdaq .market-title {
+            border-left: 4px solid #667eea;
+        }
+        
+        /* ============================================
            주식 카드 그리드
            ============================================ */
         .stocks-grid {
@@ -940,13 +982,13 @@
             <h1>급등주 알림</h1>
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
-                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.cce9096 | 2026-04-19 07:30</a>
+                <a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.ca5cc5b | 2026-04-19 07:36</a>
             </div>
         </header>
         
         <div class="update-time-wrapper">
             <div class="update-time">
-                <span>🕐 마지막 업데이트: 2026-04-19 07:35</span>
+                <span>🕐 마지막 업데이트: 2026-04-19 09:45</span>
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
         </div>
@@ -1114,7 +1156,10 @@
                 <div class="swiper-button-next"></div>
             </div>
         </div>
-<div class="stocks-grid">
+<div class="markets-container">
+    <div class="market-section korea">
+    <h3 class="market-title">🇰🇷 국내 급등주</h3>
+    <div class="stocks-grid">
         <div class="card stock-card">
             <div class="stock-header">
                 <div>
@@ -1277,6 +1322,12 @@
                 <div class="company-desc">거래량 급등</div>
             </div>
         </div>
+    </div>
+</div>
+    <div class="market-section nasdaq">
+        <h3 class="market-title">🇺🇸 나스닥 급등주</h3>
+        <div class="empty">현재 급등 종목이 없습니다.</div>
+    </div>
 </div>        
     </div>
     

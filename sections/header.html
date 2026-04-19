@@ -734,6 +734,48 @@
         .sesang-card .source-link a:hover { background: rgba(102,126,234,0.1); }
         
         /* ============================================
+           국내/해외 시장 컨테이너
+           ============================================ */
+        .markets-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-lg);
+            margin-top: var(--space-md);
+        }
+        
+        @media (min-width: 768px) {
+            .markets-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: var(--space-xl);
+            }
+        }
+        
+        .market-section {
+            background: rgba(255,255,255,0.5);
+            border-radius: var(--card-radius);
+            padding: var(--space-md);
+        }
+        
+        .market-title {
+            font-size: var(--font-lg);
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: var(--space-md);
+            text-align: center;
+            padding: var(--space-sm);
+            background: rgba(255,255,255,0.8);
+            border-radius: 12px;
+        }
+        
+        .market-section.korea .market-title {
+            border-left: 4px solid #ff9a9e;
+        }
+        
+        .market-section.nasdaq .market-title {
+            border-left: 4px solid #667eea;
+        }
+        
+        /* ============================================
            주식 카드 그리드
            ============================================ */
         .stocks-grid {
