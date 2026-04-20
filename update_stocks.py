@@ -914,14 +914,25 @@ def main():
     print(f"🏦 장 상태: {'열림' if is_market_open() else '마감'}")
     print(f"{'='*60}\n")
     
-    # 1. 새로운 데이터 수집 시도
+    # 1. 새로운 데이터 수집
     fresh_data = fetch_surge_stocks()
     
-    # 2. 데이터 저장 (항상 저장)
-    save_market_data(fresh_data)
-    
-    # 3. HTML 업데이트
-    update_html(fresh_data)
+    # 2. 장중이고 데이터가 있으면 저장, 없으면 이전 데이터 사용
+    if is_market_open():
+        # 장중: 새 데이터 저장
+        if fresh_data.get('kospi_stocks') or fresh_data.get('kosdaq_stocks'):
+            save_market_data(fresh_data)
+            print("📈 장중 데이터 저장 완료")
+        else:
+            print("⚠️ 장중인데 데이터가 없음 - 이전 데이터 유지")
+    else:
+        # 장 마감: 저장된 데이터가 있으면 사용
+        saved_data = load_market_data()
+        if saved_data:
+            print("📂 장 마감 - 저장된 장중 데이터로 표시")
+            fresh_data = saved_data
+        else:
+            print("⚠️ 저장된 데이터 없음 - 현재 데이터 사용")
     
     print(f"\n✨ 작업 완료!")
     print(f"💡 장 마감 후에는 마지막 장중 데이터를 표시합니다.")
