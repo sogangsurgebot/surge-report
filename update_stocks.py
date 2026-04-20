@@ -840,7 +840,10 @@ def update_html(data):
     
     # HTML 조합 (CSS 삽입)
     html_content = header.replace('</head>', f'{additional_css}</head>')
-    html_content += criteria + experts + stock_cards + footer
+    
+    # 히트맵/거래량 알림 섹션 삽입 (있는 경우)
+    extra_sections = data.get("extra_sections", "")
+    html_content += criteria + experts + extra_sections + stock_cards + footer
     
     with open('index.html', 'w', encoding='utf-8') as f:
         f.write(html_content)
@@ -878,6 +881,28 @@ def fetch_surge_stocks():
         save_stocks(snapshot_id, "KOSPI", kospi_stocks)
         save_stocks(snapshot_id, "KOSDAQ", kosdaq_stocks)
         print(f"✅ DB 저장 완료 (snapshot_id: {snapshot_id})")
+        
+        # 섹터 히트맵 & 거래량 폭발 알림 생성
+        try:
+            from sector_heatmap import get_sector_heatmap, generate_heatmap_html
+            from volume_alert import detect_volume_spikes, generate_volume_alert_html
+            
+            heatmap_data = get_sector_heatmap()
+            volume_alerts = detect_volume_spikes()
+            
+            # HTML 파일에 추가할 섹션 생성
+            extra_sections = ""
+            if heatmap_data["sectors"]:
+                extra_sections += generate_heatmap_html(heatmap_data)
+            if volume_alerts["alerts"]:
+                extra_sections += generate_volume_alert_html(volume_alerts)
+            
+            # data에 저장 (update_html에서 사용)
+            data["extra_sections"] = extra_sections
+            print(f"📊 섹터 히트맵: {len(heatmap_data['sectors'])}개 / 거래량 폭발: {volume_alerts['total_alerts']}개")
+        except Exception as e:
+            print(f"⚠️ 히트맵/알림 생성 실패: {e}")
+        
     except Exception as e:
         print(f"⚠️ DB 저장 실패: {e}")
     
