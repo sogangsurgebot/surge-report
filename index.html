@@ -1513,88 +1513,158 @@
             </div>
         </div>
         
-        <!-- 오일전문가 추천 종목 - 별도 섹션 -->
-        <div class="card picks-section" id="oilPicksStandalone">
-            <h2 class="gurus-title">🎯 오일전문가 추천 종목</h2>
-            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">배당+성장 전략 기반 선별 종목 · 투자 인사이트 적용</p>
-            
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-label">추천 섹터</div>
-                    <div class="portfolio-value">금융·통신·에너지</div>
+        <!-- 전문가 추천 종목 - Swipe 섹션 -->
+        <div class="card picks-section">
+            <h2 class="gurus-title">🎯 전문가 추천 종목</h2>
+            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">좌우로 스와이프하여 전문가별 추천 종목 확인 👆</p>
+
+            <!-- Swiper 컨테이너 -->
+            <div class="swiper picks-swiper" id="picksSwiper">
+                <div class="swiper-wrapper">
+
+                    <!-- Slide 1: 오일전문가 추천 종목 -->
+                    <div class="swiper-slide">
+                        <div id="oilPicksStandalone">
+                            <div class="expert-header" style="margin-bottom: var(--space-md);">
+                                <div class="expert-avatar" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">🛢️</div>
+                                <div class="expert-info">
+                                    <h2 style="color: #5a67d8;">오일전문가 (임인홍)</h2>
+                                    <p>배당+성장 전략 · 10년 연평균 24% 수익률</p>
+                                </div>
+                            </div>
+
+                            <div class="portfolio-grid">
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">추천 섹터</div>
+                                    <div class="portfolio-value">금융·통신·에너지</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">선별 기준</div>
+                                    <div class="portfolio-value">배당수익률 5%+</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">투자 스타일</div>
+                                    <div class="portfolio-value">장기 보유</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">리스크 관리</div>
+                                    <div class="portfolio-value positive">분산 투자</div>
+                                </div>
+                            </div>
+
+                            <div class="top-holdings" style="background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(250,208,196,0.15) 100%); border: 1px solid rgba(255,154,158,0.3);">
+                                <h3 style="color: #ff6b6b;">⭐ 오일전문가 추천 TOP 3</h3>
+                                <ul class="holding-list">
+                                    <li class="holding-item">
+                                        <div class="holding-rank gold">1</div>
+                                        <span class="holding-name">KB금융지주</span>
+                                        <span class="holding-code">105560 · 배당 5.2% · PER 6.5배</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank silver">2</div>
+                                        <span class="holding-name">신한지주</span>
+                                        <span class="holding-code">055550 · 배당 5.0% · PER 6.8배</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank bronze">3</div>
+                                        <span class="holding-name">SK텔레콤</span>
+                                        <span class="holding-code">017670 · 배당 5.5% · PER 8.2배</span>
+                                    </li>
+                                </ul>
+                                <div class="date-note">📅 기준: 2026년 4월</div>
+                            </div>
+
+                            <div class="philosophy" style="border-left-color: #ff9a9e;">
+                                <h4 style="color: #ff6b6b;">📚 선별 근거</h4>
+                                <p>"황금알을 낳는 거위를 선별하라" — 배당 안정성(5년+), 저평가(PER 15배 미만), 성장성(연 10%+) 충족 종목 중심. KB금융은 국내 금융지주 최고 배당+분기배당 도입. 신한지주는 주주환원 강화. SK텔레콤은 5G 투자 마무리 후 배당 여력 확대.</p>
+                            </div>
+
+                            <div class="source-link">
+                                <a href="https://blog.naver.com/oilpro1" target="_blank" style="color: #ff6b6b;">📎 오일전문가 블로그</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide 2: 세상학개론 관심 섹터 -->
+                    <div class="swiper-slide">
+                        <div id="sesangPicks">
+                            <div class="expert-header" style="margin-bottom: var(--space-md);">
+                                <div class="expert-avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">🎓</div>
+                                <div class="expert-info">
+                                    <h2 style="color: #667eea;">세상학개론 (한정수)</h2>
+                                    <p>26/4/19 Calm Sunday Live · 단기=운, 장기=필연</p>
+                                </div>
+                            </div>
+
+                            <div class="portfolio-grid">
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">핵심 테마</div>
+                                    <div class="portfolio-value">양자컴·우주·AI</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">관심 섹터</div>
+                                    <div class="portfolio-value">데이터센터·전력</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">투자 스타일</div>
+                                    <div class="portfolio-value">장기 집중</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">현금 전략</div>
+                                    <div class="portfolio-value positive">대응력 핵심</div>
+                                </div>
+                            </div>
+
+                            <div class="top-holdings" style="background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(167,139,250,0.15) 100%); border: 1px solid rgba(102,126,234,0.3);">
+                                <h3 style="color: #7c3aed;">🔥 세상학개론 관심 TOP 5</h3>
+                                <ul class="holding-list">
+                                    <li class="holding-item">
+                                        <div class="holding-rank gold">1</div>
+                                        <span class="holding-name">양자컴퓨터 (중성원자)</span>
+                                        <span class="holding-code">2029년 타임라인 · 인플렉션 등</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank silver">2</div>
+                                        <span class="holding-name">로켓랩 / 우주 네러티브</span>
+                                        <span class="holding-code">스페이스X 6월 상장 · 저평가</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank bronze">3</div>
+                                        <span class="holding-name">데이터센터 · 전력망</span>
+                                        <span class="holding-code">AI 병목 · 기존업체 유리</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #fff;">4</div>
+                                        <span class="holding-name">팔란티어 (방산)</span>
+                                        <span class="holding-code">네오 프라임 · 계약 확장</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); color: #fff;">5</div>
+                                        <span class="holding-name">서클 · 인텔</span>
+                                        <span class="holding-code">금리 인하 · 반도체 자립</span>
+                                    </li>
+                                </ul>
+                                <div class="date-note">📅 기준: 26/4/19 Live | ⚠️ 락업 풀림 주의</div>
+                            </div>
+
+                            <div class="philosophy" style="border-left-color: #667eea;">
+                                <h4 style="color: #667eea;">📚 투자 철학</h4>
+                                <p>"단기는 운의 영역, 장기는 필연의 영역" — S&P 500만 해도 상위 10% 수익률. 현금 비중이 대응력. 전쟁 끝나면 정상화되는 섹터(양자컴·데이터센터)에 집중. 인플렉션 락업 풀림 단기 압력 주의.</p>
+                            </div>
+
+                            <div class="source-link">
+                                <a href="https://youtube.com/live/q1B0g8MKkGQ" target="_blank" style="color: #667eea;">📺 26/4/19 Calm Sunday Live</a>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">선별 기준</div>
-                    <div class="portfolio-value">배당수익률 5%+</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">투자 스타일</div>
-                    <div class="portfolio-value">장기 보유</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">리스크 관리</div>
-                    <div class="portfolio-value positive">분산 투자</div>
-                </div>
-            </div>
-            
-            <div class="top-holdings" style="background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(250,208,196,0.15) 100%); border: 1px solid rgba(255,154,158,0.3);">
-                <h3 style="color: #ff6b6b;">⭐ 오일전문가 추천 TOP 3 (분석 기반)</h3>
-                <ul class="holding-list">
-                    <li class="holding-item">
-                        <div class="holding-rank gold">1</div>
-                        <span class="holding-name">KB금융지주</span>
-                        <span class="holding-code">105560 · 배당수익률 5.2% · PER 6.5배</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank silver">2</div>
-                        <span class="holding-name">신한지주</span>
-                        <span class="holding-code">055550 · 배당수익률 5.0% · PER 6.8배</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank bronze">3</div>
-                        <span class="holding-name">SK텔레콤</span>
-                        <span class="holding-code">017670 · 배당수익률 5.5% · PER 8.2배</span>
-                    </li>
-                </ul>
-                <div class="date-note">📅 기준일: 2026년 4월 | ⚠️ 투자 유의사항 참고</div>
-            </div>
-            
-            <div class="philosophy" style="border-left-color: #ff9a9e;">
-                <h4 style="color: #ff6b6b;">📚 선별 근거 및 판단 기준</h4>
-                <p style="margin-bottom: 0.8rem;"><strong>오일전문가 투자 철학 적용:</strong> "황금알을 낳는 거위를 선별하라" — 배당 안정성(5년 이상 연속 배당), 저평가(PER 15배 미만), 성장성(연평균 10%+)을 모두 충족하는 종목 중심으로 선별했습니다.</p>
-                
-                <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                    <strong style="color: #ff6b6b;">🥇 KB금융지주 (105560)</strong>
-                    <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                        <li>국내 금융지주 중 가장 높은 배당수익률(5.2%)과 낮은 PER(6.5배) 기록</li>
-                        <li>분기배당 도입으로 배당 안정성 확보, 10년 연속 배당 증가 추세</li>
-                        <li><strong>선별 근거:</strong> 오일전문가의 "황금 거위" 전략에 부합하는 대표 저평가 고배당주</li>
-                    </ul>
-                </div>
-                
-                <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                    <strong style="color: #4ecdc4;">🥈 신한지주 (055550)</strong>
-                    <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                        <li>안정적 수익구조 기반 꾸준한 배당 증가 이력, PER 6.8배로 저평가 상태</li>
-                        <li>주주환원 정책 강화로 배당성향 상승 중, 밸류업 정책 수혜 기대</li>
-                        <li><strong>선별 근거:</strong> 배당 성장성 + 저평가 조합으로 장기 복리 효과 극대화 가능</li>
-                    </ul>
-                </div>
-                
-                <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem;">
-                    <strong style="color: #cd853f;">🥉 SK텔레콤 (017670)</strong>
-                    <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                        <li>통신업계 최고 배당수익률(5.5%), 구독 기반 안정적 현금흐름 보유</li>
-                        <li>5G 투자 마무리 후 배당 여력 확대 예상, 경기방어적 성격 강함</li>
-                        <li><strong>선별 근거:</strong> 오일전문가의 안정적 "황금 거위" 포트폴리오 구성에 적합</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="source-link">
-                <a href="https://blog.naver.com/oilpro1" target="_blank" style="color: #ff6b6b;">📎 출처: 오일전문가 네이버 블로그</a>
-                <span style="margin: 0 0.5rem; color: #ccc;">|</span>
-                <span style="font-size: var(--font-sm); color: var(--color-text-light);">📊 데이터: 2026년 4월 시장 기준</span>
+
+                <!-- 페이지네이션 -->
+                <div class="swiper-pagination picks-pagination"></div>
+                <!-- 네비게이션 -->
+                <div class="swiper-button-prev picks-prev"></div>
+                <div class="swiper-button-next picks-next"></div>
             </div>
         </div><div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2><div class="market-section market-section-primary" data-market="kospi">
     <div class="market-header" style="border-left: 4px solid #ff6b6b;">
@@ -1675,6 +1745,38 @@
                 },
                 
                 // 스와이프
+                touchRatio: 1,
+                touchAngle: 45,
+                simulateTouch: true,
+                allowTouchMove: true,
+                threshold: 10
+            });
+            
+            // picks-swiper 초기화 (추천 종목 섹션)
+            const picksSwiper = new Swiper('.picks-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: true,
+                autoplay: {
+                    delay: 6000,
+                    disableOnInteraction: false,
+                    pauseOnMouseEnter: true
+                },
+                pagination: {
+                    el: '.picks-pagination',
+                    clickable: true,
+                    bulletActiveClass: 'swiper-pagination-bullet-active'
+                },
+                navigation: {
+                    nextEl: '.picks-next',
+                    prevEl: '.picks-prev'
+                },
+                effect: 'slide',
+                speed: 500,
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true
+                },
                 touchRatio: 1,
                 touchAngle: 45,
                 simulateTouch: true,
