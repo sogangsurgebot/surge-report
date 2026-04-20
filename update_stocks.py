@@ -497,37 +497,114 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
     return html
 
 
-def generate_stock_cards(kospi_stocks, kosdaq_stocks, us_stocks):
-    """전체 주식 카드 HTML 생성 - KOSDAQ 가시성 개선 레이아웃"""
+def generate_stock_section(stocks, title, market_type, is_primary=False):
+    """주식 섹션 HTML 생성"""
     
-    # 1. 국내 주식 메인 섹션 (KOSPI + KOSDAQ 합쳐서 표시)
-    domestic_html = '<div class="domestic-section">'
-    domestic_html += '<h2 class="section-main-title">🇰🇷 국내 급등주</h2>'
+    # 시장별 테두리 색상
+    border_colors = {
+        "kospi": "#ff6b6b", "kosdaq": "#4ecdc4", "nasdaq": "#667eea"
+    }
+    border_color = border_colors.get(market_type, "#667eea")
     
-    # KOSPI 섹션
-    domestic_html += generate_stock_section(kospi_stocks, "📈 KOSPI", "kospi", is_primary=True)
+    # 주요 섹션 여부에 따른 스타일
+    section_class = "market-section-primary" if is_primary else "market-section-secondary"
     
-    # KOSDAQ 섹션 (강조된 스타일)
-    domestic_html += generate_stock_section(kosdaq_stocks, "🚀 KOSDAQ", "kosdaq", is_primary=True)
+    # 빈 상태 메시지
+    if not stocks:
+        empty_messages = {
+            "kospi": "📊 현재 KOSPI 시장에서 급등주(+5% 이상)가 감지되지 않았습니다",
+            "kosdaq": "🚀 현재 KOSDAQ 시장에서 급등주(+5% 이상)가 감지되지 않았습니다",
+            "nasdaq": "🇺🇸 현재 나스닥 시장이 마감되었거나 급등주가 없습니다"
+        }
+        empty_msg = empty_messages.get(market_type, "현재 급등주가 없습니다")
+        
+        return f'''<div class="market-section {section_class}" data-market="{market_type}">
+    <div class="market-header" style="border-left: 4px solid {border_color};">
+        <h3 class="market-title">{title} <span class="market-count">0개</span></h3>
+    </div>
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-text">{empty_msg}</div>
+        <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
+    </div>
+</div>'''
     
-    domestic_html += '</div>'
+    html = f'''<div class="market-section {section_class}" data-market="{market_type}">
+    <div class="market-header" style="border-left: 4px solid {border_color};">
+        <h3 class="market-title">{title} <span class="market-count">{len(stocks)}개</span></h3>
+    </div>
+    <div class="stocks-grid {'stocks-grid-3col' if is_primary else 'stocks-grid-2col'}">
+'''
     
-    # 2. 해외 주식 섹션 (접을 수 있는 형태)
-    nasdaq_html = ''
-    if us_stocks:
-        nasdaq_html = '''<div class="international-section">
+    for stock in stocks[:6]:  # 최대 6개
+        change_class = "up" if "+" in stock["change"] else "down"
+        badge = stock.get("badge", "급등")
+        alert_level = stock.get("alert_level", "NORMAL")
+        market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
+        
+        # 알림 레벨별 스타일
+        if alert_level == "STRONG":
+            card_style = f'border: 2px solid #ff4757; background: linear-gradient(135deg, rgba(255,71,87,0.05) 0%, rgba(255,71,87,0.1) 100%);'
+        elif alert_level == "NORMAL":
+            card_style = f'border: 2px solid #ffa502; background: linear-gradient(135deg, rgba(255,165,2,0.05) 0%, rgba(255,165,2,0.1) 100%);'
+        else:
+            card_style = f'border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);'
+        
+        score_detail = stock.get('score_details', '')
+        
+        html += f'''        <div class="card stock-card" style="{card_style}">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">{stock["name"]} {market_badge}</div>
+                    <div class="stock-code">{stock["code"]}</div>
+                </div>
+                <span class="surge-badge badge-{alert_level.lower()}">{badge}</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">{stock["price"]}</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value {change_class}">{stock["change"]}</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">{stock["volume"]}</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 {stock["reason"]}
+                {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
+            </div>
+            {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
+        </div>
+'''
+    
+    html += '''    </div>
+</div>'''
+    return html
+
+
+def generate_domestic_section(kospi_stocks, kosdaq_stocks):
+    """국내 급등주 섹션 HTML 생성 (마커 교체용)"""
+    html = '<div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2>'
+    html += generate_stock_section(kospi_stocks, "📈 KOSPI", "kospi", is_primary=True)
+    html += generate_stock_section(kosdaq_stocks, "🚀 KOSDAQ", "kosdaq", is_primary=True)
+    html += '</div>'
+    return html
+
+
+def generate_nasdaq_section(us_stocks):
+    """해외 급등주 섹션 HTML 생성 (마커 교체용)"""
+    if not us_stocks:
+        return ''
+    
+    html = '''<div class="international-section">
     <details class="collapse-section">
         <summary class="collapse-header">
             <span>🇺🇸 해외 급등주 보기</span>
             <span class="collapse-hint">클릭하여 펼치기</span>
         </summary>
         <div class="collapse-content">
-''' + generate_stock_section(us_stocks, "나스닥", "nasdaq", is_primary=False) + '''
-        </div>
+'''
+    html += generate_stock_section(us_stocks, "나스닥", "nasdaq", is_primary=False)
+    html += '''        </div>
     </details>
 </div>'''
-    
-    return domestic_html + nasdaq_html
+    return html
 
 
 def get_git_version_info():
@@ -547,309 +624,107 @@ def load_section(filename):
     return ""
 
 
+def generate_domestic_section(kospi_stocks, kosdaq_stocks):
+    """국내 급등주 섹션 HTML 생성 (마커 교체용)"""
+    html = '<div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2>'
+    html += generate_stock_section(kospi_stocks, "📈 KOSPI", "kospi", is_primary=True)
+    html += generate_stock_section(kosdaq_stocks, "🚀 KOSDAQ", "kosdaq", is_primary=True)
+    html += '</div>'
+    return html
+
+
+def generate_nasdaq_section(us_stocks):
+    """해외 급등주 섹션 HTML 생성 (마커 교체용)"""
+    if not us_stocks:
+        return ''
+    
+    html = '''<div class="international-section">
+    <details class="collapse-section">
+        <summary class="collapse-header">
+            <span>🇺🇸 해외 급등주 보기</span>
+            <span class="collapse-hint">클릭하여 펼치기</span>
+        </summary>
+        <div class="collapse-content">
+'''
+    html += generate_stock_section(us_stocks, "나스닥", "nasdaq", is_primary=False)
+    html += '''        </div>
+    </details>
+</div>'''
+    return html
+
+
+def replace_between_markers(file_path, marker_start, marker_end, new_content):
+    """
+    index.html에서 마커 사이의 내용만 교체
+    마커 외부의 모든 내용은 보존됨
+    """
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    start_idx = content.find(marker_start)
+    end_idx = content.find(marker_end)
+    
+    if start_idx == -1 or end_idx == -1:
+        print(f"⚠️ 마커를 찾을 수 없음: {marker_start} / {marker_end}")
+        return False
+    
+    # 마커 끝 위치 계산 (마커 텍스트 자체는 유지)
+    start_pos = start_idx + len(marker_start)
+    end_pos = end_idx
+    
+    new_html = content[:start_pos] + '\n' + new_content + '\n' + content[end_pos:]
+    
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write(new_html)
+    
+    return True
+
+
 def update_html(data):
-    """HTML 생성 - 개선된 레이아웃"""
+    """HTML 업데이트 - 마커 기반 부분 교체 (index.html 전체 덮어쓰기 금지)"""
     
-    header = load_section('header.html')
-    criteria = load_section('criteria.html')
-    experts = load_section('experts.html')
-    footer = load_section('footer.html')
+    # 1. 히트맵 + 거래량 알림 교체
+    extra_sections = data.get("extra_sections", "")
+    replace_between_markers(
+        'index.html',
+        '<!-- DYNAMIC_HEATMAP_START -->',
+        '<!-- DYNAMIC_HEATMAP_END -->',
+        extra_sections
+    )
     
-    # 주식 카드 (KOSPI, KOSDAQ, NASDAQ 분리)
+    # 2. 국내 급등주 카드 교체
     kospi = data.get("kospi_stocks", [])
     kosdaq = data.get("kosdaq_stocks", [])
+    stock_cards_html = generate_domestic_section(kospi, kosdaq)
+    replace_between_markers(
+        'index.html',
+        '<!-- DYNAMIC_STOCK_CARDS_START -->',
+        '<!-- DYNAMIC_STOCK_CARDS_END -->',
+        stock_cards_html
+    )
+    
+    # 3. 해외 급등주 (NASDAQ) 교체
     us = data.get("us_stocks", [])
+    nasdaq_html = generate_nasdaq_section(us)
+    replace_between_markers(
+        'index.html',
+        '<!-- DYNAMIC_NASDAQ_START -->',
+        '<!-- DYNAMIC_NASDAQ_END -->',
+        nasdaq_html
+    )
     
-    stock_cards = generate_stock_cards(kospi, kosdaq, us)
-    
-    # 플레이스홀더 치환
+    # 4. 업데이트 시간 교체
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
-    version_info = get_git_version_info()
-    
-    source_indicator = data.get("source", "🔴 실제 데이터")
-    server_type = data.get("server", SERVER_TYPE)
-    if server_type and server_type != "N/A":
-        source_indicator += f" | {server_type}"
-    
-    header = header.replace('{{UPDATE_DATE}}', current_time)
-    header = header.replace('{{DATA_SOURCE}}', source_indicator)
-    header = header.replace('{{VERSION_INFO}}', version_info)
-    
-    # 추가 CSS 삽입 (레이아웃 개선용)
-    additional_css = '''
-<style>
-/* KOSDAQ 가시성 개선 - 추가 CSS */
-.section-main-title {
-    font-size: var(--font-xl);
-    font-weight: 700;
-    text-align: center;
-    margin: var(--space-xl) 0 var(--space-md);
-    color: #2d3748;
-}
-
-.domestic-section {
-    margin-bottom: var(--space-xl);
-}
-
-.market-section-primary {
-    margin-bottom: var(--space-lg);
-}
-
-.market-section-primary .market-header {
-    background: rgba(255,255,255,0.9);
-    padding: var(--space-md);
-    border-radius: 12px;
-    margin-bottom: var(--space-md);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.market-count {
-    font-size: var(--font-sm);
-    color: var(--color-text-light);
-    font-weight: 500;
-    background: rgba(0,0,0,0.05);
-    padding: 4px 12px;
-    border-radius: 20px;
-}
-
-.market-badge {
-    font-size: 0.65rem;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-left: 6px;
-    font-weight: 600;
-}
-
-.market-badge.kospi {
-    background: #ff6b6b;
-    color: white;
-}
-
-.market-badge.kosdaq {
-    background: #4ecdc4;
-    color: white;
-}
-
-.stocks-grid-3col {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-}
-
-@media (min-width: 640px) {
-    .stocks-grid-3col {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (min-width: 1024px) {
-    .stocks-grid-3col {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-.stocks-grid-2col {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
-}
-
-@media (min-width: 640px) {
-    .stocks-grid-2col {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-/* 해외 주식 접기 섹션 */
-.international-section {
-    margin-top: var(--space-xl);
-}
-
-.collapse-section {
-    background: rgba(255,255,255,0.6);
-    border-radius: var(--card-radius);
-    border: 1px solid rgba(255,255,255,0.8);
-    overflow: hidden;
-}
-
-.collapse-header {
-    padding: var(--space-md);
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    color: #2d3748;
-    list-style: none;
-    transition: background 0.2s;
-}
-
-.collapse-header:hover {
-    background: rgba(255,255,255,0.8);
-}
-
-.collapse-header::-webkit-details-marker {
-    display: none;
-}
-
-.collapse-hint {
-    font-size: var(--font-xs);
-    color: var(--color-text-light);
-    font-weight: 400;
-}
-
-.collapse-content {
-    padding: 0 var(--space-md) var(--space-md);
-}
-
-/* 알림 뱃지 스타일 */
-.badge-strong {
-    background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
-    color: white;
-}
-
-.badge-normal {
-    background: linear-gradient(135deg, #ffa502 0%, #ffb74d 100%);
-    color: white;
-}
-
-.badge-watch {
-    background: linear-gradient(135deg, #747d8c 0%, #95a5a6 100%);
-    color: white;
-}
-
-.score-detail {
-    font-size: 0.75rem;
-    color: #667eea;
-    margin-top: 4px;
-    opacity: 0.8;
-}
-
-/* 빈 상태 스타일 */
-.empty-state {
-    text-align: center;
-    padding: var(--space-xl) var(--space-md);
-    background: rgba(255,255,255,0.6);
-    border-radius: var(--card-radius);
-    border: 2px dashed rgba(160, 174, 192, 0.4);
-    margin: var(--space-md) 0;
-}
-
-.empty-icon {
-    font-size: 3rem;
-    margin-bottom: var(--space-sm);
-    opacity: 0.6;
-}
-
-.empty-text {
-    font-size: var(--font-md);
-    color: var(--color-text);
-    font-weight: 500;
-    margin-bottom: var(--space-xs);
-}
-
-.empty-hint {
-    font-size: var(--font-xs);
-    color: var(--color-text-light);
-}
-
-.stock-reason {
-    margin-top: 8px;
-    padding: 8px 12px;
-    background: rgba(102,126,234,0.08);
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: #667eea;
-    font-weight: 600;
-}
-/* 판별로직 접기/펼치기 스타일 */
-.logic-details {
-    background: rgba(255,255,255,0.6);
-    border-radius: var(--card-radius);
-    border: 1px solid rgba(255,255,255,0.8);
-    overflow: hidden;
-    margin: var(--space-md) 0;
-}
-
-.logic-summary {
-    padding: var(--space-md);
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    list-style: none;
-    transition: background 0.2s;
-}
-
-.logic-summary:hover {
-    background: rgba(255,255,255,0.8);
-}
-
-.logic-summary::-webkit-details-marker {
-    display: none;
-}
-
-.summary-title {
-    font-size: var(--font-lg);
-    font-weight: 700;
-    color: var(--color-accent);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.summary-title::before {
-    content: '▶';
-    font-size: 0.8rem;
-    transition: transform 0.3s;
-    color: var(--color-accent);
-}
-
-.logic-details[open] .summary-title::before {
-    transform: rotate(90deg);
-}
-
-.summary-hint {
-    font-size: var(--font-sm);
-    color: var(--color-text-light);
-}
-
-.logic-content {
-    padding: 0 var(--space-md) var(--space-md);
-}
-
-/* details 애니메이션 */
-.logic-details[open] .logic-content {
-    animation: slideDown 0.3s ease-out;
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-</style>
-'''
-    
-    # HTML 조합 (CSS 삽입)
-    html_content = header.replace('</head>', f'{additional_css}</head>')
-    
-    # 히트맵/거래량 알림 섹션 삽입 (있는 경우)
-    extra_sections = data.get("extra_sections", "")
-    html_content += criteria + experts + extra_sections + stock_cards + footer
-    
-    with open('index.html', 'w', encoding='utf-8') as f:
-        f.write(html_content)
+    update_time_html = f'<span>🕐 마지막 업데이트: {current_time}</span>'
+    replace_between_markers(
+        'index.html',
+        '<!-- DYNAMIC_UPDATE_TIME_START -->',
+        '<!-- DYNAMIC_UPDATE_TIME_END -->',
+        update_time_html
+    )
     
     total_domestic = len(kospi) + len(kosdaq)
-    print(f"✅ HTML 업데이트: 국내 {total_domestic}개 (KOSPI {len(kospi)}, KOSDAQ {len(kosdaq)}) / 해외 {len(us)}개")
+    print(f"✅ HTML 부분 교체 완료: 국내 {total_domestic}개 (KOSPI {len(kospi)}, KOSDAQ {len(kosdaq)}) / 해외 {len(us)}개")
 
 
 def fetch_surge_stocks():
