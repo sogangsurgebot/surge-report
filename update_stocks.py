@@ -875,10 +875,56 @@ def fetch_surge_stocks():
     }
 
 
+def is_market_open():
+    """장중 여부 확인 (09:00 ~ 15:30)"""
+    now = datetime.now()
+    market_open = now.replace(hour=9, minute=0, second=0, microsecond=0)
+    market_close = now.replace(hour=15, minute=30, second=0, microsecond=0)
+    return market_open <= now <= market_close
+
+
+def save_market_data(data):
+    """장중 데이터를 JSON 파일로 저장"""
+    data["saved_at"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    data["market_status"] = "OPEN" if is_market_open() else "CLOSED"
+    
+    with open('market_data.json', 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    
+    print(f"💾 장중 데이터 저장 완료: {data['saved_at']} (장{'' if is_market_open() else ' 마감'})")
+
+
+def load_market_data():
+    """저장된 마지막 장중 데이터 로드"""
+    if os.path.exists('market_data.json'):
+        try:
+            with open('market_data.json', 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            print(f"📂 저장된 데이터 로드: {data.get('saved_at', 'unknown')}")
+            return data
+        except Exception as e:
+            print(f"⚠️ 데이터 로드 실패: {e}")
+            return None
+    return None
+
+
 def main():
-    data = fetch_surge_stocks()
-    update_html(data)
-    print(f"✨ 작업 완료!")
+    print(f"🚀 {'='*60}")
+    print(f"📅 현재 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"🏦 장 상태: {'열림' if is_market_open() else '마감'}")
+    print(f"{'='*60}\n")
+    
+    # 1. 새로운 데이터 수집 시도
+    fresh_data = fetch_surge_stocks()
+    
+    # 2. 데이터 저장 (항상 저장)
+    save_market_data(fresh_data)
+    
+    # 3. HTML 업데이트
+    update_html(fresh_data)
+    
+    print(f"\n✨ 작업 완료!")
+    print(f"💡 장 마감 후에는 마지막 장중 데이터를 표시합니다.")
 
 
 if __name__ == "__main__":
