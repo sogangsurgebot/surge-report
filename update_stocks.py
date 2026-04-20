@@ -865,6 +865,22 @@ def fetch_surge_stocks():
     # 해외 주식
     us_stocks = get_nasdaq_surge_stocks(token)
     
+    # DB 저장
+    try:
+        from stock_db import init_db, save_snapshot, save_stocks
+        init_db()  # 테이블 없으면 생성
+        snapshot_id = save_snapshot(
+            market_status="OPEN" if is_market_open() else "CLOSED",
+            data_source=SERVER_TYPE,
+            total_kospi=len(kospi_stocks),
+            total_kosdaq=len(kosdaq_stocks)
+        )
+        save_stocks(snapshot_id, "KOSPI", kospi_stocks)
+        save_stocks(snapshot_id, "KOSDAQ", kosdaq_stocks)
+        print(f"✅ DB 저장 완료 (snapshot_id: {snapshot_id})")
+    except Exception as e:
+        print(f"⚠️ DB 저장 실패: {e}")
+    
     return {
         "date": datetime.now().strftime("%Y-%m-%d"),
         "source": "🔴 실제 데이터",
