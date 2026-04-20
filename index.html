@@ -1280,6 +1280,7 @@
             <div class="update-time">
                 <span>🕐 마지막 업데이트: 2026-04-20 19:30</span>
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
+                <span id="market-status" style="margin-left: 8px; font-weight: 600;"></span>
             </div>
         </div>
         <!-- 급등주 판단 로직 상세 설명 (접기/펼치기) -->
@@ -1681,6 +1682,27 @@
                 allowTouchMove: true,
                 threshold: 10
             });
+            
+            // 장 마감 상태 표시
+            function updateMarketStatus() {
+                const now = new Date();
+                const hour = now.getHours();
+                const minute = now.getMinutes();
+                const statusEl = document.getElementById('market-status');
+                
+                // 장중: 09:00 ~ 15:30
+                const isMarketOpen = (hour > 9 || (hour === 9 && minute >= 0)) && 
+                                     (hour < 15 || (hour === 15 && minute <= 30));
+                
+                if (!isMarketOpen && statusEl) {
+                    statusEl.innerHTML = '<span style="color: #e53e3e;">⛔ 장 마감</span>';
+                }
+            }
+            
+            // 페이지 로드 시 실행
+            updateMarketStatus();
+            // 1분마다 업데이트
+            setInterval(updateMarketStatus, 60000);
         });
     </script>
 </body>
