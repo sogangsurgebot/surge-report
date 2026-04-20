@@ -881,28 +881,6 @@ def fetch_surge_stocks():
         save_stocks(snapshot_id, "KOSPI", kospi_stocks)
         save_stocks(snapshot_id, "KOSDAQ", kosdaq_stocks)
         print(f"✅ DB 저장 완료 (snapshot_id: {snapshot_id})")
-        
-        # 섹터 히트맵 & 거래량 폭발 알림 생성
-        try:
-            from sector_heatmap import get_sector_heatmap, generate_heatmap_html
-            from volume_alert import detect_volume_spikes, generate_volume_alert_html
-            
-            heatmap_data = get_sector_heatmap()
-            volume_alerts = detect_volume_spikes()
-            
-            # HTML 파일에 추가할 섹션 생성
-            extra_sections = ""
-            if heatmap_data["sectors"]:
-                extra_sections += generate_heatmap_html(heatmap_data)
-            if volume_alerts["alerts"]:
-                extra_sections += generate_volume_alert_html(volume_alerts)
-            
-            # data에 저장 (update_html에서 사용)
-            data["extra_sections"] = extra_sections
-            print(f"📊 섹터 히트맵: {len(heatmap_data['sectors'])}개 / 거래량 폭발: {volume_alerts['total_alerts']}개")
-        except Exception as e:
-            print(f"⚠️ 히트맵/알림 생성 실패: {e}")
-        
     except Exception as e:
         print(f"⚠️ DB 저장 실패: {e}")
     
@@ -914,6 +892,32 @@ def fetch_surge_stocks():
         "kosdaq_stocks": kosdaq_stocks,
         "us_stocks": us_stocks
     }
+
+
+def generate_extra_sections(kospi_stocks, kosdaq_stocks):
+    """섹터 히트맵 + 거래량 폭발 알림 HTML 생성"""
+    extra_sections = ""
+    
+    try:
+        from sector_heatmap import get_sector_heatmap, generate_heatmap_html
+        from volume_alert import detect_volume_spikes, generate_volume_alert_html
+        
+        # DB에 저장된 오늘 데이터 기준으로 분석
+        heatmap_data = get_sector_heatmap()
+        volume_alerts = detect_volume_spikes()
+        
+        if heatmap_data["sectors"]:
+            extra_sections += generate_heatmap_html(heatmap_data)
+            print(f"📊 섹터 히트맵: {len(heatmap_data['sectors'])}개 섹터")
+        
+        if volume_alerts["alerts"]:
+            extra_sections += generate_volume_alert_html(volume_alerts)
+            print(f"⚠️ 거래량 폭발: {volume_alerts['total_alerts']}개 종목")
+        
+    except Exception as e:
+        print(f"⚠️ 히트맵/알림 생성 실패: {e}")
+    
+    return extra_sections
 
 
 def is_market_open():
@@ -960,20 +964,28 @@ def main():
     
     # 2. 장중이고 데이터가 있으면 저장, 없으면 이전 데이터 사용
     if is_market_open():
-        # 장중: 새 데이터 저장
         if fresh_data.get('kospi_stocks') or fresh_data.get('kosdaq_stocks'):
             save_market_data(fresh_data)
             print("📈 장중 데이터 저장 완료")
         else:
             print("⚠️ 장중인데 데이터가 없음 - 이전 데이터 유지")
     else:
-        # 장 마감: 저장된 데이터가 있으면 사용
         saved_data = load_market_data()
         if saved_data:
             print("📂 장 마감 - 저장된 장중 데이터로 표시")
             fresh_data = saved_data
         else:
             print("⚠️ 저장된 데이터 없음 - 현재 데이터 사용")
+    
+    # 3. 히트맵 & 거래량 알림 생성 (DB 기반)
+    extra_sections = generate_extra_sections(
+        fresh_data.get('kospi_stocks', []),
+        fresh_data.get('kosdaq_stocks', [])
+    )
+    fresh_data["extra_sections"] = extra_sections
+    
+    # 4. HTML 업데이트 (최종 데이터)
+    update_html(fresh_data)
     
     print(f"\n✨ 작업 완료!")
     print(f"💡 장 마감 후에는 마지막 장중 데이터를 표시합니다.")
