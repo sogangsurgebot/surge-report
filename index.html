@@ -2030,7 +2030,7 @@
             });
         });
         
-        // 등급 필터 기능
+        // 등급 필터 기능 — 실제 종목 필터링
         document.addEventListener('DOMContentLoaded', function() {
             const gradeBtns = document.querySelectorAll('.grade-btn');
             
@@ -2038,32 +2038,61 @@
                 btn.addEventListener('click', function() {
                     const parent = this.closest('.grade-filter-section');
                     const resultDiv = parent.querySelector('.grade-result');
+                    const marketSection = parent.closest('[data-market]');
                     const grade = this.dataset.grade;
-                    const minRate = this.dataset.min;
-                    const market = parent.closest('[data-market]')?.dataset.market || '';
+                    const minRate = parseFloat(this.dataset.min);
+                    const market = marketSection?.dataset.market || '';
                     
                     // 같은 섹션 내 다른 버튼 비활성화
                     parent.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
                     this.classList.add('active');
                     
-                    // 등급별 표시 텍스트
-                    const gradeNames = {
-                        'S': '상한가 근접(+29% 이상)',
-                        'A': '강한 급등(+20% ~ 29%)',
-                        'B': '중간 급등(+10% ~ 20%)',
-                        'C': '초기 급등(+5% ~ 10%)',
-                        'D': '주목 단계(+3% ~ 5%)',
-                        'W': '관심 종목(0% ~ 3%)'
+                    // 등급별 범위 정의
+                    const gradeRanges = {
+                        'S': { min: 29, max: 999, label: '상한가 근접(+29% 이상)' },
+                        'A': { min: 20, max: 29, label: '강한 급등(+20% ~ 29%)' },
+                        'B': { min: 10, max: 20, label: '중간 급등(+10% ~ 20%)' },
+                        'C': { min: 3, max: 10, label: '초기 급등(+3% ~ 10%)' },
+                        'D': { min: 0, max: 3, label: '주목 단계(0% ~ 3%)' },
+                        'W': { min: -999, max: 999, label: '전체 종목' }
                     };
                     
+                    const range = gradeRanges[grade];
                     const marketName = market === 'kospi' ? 'KOSPI' : market === 'kosdaq' ? 'KOSDAQ' : '';
                     
-                    resultDiv.innerHTML = `
-                        <div class="grade-result-empty">
-                            <span class="grade-result-icon">📈</span>
-                            <span class="grade-result-text">${grade}등급(${gradeNames[grade]}) 선택됨 — 현재 ${marketName}에서 해당 조건 종목 없음</span>
-                        </div>
-                    `;
+                    // 해당 시장의 종목 카드 필터링
+                    const stockCards = marketSection?.querySelectorAll('.stock-card') || [];
+                    let visibleCount = 0;
+                    
+                    stockCards.forEach(card => {
+                        // 등락률 파싱 (예: "+13.70%" → 13.7)
+                        const changeEl = card.querySelector('.price-value.up, .price-value.down');
+                        const changeText = changeEl?.textContent?.trim() || '';
+                        const match = changeText.match(/([+-]?\d+\.?\d*)%/);
+                        const changeRate = match ? parseFloat(match[1]) : 0;
+                        
+                        // 등급 범위에 맞는지 확인
+                        const isVisible = (changeRate >= range.min && changeRate < range.max);
+                        card.style.display = isVisible ? '' : 'none';
+                        if (isVisible) visibleCount++;
+                    });
+                    
+                    // 결과 메시지 업데이트
+                    if (visibleCount > 0) {
+                        resultDiv.innerHTML = `
+                            <div class="grade-result-empty">
+                                <span class="grade-result-icon">📈</span>
+                                <span class="grade-result-text">${grade}등급 — ${visibleCount}개 종목 표시 중</span>
+                            </div>
+                        `;
+                    } else {
+                        resultDiv.innerHTML = `
+                            <div class="grade-result-empty">
+                                <span class="grade-result-icon">📈</span>
+                                <span class="grade-result-text">${grade}등급(${range.label}) — 현재 ${marketName}에서 해당 조건 종목 없음</span>
+                            </div>
+                        `;
+                    }
                     
                     // 부드러운 플래시 효과
                     resultDiv.style.animation = 'none';
