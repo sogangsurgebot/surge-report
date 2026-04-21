@@ -678,6 +678,16 @@ def update_html(data):
         update_time_html
     )
 
+    # 5. 깃 버전 정보 갱신
+    version_info = get_git_version_info()
+    version_html = f'<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 {version_info}</a>'
+    replace_between_markers(
+        'index.html',
+        '<!-- DYNAMIC_VERSION_START -->',
+        '<!-- DYNAMIC_VERSION_END -->',
+        version_html
+    )
+
     total_domestic = len(kospi) + len(kosdaq)
     print(f"✅ HTML 부분 교체 완료: 국내 {total_domestic}개 (KOSPI {len(kospi)}, KOSDAQ {len(kosdaq)}) / 해외 {len(us)}개")
 
