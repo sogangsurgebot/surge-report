@@ -409,7 +409,7 @@ def get_sample_data():
 
 
 def generate_stock_section(stocks, title, market_type, is_primary=False):
-    """주식 섹션 HTML 생성"""
+    """주식 섹션 HTML 생성 (등급 필터 항상 포함)"""
 
     # 시장별 테두리 색상
     border_colors = {
@@ -420,22 +420,9 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
     # 주요 섹션 여부에 따른 스타일
     section_class = "market-section-primary" if is_primary else "market-section-secondary"
 
-    # 빈 상태 메시지
-    if not stocks:
-        empty_messages = {
-            "kospi": "📊 현재 KOSPI 시장에서 급등주(+3% 이상)가 감지되지 않았습니다",
-            "kosdaq": "🚀 현재 KOSDAQ 시장에서 급등주(+3% 이상)가 감지되지 않았습니다",
-            "nasdaq": "🇺🇸 현재 나스닥 시장이 마감되었거나 급등주가 없습니다"
-        }
-        empty_msg = empty_messages.get(market_type, "현재 급등주가 없습니다")
-        
-        result_id = f"{market_type}GradeResult"
-        
-        return f'''<div class="market-section {section_class}" data-market="{market_type}">
-    <div class="market-header" style="border-left: 4px solid {border_color};">
-        <h3 class="market-title">{title} <span class="market-count">0개</span></h3>
-    </div>
-    <div class="grade-filter-section">
+    # 등급 필터 HTML (데이터 유무와 관계없이 항상 표시)
+    result_id = f"{market_type}GradeResult"
+    grade_filter_html = f'''<div class="grade-filter-section">
         <div class="grade-filter-header">
             <span class="grade-filter-title">📊 등락률 대역 필터</span>
             <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
@@ -472,85 +459,8 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
                 <span class="grade-desc">모든 종목</span>
             </button>
         </div>
-        <div class="grade-result" id="{result_id}">
-            <div class="grade-result-empty">
-                <span class="grade-result-icon">📈</span>
-                <span class="grade-result-text">C등급(+3% 이상) 선택됨 — 현재 {market_type.upper()}에서 해당 조건 종목 없음</span>
-            </div>
-        </div>
-    </div>
-</div>'''
-    
-    
-    # 시장별 테두리 색상
-    border_colors = {
-        "kospi": "#ff6b6b", "kosdaq": "#4ecdc4", "nasdaq": "#667eea"
-    }
-    border_color = border_colors.get(market_type, "#667eea")
-
-    # 주요 섹션 여부에 따른 스타일
-    section_class = "market-section-primary" if is_primary else "market-section-secondary"
-
-    html = f'''<div class="market-section {section_class}" data-market="{market_type}">
-    <div class="market-header" style="border-left: 4px solid {border_color};">
-        <h3 class="market-title">{title} <span class="market-count">{len(stocks)}개</span></h3>
-    </div>
-    <div class="stocks-grid {'stocks-grid-3col' if is_primary else 'stocks-grid-2col'}">
-'''
-
-    for stock in stocks[:6]:  # 최대 6개
-        change_class = "up" if "+" in stock["change"] else "down"
-        badge = stock.get("badge", "급등")
-        alert_level = stock.get("alert_level", "NORMAL")
-        market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
-
-        # 알림 레벨별 스타일
-        if alert_level == "STRONG":
-            card_style = f'border: 2px solid #ff4757; background: linear-gradient(135deg, rgba(255,71,87,0.05) 0%, rgba(255,71,87,0.1) 100%);'
-        elif alert_level == "NORMAL":
-            card_style = f'border: 2px solid #ffa502; background: linear-gradient(135deg, rgba(255,165,2,0.05) 0%, rgba(255,165,2,0.1) 100%);'
-        else:
-            card_style = f'border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);'
-
-        score_detail = stock.get('score_details', '')
-
-        html += f'''        <div class="card stock-card" style="{card_style}">
-            <div class="stock-header">
-                <div>
-                    <div class="stock-name">{stock["name"]} {market_badge}</div>
-                    <div class="stock-code">{stock["code"]}</div>
-                </div>
-                <span class="surge-badge badge-{alert_level.lower()}">{badge}</span>
-            </div>
-            <div class="price-info">
-                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">{stock["price"]}</div></div>
-                <div class="price-item"><div class="price-label">등락률</div><div class="price-value {change_class}">{stock["change"]}</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">{stock["volume"]}</div></div>
-            </div>
-            <div class="stock-reason">
-                📊 {stock["reason"]}
-                {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
-            </div>
-            {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
-        </div>
-'''
-
-    html += '''    </div>
-</div>'''
-    return html
-
-
-def generate_stock_section(stocks, title, market_type, is_primary=False):
-    """주식 섹션 HTML 생성"""
-
-    # 시장별 테두리 색상
-    border_colors = {
-        "kospi": "#ff6b6b", "kosdaq": "#4ecdc4", "nasdaq": "#667eea"
-    }
-    border_color = border_colors.get(market_type, "#667eea")
-
-    # 주요 섹션 여부에 따른 스타일
-    section_class = "market-section-primary" if is_primary else "market-section-secondary"
+        <div class="grade-result" id="{result_id}"></div>
+    </div>'''
 
     # 빈 상태 메시지
     if not stocks:
@@ -560,22 +470,24 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
             "nasdaq": "🇺🇸 현재 나스닥 시장이 마감되었거나 급등주가 없습니다"
         }
         empty_msg = empty_messages.get(market_type, "현재 급등주가 없습니다")
-
+        
         return f'''<div class="market-section {section_class}" data-market="{market_type}">
     <div class="market-header" style="border-left: 4px solid {border_color};">
         <h3 class="market-title">{title} <span class="market-count">0개</span></h3>
     </div>
+    {grade_filter_html}
     <div class="empty-state">
         <div class="empty-icon">🔍</div>
         <div class="empty-text">{empty_msg}</div>
         <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
     </div>
 </div>'''
-
+    
     html = f'''<div class="market-section {section_class}" data-market="{market_type}">
     <div class="market-header" style="border-left: 4px solid {border_color};">
         <h3 class="market-title">{title} <span class="market-count">{len(stocks)}개</span></h3>
     </div>
+    {grade_filter_html}
     <div class="stocks-grid {'stocks-grid-3col' if is_primary else 'stocks-grid-2col'}">
 '''
 

@@ -1410,7 +1410,7 @@
         <div class="update-time-wrapper">
             <div class="update-time">
                 <!-- DYNAMIC_UPDATE_TIME_START -->
-<span>🕐 마지막 업데이트: 2026-04-21 08:47</span>
+<span>🕐 마지막 업데이트: 2026-04-21 08:51</span>
 <!-- DYNAMIC_UPDATE_TIME_END -->
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
@@ -1752,6 +1752,45 @@
     <div class="market-header" style="border-left: 4px solid #ff6b6b;">
         <h3 class="market-title">📈 KOSPI <span class="market-count">12개</span></h3>
     </div>
+    <div class="grade-filter-section">
+        <div class="grade-filter-header">
+            <span class="grade-filter-title">📊 등락률 대역 필터</span>
+            <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
+        </div>
+        <div class="grade-filter-grid">
+            <button class="grade-btn s-grade" data-grade="S" data-min="29">
+                <span class="grade-label">S</span>
+                <span class="grade-range">+29% ~</span>
+                <span class="grade-desc">상한가 근접</span>
+            </button>
+            <button class="grade-btn a-grade" data-grade="A" data-min="20">
+                <span class="grade-label">A</span>
+                <span class="grade-range">+20% ~ 29%</span>
+                <span class="grade-desc">강한 급등</span>
+            </button>
+            <button class="grade-btn b-grade" data-grade="B" data-min="10">
+                <span class="grade-label">B</span>
+                <span class="grade-range">+10% ~ 20%</span>
+                <span class="grade-desc">중간 급등</span>
+            </button>
+            <button class="grade-btn c-grade active" data-grade="C" data-min="3">
+                <span class="grade-label">C</span>
+                <span class="grade-range">+3% ~ 10%</span>
+                <span class="grade-desc">초기 급등</span>
+            </button>
+            <button class="grade-btn d-grade" data-grade="D" data-min="0">
+                <span class="grade-label">D</span>
+                <span class="grade-range">0% ~ 3%</span>
+                <span class="grade-desc">주목 단계</span>
+            </button>
+            <button class="grade-btn watch-grade" data-grade="W" data-min="-100">
+                <span class="grade-label">W</span>
+                <span class="grade-range">전체</span>
+                <span class="grade-desc">모든 종목</span>
+            </button>
+        </div>
+        <div class="grade-result" id="kospiGradeResult"></div>
+    </div>
     <div class="stocks-grid stocks-grid-3col">
         <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
             <div class="stock-header">
@@ -1762,13 +1801,13 @@
                 <span class="surge-badge badge-watch">👀 WATCH</span>
             </div>
             <div class="price-info">
-                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">32,150</div></div>
-                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+14.41%</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">37,093,216</div></div>
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">31,750</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+12.99%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">38,629,483</div></div>
             </div>
             <div class="stock-reason">
                 📊 급등 watch (점수: 4.0)
-                <div class="score-detail">등락 14.4% / 거래대금 11925억</div>
+                <div class="score-detail">등락 13.0% / 거래대금 12265억</div>
             </div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
         </div>
@@ -1781,13 +1820,13 @@
                 <span class="surge-badge badge-watch">👀 WATCH</span>
             </div>
             <div class="price-info">
-                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">4,050</div></div>
-                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+3.85%</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">22,104,083</div></div>
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">4,080</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+4.62%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">22,744,481</div></div>
             </div>
             <div class="stock-reason">
-                📊 급등 watch (점수: 2.3)
-                <div class="score-detail">등락 3.9% / 거래대금 895억</div>
+                📊 급등 watch (점수: 2.4)
+                <div class="score-detail">등락 4.6% / 거래대금 928억</div>
             </div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
         </div>
@@ -1800,13 +1839,13 @@
                 <span class="surge-badge badge-watch">👀 WATCH</span>
             </div>
             <div class="price-info">
-                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">1,410</div></div>
-                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+15.29%</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">21,110,832</div></div>
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">1,408</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+15.13%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">21,775,578</div></div>
             </div>
             <div class="stock-reason">
                 📊 급등 watch (점수: 3.4)
-                <div class="score-detail">등락 15.3% / 거래대금 298억</div>
+                <div class="score-detail">등락 15.1% / 거래대금 307억</div>
             </div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
         </div>
@@ -1819,13 +1858,13 @@
                 <span class="surge-badge badge-watch">👀 WATCH</span>
             </div>
             <div class="price-info">
-                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">1,412</div></div>
-                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+6.81%</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">19,887,964</div></div>
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">1,428</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+8.02%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">20,976,515</div></div>
             </div>
             <div class="stock-reason">
-                📊 급등 watch (점수: 2.2)
-                <div class="score-detail">등락 6.8% / 거래대금 281억</div>
+                📊 급등 watch (점수: 2.5)
+                <div class="score-detail">등락 8.0% / 거래대금 300억</div>
             </div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
         </div>
@@ -1838,13 +1877,13 @@
                 <span class="surge-badge badge-watch">👀 WATCH</span>
             </div>
             <div class="price-info">
-                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">4,385</div></div>
-                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+7.08%</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">17,526,777</div></div>
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">4,365</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+6.59%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">18,559,065</div></div>
             </div>
             <div class="stock-reason">
-                📊 급등 watch (점수: 2.9)
-                <div class="score-detail">등락 7.1% / 거래대금 769억</div>
+                📊 급등 watch (점수: 2.8)
+                <div class="score-detail">등락 6.6% / 거래대금 810억</div>
             </div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
         </div>
@@ -1857,13 +1896,13 @@
                 <span class="surge-badge badge-watch">👀 WATCH</span>
             </div>
             <div class="price-info">
-                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">3,555</div></div>
-                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+13.04%</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">17,393,082</div></div>
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">3,565</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+13.35%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">17,739,666</div></div>
             </div>
             <div class="stock-reason">
                 📊 급등 watch (점수: 4.0)
-                <div class="score-detail">등락 13.0% / 거래대금 618억</div>
+                <div class="score-detail">등락 13.3% / 거래대금 632억</div>
             </div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
         </div>
@@ -1871,6 +1910,45 @@
 </div><div class="market-section market-section-primary" data-market="kosdaq">
     <div class="market-header" style="border-left: 4px solid #4ecdc4;">
         <h3 class="market-title">🚀 KOSDAQ <span class="market-count">0개</span></h3>
+    </div>
+    <div class="grade-filter-section">
+        <div class="grade-filter-header">
+            <span class="grade-filter-title">📊 등락률 대역 필터</span>
+            <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
+        </div>
+        <div class="grade-filter-grid">
+            <button class="grade-btn s-grade" data-grade="S" data-min="29">
+                <span class="grade-label">S</span>
+                <span class="grade-range">+29% ~</span>
+                <span class="grade-desc">상한가 근접</span>
+            </button>
+            <button class="grade-btn a-grade" data-grade="A" data-min="20">
+                <span class="grade-label">A</span>
+                <span class="grade-range">+20% ~ 29%</span>
+                <span class="grade-desc">강한 급등</span>
+            </button>
+            <button class="grade-btn b-grade" data-grade="B" data-min="10">
+                <span class="grade-label">B</span>
+                <span class="grade-range">+10% ~ 20%</span>
+                <span class="grade-desc">중간 급등</span>
+            </button>
+            <button class="grade-btn c-grade active" data-grade="C" data-min="3">
+                <span class="grade-label">C</span>
+                <span class="grade-range">+3% ~ 10%</span>
+                <span class="grade-desc">초기 급등</span>
+            </button>
+            <button class="grade-btn d-grade" data-grade="D" data-min="0">
+                <span class="grade-label">D</span>
+                <span class="grade-range">0% ~ 3%</span>
+                <span class="grade-desc">주목 단계</span>
+            </button>
+            <button class="grade-btn watch-grade" data-grade="W" data-min="-100">
+                <span class="grade-label">W</span>
+                <span class="grade-range">전체</span>
+                <span class="grade-desc">모든 종목</span>
+            </button>
+        </div>
+        <div class="grade-result" id="kosdaqGradeResult"></div>
     </div>
     <div class="empty-state">
         <div class="empty-icon">🔍</div>
