@@ -420,26 +420,48 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
     # 주요 섹션 여부에 따른 스타일
     section_class = "market-section-primary" if is_primary else "market-section-secondary"
 
-    # 등급별 종목 개수 계산
+    # 등급별 종목 개수 계산 (JS와 동일한 min/max 범위 사용)
+    grade_ranges = {
+        "S": {"min": 29, "max": 999},
+        "A": {"min": 20, "max": 29},
+        "B": {"min": 10, "max": 20},
+        "C": {"min": 3, "max": 10},
+        "D": {"min": 0, "max": 3},
+    }
     grade_counts = {"S": 0, "A": 0, "B": 0, "C": 0, "D": 0, "W": len(stocks)}
+    
     for stock in stocks:
-        # 등락률 파싱 (stock["change"] 또는 stock.get("change", "0%"))
         change_str = stock.get("change", "0%")
         try:
             change_rate = float(change_str.replace("%", "").replace("+", ""))
         except (ValueError, TypeError):
             change_rate = 0.0
         
-        if change_rate >= 29:
-            grade_counts["S"] += 1
-        elif change_rate >= 20:
-            grade_counts["A"] += 1
-        elif change_rate >= 10:
-            grade_counts["B"] += 1
-        elif change_rate >= 3:
-            grade_counts["C"] += 1
-        elif change_rate >= 0:
-            grade_counts["D"] += 1
+        # JS와 동일한 로직: min <= rate < max
+        found = False
+        for grade, rng in grade_ranges.items():
+            if rng["min"] <= change_rate < rng["max"]:
+                grade_counts[grade] += 1
+                found = True
+                break
+        if not found and change_rate >= 0:
+            grade_counts["D"] += 1  # 0~3% 범위
+    
+    # 디버깅 로그
+    if stocks:
+        print(f"   📊 등급 분포: S:{grade_counts['S']} A:{grade_counts['A']} B:{grade_counts['B']} C:{grade_counts['C']} D:{grade_counts['D']} (총 {len(stocks)}개)")
+        for s in stocks:
+            c = s.get('change', '0%')
+            try:
+                r = float(c.replace('%','').replace('+',''))
+            except:
+                r = 0.0
+            g = 'W'
+            for gr, rng in grade_ranges.items():
+                if rng["min"] <= r < rng["max"]:
+                    g = gr
+                    break
+            print(f"      {s.get('name','N/A')} ({s.get('code','N/A')}): {c} → {g}")
 
     # 등급 요약 배너 HTML
     grade_dots = {
@@ -512,7 +534,7 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
     <div class="stocks-grid {'stocks-grid-3col' if is_primary else 'stocks-grid-2col'}">
 '''
 
-    for stock in stocks[:6]:  # 최대 6개
+    for stock in stocks:  # 모든 종목 표시 (필터링 위해 전체 필요)
         change_class = "up" if "+" in stock["change"] else "down"
         badge = stock.get("badge", "급등")
         alert_level = stock.get("alert_level", "NORMAL")
