@@ -12,10 +12,11 @@
 import os
 import requests
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
+import json
 
 # .env 파일에서 환경변수 로드
 def load_env():
@@ -150,7 +151,8 @@ def calculate_stock_score(item: dict, market_type: str = "KOSPI") -> Optional[St
             return None
         if trade_amount < MIN_TRADE_AMOUNT:
             return None
-        if market_cap < MIN_MARKET_CAP:
+        # 시총 정보가 없으면(cap=0) 시총 필터 무시 (거래량순위 API에 hts_avls 필드 없음)
+        if market_cap > 0 and market_cap < MIN_MARKET_CAP:
             return None
 
         # 점수 계산
@@ -837,11 +839,13 @@ def generate_extra_sections(kospi_stocks, kosdaq_stocks):
 
 
 def is_market_open():
-    """장중 여부 확인 (09:00 ~ 15:30)"""
-    now = datetime.now()
-    market_open = now.replace(hour=9, minute=0, second=0, microsecond=0)
-    market_close = now.replace(hour=15, minute=30, second=0, microsecond=0)
-    return market_open <= now <= market_close
+    """장중 여부 확인 (09:00 ~ 15:30 KST)"""
+    # 한국 시간(KST, UTC+9) 기준으로 장 상태 확인
+    kst = timezone(timedelta(hours=9))
+    now_kst = datetime.now(kst)
+    market_open = now_kst.replace(hour=9, minute=0, second=0, microsecond=0)
+    market_close = now_kst.replace(hour=15, minute=30, second=0, microsecond=0)
+    return market_open <= now_kst <= market_close
 
 
 def save_market_data(data):
@@ -870,8 +874,12 @@ def load_market_data():
 
 
 def main():
+    # 한국 시간(KST) 현재 시간
+    kst = timezone(timedelta(hours=9))
+    now_kst = datetime.now(kst)
+    
     print(f"🚀 {'='*60}")
-    print(f"📅 현재 시간: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"📅 현재 시간: {now_kst.strftime('%Y-%m-%d %H:%M:%S')} (KST)")
     print(f"🏦 장 상태: {'열림' if is_market_open() else '마감'}")
     print(f"{'='*60}\n")
 
