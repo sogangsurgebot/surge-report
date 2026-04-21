@@ -427,14 +427,55 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
         }
         empty_msg = empty_messages.get(market_type, "현재 급등주가 없습니다")
         
+        result_id = f"{market_type}GradeResult"
+        
         return f'''<div class="market-section {section_class}" data-market="{market_type}">
     <div class="market-header" style="border-left: 4px solid {border_color};">
         <h3 class="market-title">{title} <span class="market-count">0개</span></h3>
     </div>
-    <div class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <div class="empty-text">{empty_msg}</div>
-        <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
+    <div class="grade-filter-section">
+        <div class="grade-filter-header">
+            <span class="grade-filter-title">📊 등락률 대역 필터</span>
+            <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
+        </div>
+        <div class="grade-filter-grid">
+            <button class="grade-btn s-grade" data-grade="S" data-min="29">
+                <span class="grade-label">S</span>
+                <span class="grade-range">+29% ~</span>
+                <span class="grade-desc">상한가 근접</span>
+            </button>
+            <button class="grade-btn a-grade" data-grade="A" data-min="20">
+                <span class="grade-label">A</span>
+                <span class="grade-range">+20% ~ 29%</span>
+                <span class="grade-desc">강한 급등</span>
+            </button>
+            <button class="grade-btn b-grade" data-grade="B" data-min="10">
+                <span class="grade-label">B</span>
+                <span class="grade-range">+10% ~ 20%</span>
+                <span class="grade-desc">중간 급등</span>
+            </button>
+            <button class="grade-btn c-grade active" data-grade="C" data-min="3">
+                <span class="grade-label">C</span>
+                <span class="grade-range">+3% ~ 10%</span>
+                <span class="grade-desc">초기 급등</span>
+            </button>
+            <button class="grade-btn d-grade" data-grade="D" data-min="0">
+                <span class="grade-label">D</span>
+                <span class="grade-range">0% ~ 3%</span>
+                <span class="grade-desc">주목 단계</span>
+            </button>
+            <button class="grade-btn watch-grade" data-grade="W" data-min="-100">
+                <span class="grade-label">W</span>
+                <span class="grade-range">전체</span>
+                <span class="grade-desc">모든 종목</span>
+            </button>
+        </div>
+        <div class="grade-result" id="{result_id}">
+            <div class="grade-result-empty">
+                <span class="grade-result-icon">📈</span>
+                <span class="grade-result-text">C등급(+3% 이상) 선택됨 — 현재 {market_type.upper()}에서 해당 조건 종목 없음</span>
+            </div>
+        </div>
     </div>
 </div>'''
     
