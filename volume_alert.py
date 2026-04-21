@@ -66,12 +66,16 @@ def detect_volume_spikes(date_str=None, threshold=VOLUME_ALERT_THRESHOLD):
     
     for stock in today_stocks:
         stock_code = stock["stock_code"]
-        today_volume = stock["volume"]
+        # volume을 안전하게 int로 변환
+        try:
+            today_volume = int(stock["volume"])
+        except (ValueError, TypeError):
+            today_volume = 0
         
         # 평균 거래량 조회
         avg_volume = get_average_volume(stock_code, days=5)
         
-        if avg_volume and avg_volume > 0:
+        if avg_volume and avg_volume > 0 and today_volume > 0:
             ratio = today_volume / avg_volume
             
             if ratio >= threshold:

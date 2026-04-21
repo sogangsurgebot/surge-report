@@ -104,18 +104,25 @@ def get_sector_heatmap(date_str=None):
         sector = get_sector_by_code(row["stock_code"], row["stock_name"])
         stats = sector_stats[sector]
         stats["count"] += 1
-        stats["max_change"] = max(stats["max_change"], row["change_rate"])
+        # change_rate를 float으로 안전하게 변환
+        try:
+            change_val = float(row["change_rate"])
+        except (ValueError, TypeError):
+            change_val = 0.0
+        stats["max_change"] = max(stats["max_change"], change_val)
         stats["stocks"].append({
             "code": row["stock_code"],
             "name": row["stock_name"],
-            "change": row["change_rate"],
+            "change": change_val,
             "market": row["market"]
         })
     
     # 평균 계산
     for sector, stats in sector_stats.items():
         if stats["stocks"]:
-            stats["avg_change"] = sum(s["change"] for s in stats["stocks"]) / len(stats["stocks"])
+            changes = [s["change"] for s in stats["stocks"] if isinstance(s["change"], (int, float))]
+            if changes:
+                stats["avg_change"] = sum(changes) / len(changes)
     
     # 정렬 (종목수 많은 순 → 평균 등락률 높은 순)
     sorted_sectors = sorted(
