@@ -1192,6 +1192,137 @@
     color: #667eea;
     font-weight: 600;
 }
+/* 등급 필터 스타일 */
+.grade-filter-section {
+    margin: var(--space-md) 0;
+}
+
+.grade-filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+    padding: 0 var(--space-xs);
+}
+
+.grade-filter-title {
+    font-size: var(--font-sm);
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.grade-filter-sub {
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+
+.grade-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: var(--space-sm);
+}
+
+@media (min-width: 480px) {
+    .grade-filter-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 10px;
+    }
+}
+
+.grade-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 4px;
+    border: 2px solid transparent;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-height: 60px;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.grade-btn:active {
+    transform: scale(0.96);
+}
+
+.grade-btn.active {
+    border-color: currentColor;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.grade-label {
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+
+.grade-range {
+    font-size: 0.65rem;
+    font-weight: 500;
+    margin-bottom: 2px;
+    white-space: nowrap;
+}
+
+.grade-desc {
+    font-size: 0.6rem;
+    opacity: 0.8;
+    white-space: nowrap;
+}
+
+/* 등급별 색상 */
+.s-grade { color: #e53e3e; background: linear-gradient(135deg, rgba(229,62,62,0.1) 0%, rgba(245,101,101,0.1) 100%); }
+.s-grade.active { background: linear-gradient(135deg, rgba(229,62,62,0.2) 0%, rgba(245,101,101,0.2) 100%); border-color: #e53e3e; }
+
+.a-grade { color: #dd6b20; background: linear-gradient(135deg, rgba(221,107,32,0.1) 0%, rgba(251,146,60,0.1) 100%); }
+.a-grade.active { background: linear-gradient(135deg, rgba(221,107,32,0.2) 0%, rgba(251,146,60,0.2) 100%); border-color: #dd6b20; }
+
+.b-grade { color: #d69e2e; background: linear-gradient(135deg, rgba(214,158,46,0.1) 0%, rgba(246,224,154,0.1) 100%); }
+.b-grade.active { background: linear-gradient(135deg, rgba(214,158,46,0.2) 0%, rgba(246,224,154,0.2) 100%); border-color: #d69e2e; }
+
+.c-grade { color: #38a169; background: linear-gradient(135deg, rgba(56,161,105,0.1) 0%, rgba(104,211,145,0.1) 100%); }
+.c-grade.active { background: linear-gradient(135deg, rgba(56,161,105,0.2) 0%, rgba(104,211,145,0.2) 100%); border-color: #38a169; }
+
+.d-grade { color: #3182ce; background: linear-gradient(135deg, rgba(49,130,206,0.1) 0%, rgba(99,179,237,0.1) 100%); }
+.d-grade.active { background: linear-gradient(135deg, rgba(49,130,206,0.2) 0%, rgba(99,179,237,0.2) 100%); border-color: #3182ce; }
+
+.watch-grade { color: #718096; background: linear-gradient(135deg, rgba(113,128,150,0.1) 0%, rgba(160,174,192,0.1) 100%); }
+.watch-grade.active { background: linear-gradient(135deg, rgba(113,128,150,0.2) 0%, rgba(160,174,192,0.2) 100%); border-color: #718096; }
+
+/* 등급 결과 영역 */
+.grade-result {
+    background: rgba(255,255,255,0.6);
+    border-radius: 12px;
+    padding: var(--space-md);
+    border: 1px dashed rgba(160, 174, 192, 0.4);
+    min-height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grade-result-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-xs);
+    text-align: center;
+    color: var(--color-text-light);
+}
+
+.grade-result-icon {
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+
+.grade-result-text {
+    font-size: var(--font-sm);
+    line-height: 1.5;
+}
+
 /* 판별로직 접기/펼치기 스타일 */
 .logic-details {
     background: rgba(255,255,255,0.6);
@@ -1621,19 +1752,97 @@
     <div class="market-header" style="border-left: 4px solid #ff6b6b;">
         <h3 class="market-title">📈 KOSPI <span class="market-count">0개</span></h3>
     </div>
-    <div class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <div class="empty-text">📊 현재 KOSPI 시장에서 급등주(+5% 이상)가 감지되지 않았습니다</div>
-        <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
+    <div class="grade-filter-section">
+        <div class="grade-filter-header">
+            <span class="grade-filter-title">📊 등락률 대역 필터</span>
+            <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
+        </div>
+        <div class="grade-filter-grid">
+            <button class="grade-btn s-grade" data-grade="S" data-min="29">
+                <span class="grade-label">S</span>
+                <span class="grade-range">+29% ~</span>
+                <span class="grade-desc">상한가 근접</span>
+            </button>
+            <button class="grade-btn a-grade" data-grade="A" data-min="20">
+                <span class="grade-label">A</span>
+                <span class="grade-range">+20% ~ 29%</span>
+                <span class="grade-desc">강한 급등</span>
+            </button>
+            <button class="grade-btn b-grade" data-grade="B" data-min="10">
+                <span class="grade-label">B</span>
+                <span class="grade-range">+10% ~ 20%</span>
+                <span class="grade-desc">중간 급등</span>
+            </button>
+            <button class="grade-btn c-grade active" data-grade="C" data-min="5">
+                <span class="grade-label">C</span>
+                <span class="grade-range">+5% ~ 10%</span>
+                <span class="grade-desc">초기 급등</span>
+            </button>
+            <button class="grade-btn d-grade" data-grade="D" data-min="3">
+                <span class="grade-label">D</span>
+                <span class="grade-range">+3% ~ 5%</span>
+                <span class="grade-desc">주목 단계</span>
+            </button>
+            <button class="grade-btn watch-grade" data-grade="W" data-min="0">
+                <span class="grade-label">W</span>
+                <span class="grade-range">0% ~ 3%</span>
+                <span class="grade-desc">관심 종목</span>
+            </button>
+        </div>
+        <div class="grade-result" id="kospiGradeResult">
+            <div class="grade-result-empty">
+                <span class="grade-result-icon">📈</span>
+                <span class="grade-result-text">C등급(+5% 이상) 선택됨 — 현재 KOSPI에서 해당 조건 종목 없음</span>
+            </div>
+        </div>
     </div>
 </div><div class="market-section market-section-primary" data-market="kosdaq">
     <div class="market-header" style="border-left: 4px solid #4ecdc4;">
         <h3 class="market-title">🚀 KOSDAQ <span class="market-count">0개</span></h3>
     </div>
-    <div class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <div class="empty-text">🚀 현재 KOSDAQ 시장에서 급등주(+5% 이상)가 감지되지 않았습니다</div>
-        <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
+    <div class="grade-filter-section">
+        <div class="grade-filter-header">
+            <span class="grade-filter-title">📊 등락률 대역 필터</span>
+            <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
+        </div>
+        <div class="grade-filter-grid">
+            <button class="grade-btn s-grade" data-grade="S" data-min="29">
+                <span class="grade-label">S</span>
+                <span class="grade-range">+29% ~</span>
+                <span class="grade-desc">상한가 근접</span>
+            </button>
+            <button class="grade-btn a-grade" data-grade="A" data-min="20">
+                <span class="grade-label">A</span>
+                <span class="grade-range">+20% ~ 29%</span>
+                <span class="grade-desc">강한 급등</span>
+            </button>
+            <button class="grade-btn b-grade" data-grade="B" data-min="10">
+                <span class="grade-label">B</span>
+                <span class="grade-range">+10% ~ 20%</span>
+                <span class="grade-desc">중간 급등</span>
+            </button>
+            <button class="grade-btn c-grade active" data-grade="C" data-min="5">
+                <span class="grade-label">C</span>
+                <span class="grade-range">+5% ~ 10%</span>
+                <span class="grade-desc">초기 급등</span>
+            </button>
+            <button class="grade-btn d-grade" data-grade="D" data-min="3">
+                <span class="grade-label">D</span>
+                <span class="grade-range">+3% ~ 5%</span>
+                <span class="grade-desc">주목 단계</span>
+            </button>
+            <button class="grade-btn watch-grade" data-grade="W" data-min="0">
+                <span class="grade-label">W</span>
+                <span class="grade-range">0% ~ 3%</span>
+                <span class="grade-desc">관심 종목</span>
+            </button>
+        </div>
+        <div class="grade-result" id="kosdaqGradeResult">
+            <div class="grade-result-empty">
+                <span class="grade-result-icon">📈</span>
+                <span class="grade-result-text">C등급(+5% 이상) 선택됨 — 현재 KOSDAQ에서 해당 조건 종목 없음</span>
+            </div>
+        </div>
     </div>
 </div></div>
 <!-- DYNAMIC_STOCK_CARDS_END -->
@@ -1707,6 +1916,49 @@
                 simulateTouch: true,
                 allowTouchMove: true,
                 threshold: 10
+            });
+        });
+        
+        // 등급 필터 기능
+        document.addEventListener('DOMContentLoaded', function() {
+            const gradeBtns = document.querySelectorAll('.grade-btn');
+            
+            gradeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const parent = this.closest('.grade-filter-section');
+                    const resultDiv = parent.querySelector('.grade-result');
+                    const grade = this.dataset.grade;
+                    const minRate = this.dataset.min;
+                    const market = parent.closest('[data-market]')?.dataset.market || '';
+                    
+                    // 같은 섹션 내 다른 버튼 비활성화
+                    parent.querySelectorAll('.grade-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // 등급별 표시 텍스트
+                    const gradeNames = {
+                        'S': '상한가 근접(+29% 이상)',
+                        'A': '강한 급등(+20% ~ 29%)',
+                        'B': '중간 급등(+10% ~ 20%)',
+                        'C': '초기 급등(+5% ~ 10%)',
+                        'D': '주목 단계(+3% ~ 5%)',
+                        'W': '관심 종목(0% ~ 3%)'
+                    };
+                    
+                    const marketName = market === 'kospi' ? 'KOSPI' : market === 'kosdaq' ? 'KOSDAQ' : '';
+                    
+                    resultDiv.innerHTML = `
+                        <div class="grade-result-empty">
+                            <span class="grade-result-icon">📈</span>
+                            <span class="grade-result-text">${grade}등급(${gradeNames[grade]}) 선택됨 — 현재 ${marketName}에서 해당 조건 종목 없음</span>
+                        </div>
+                    `;
+                    
+                    // 부드러운 플래시 효과
+                    resultDiv.style.animation = 'none';
+                    resultDiv.offsetHeight; // reflow
+                    resultDiv.style.animation = 'slideDown 0.3s ease-out';
+                });
             });
         });
     </script>
