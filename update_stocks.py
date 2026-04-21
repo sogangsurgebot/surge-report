@@ -420,44 +420,65 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
     # 주요 섹션 여부에 따른 스타일
     section_class = "market-section-primary" if is_primary else "market-section-secondary"
 
+    # 등급별 종목 개수 계산
+    grade_counts = {"S": 0, "A": 0, "B": 0, "C": 0, "D": 0, "W": len(stocks)}
+    for stock in stocks:
+        # 등락률 파싱 (stock["change"] 또는 stock.get("change", "0%"))
+        change_str = stock.get("change", "0%")
+        try:
+            change_rate = float(change_str.replace("%", "").replace("+", ""))
+        except (ValueError, TypeError):
+            change_rate = 0.0
+        
+        if change_rate >= 29:
+            grade_counts["S"] += 1
+        elif change_rate >= 20:
+            grade_counts["A"] += 1
+        elif change_rate >= 10:
+            grade_counts["B"] += 1
+        elif change_rate >= 3:
+            grade_counts["C"] += 1
+        elif change_rate >= 0:
+            grade_counts["D"] += 1
+
+    # 등급 요약 배너 HTML
+    grade_dots = {
+        "S": "#ff4757", "A": "#e67e22", "B": "#f39c12",
+        "C": "#2ecc71", "D": "#3498db", "W": "#95a5a6"
+    }
+    summary_items = []
+    for g in ["S", "A", "B", "C", "D", "W"]:
+        dot = grade_dots[g]
+        cnt = grade_counts[g]
+        summary_items.append(f'<span class="grade-summary-item"><span class="grade-summary-dot" style="background:{dot}"></span><span class="grade-summary-count">{g}:{cnt}</span></span>')
+    summary_bar_html = '<div class="grade-summary-bar">' + ''.join(summary_items) + '</div>'
+
     # 등급 필터 HTML (데이터 유무와 관계없이 항상 표시)
     result_id = f"{market_type}GradeResult"
+    
+    def grade_btn_html(grade, min_rate, label, desc, count):
+        badge = f'<span class="grade-count-badge">{count}</span>' if count > 0 else ''
+        active = ' active' if grade == 'C' and count > 0 else ''
+        return f'''            <button class="grade-btn {grade.lower()}-grade{active}" data-grade="{grade}" data-min="{min_rate}">
+                {badge}
+                <span class="grade-label">{grade}</span>
+                <span class="grade-range">{label}</span>
+                <span class="grade-desc">{desc}</span>
+            </button>'''
+
     grade_filter_html = f'''<div class="grade-filter-section">
         <div class="grade-filter-header">
             <span class="grade-filter-title">📊 등락률 대역 필터</span>
             <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
         </div>
+        {summary_bar_html}
         <div class="grade-filter-grid">
-            <button class="grade-btn s-grade" data-grade="S" data-min="29">
-                <span class="grade-label">S</span>
-                <span class="grade-range">+29% ~</span>
-                <span class="grade-desc">상한가 근접</span>
-            </button>
-            <button class="grade-btn a-grade" data-grade="A" data-min="20">
-                <span class="grade-label">A</span>
-                <span class="grade-range">+20% ~ 29%</span>
-                <span class="grade-desc">강한 급등</span>
-            </button>
-            <button class="grade-btn b-grade" data-grade="B" data-min="10">
-                <span class="grade-label">B</span>
-                <span class="grade-range">+10% ~ 20%</span>
-                <span class="grade-desc">중간 급등</span>
-            </button>
-            <button class="grade-btn c-grade active" data-grade="C" data-min="3">
-                <span class="grade-label">C</span>
-                <span class="grade-range">+3% ~ 10%</span>
-                <span class="grade-desc">초기 급등</span>
-            </button>
-            <button class="grade-btn d-grade" data-grade="D" data-min="0">
-                <span class="grade-label">D</span>
-                <span class="grade-range">0% ~ 3%</span>
-                <span class="grade-desc">주목 단계</span>
-            </button>
-            <button class="grade-btn watch-grade" data-grade="W" data-min="-100">
-                <span class="grade-label">W</span>
-                <span class="grade-range">전체</span>
-                <span class="grade-desc">모든 종목</span>
-            </button>
+{grade_btn_html("S", "29", "+29% ~", "상한가 근접", grade_counts["S"])}
+{grade_btn_html("A", "20", "+20% ~ 29%", "강한 급등", grade_counts["A"])}
+{grade_btn_html("B", "10", "+10% ~ 20%", "중간 급등", grade_counts["B"])}
+{grade_btn_html("C", "3", "+3% ~ 10%", "초기 급등", grade_counts["C"])}
+{grade_btn_html("D", "0", "0% ~ 3%", "주목 단계", grade_counts["D"])}
+{grade_btn_html("W", "-100", "전체", "모든 종목", grade_counts["W"])}
         </div>
         <div class="grade-result" id="{result_id}"></div>
     </div>'''
