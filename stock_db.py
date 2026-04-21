@@ -98,6 +98,15 @@ def save_stocks(snapshot_id, market, stocks):
     cursor = conn.cursor()
     
     for stock in stocks:
+        # change_rate 추출 (change_rate 키 우선, 없으면 change 키에서 파싱)
+        change_rate = stock.get('change_rate', 0)
+        if not change_rate:
+            change_str = stock.get('change', '0%')
+            try:
+                change_rate = float(change_str.replace('%', '').replace('+', ''))
+            except (ValueError, TypeError):
+                change_rate = 0.0
+        
         cursor.execute('''
             INSERT INTO surge_stocks 
             (snapshot_id, market, stock_code, stock_name, current_price, 
@@ -109,7 +118,7 @@ def save_stocks(snapshot_id, market, stocks):
             stock.get('code', ''),
             stock.get('name', ''),
             stock.get('price', 0),
-            stock.get('change_rate', 0),
+            change_rate,
             stock.get('volume', 0),
             stock.get('trade_amount', 0),
             stock.get('alert_level', 'NORMAL'),
