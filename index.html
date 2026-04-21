@@ -1372,6 +1372,149 @@
 .grade-summary-count {
     font-weight: 700;
 }
+
+/* ============================================
+   진짜 히트맵 스타일
+   ============================================ */
+.heatmap-container {
+    margin: 20px 0;
+    background: rgba(255,255,255,0.6);
+    border-radius: 16px;
+    padding: 20px;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+.heatmap-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--color-heading);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.heatmap-subtitle {
+    font-size: 0.85rem;
+    color: var(--color-text-light);
+    margin-bottom: 20px;
+}
+.heatmap-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+@media (min-width: 640px) {
+    .heatmap-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+@media (min-width: 1024px) {
+    .heatmap-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+.heatmap-cell {
+    border-radius: 14px;
+    padding: 16px 14px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+    text-align: center;
+}
+.heatmap-cell:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.15);
+}
+.heat-intense {
+    background: linear-gradient(135deg, #ff4757 0%, #ff6b81 100%);
+    border-color: #ff4757;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(255,71,87,0.3);
+}
+.heat-hot {
+    background: linear-gradient(135deg, #ff6348 0%, #ff9f43 100%);
+    border-color: #ff6348;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(255,99,72,0.25);
+}
+.heat-warm {
+    background: linear-gradient(135deg, #ffa502 0%, #ffc107 100%);
+    border-color: #ffa502;
+    color: #2d3748;
+    box-shadow: 0 4px 16px rgba(255,165,2,0.2);
+}
+.heat-mild {
+    background: linear-gradient(135deg, #2ed573 0%, #7bed9f 100%);
+    border-color: #2ed573;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(46,213,115,0.2);
+}
+.heat-cool {
+    background: linear-gradient(135deg, #747d8c 0%, #a4b0be 100%);
+    border-color: #747d8c;
+    color: #fff;
+}
+.heatmap-emoji {
+    font-size: 2.2rem;
+    margin-bottom: 6px;
+    display: block;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+.heatmap-sector-name {
+    font-size: 1.05rem;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+}
+.heatmap-count {
+    font-size: 0.8rem;
+    opacity: 0.92;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+.heatmap-avg {
+    font-size: 1.5rem;
+    font-weight: 900;
+    margin-bottom: 10px;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+.heatmap-stocks {
+    font-size: 0.72rem;
+    opacity: 0.88;
+    line-height: 1.6;
+    text-align: left;
+    background: rgba(255,255,255,0.2);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-top: 4px;
+}
+.heatmap-stocks div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.heatmap-legend {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+    font-size: 0.75rem;
+    color: var(--color-text-light);
+}
+.heatmap-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.heatmap-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
 .logic-details {
     background: rgba(255,255,255,0.6);
     border-radius: var(--card-radius);
@@ -1452,7 +1595,7 @@
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
                 <!-- DYNAMIC_VERSION_START -->
-<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.7312149 | 2026-04-21 16:40</a>
+<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.9880fd0 | 2026-04-21 17:18</a>
 <!-- DYNAMIC_VERSION_END -->
             </div>
         </header>
@@ -1460,7 +1603,7 @@
         <div class="update-time-wrapper">
             <div class="update-time">
                 <!-- DYNAMIC_UPDATE_TIME_START -->
-<span>🕐 마지막 업데이트: 2026-04-21 16:50</span>
+<span>🕐 마지막 업데이트: 2026-04-21 17:25</span>
 <!-- DYNAMIC_UPDATE_TIME_END -->
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
@@ -1793,49 +1936,65 @@
         
         <!-- ===== 동적 콘텐츠: 히트맵 + 거래량 알림 (update_stocks.py가 교체) ===== -->
         <!-- DYNAMIC_HEATMAP_START -->
+<div class="heatmap-container">
+    <div class="heatmap-title">🔥 오늘 뜨는 섹터 히트맵</div>
+    <div class="heatmap-subtitle">2026-04-21 기준 총 13개 급등주 분석</div>
+    <div class="heatmap-grid">
+<div class="heatmap-cell heat-intense">
+    <span class="heatmap-emoji">📦</span>
+    <div class="heatmap-sector-name">기타</div>
+    <div class="heatmap-count">10개 종목 · 🔥 매우 뜨거움</div>
+    <div class="heatmap-avg">+0.0%</div>
+    <div class="heatmap-stocks">
+        <div style="font-weight:700;margin-bottom:4px;opacity:0.95;">🏆 상위 종목</div>
+        <div>• KEC <strong>+0.0%</strong></div>
+<div>• 한온시스템 <strong>+0.0%</strong></div>
+<div>• 수산세보틱스 <strong>+0.0%</strong></div>
 
-    <div class="sector-heatmap">
-        <h3 style="margin-bottom:15px;color:#2d3748;">🔥 오늘 뜨는 섹터</h3>
-        <p style="font-size:13px;color:#666;margin-bottom:20px;">
-            2026-04-21 기준 총 694개 종목
-        </p>
-        <div style="display:flex;flex-wrap:wrap;gap:10px;">
-    
-        <div style="flex:1;min-width:120px;padding:15px;border-radius:12px;background:#ff475715;border:2px solid #ff4757;text-align:center;">
-            <div style="font-size:20px;font-weight:700;color:#ff4757;">기타</div>
-            <div style="font-size:24px;font-weight:800;color:#2d3748;margin:5px 0;">509개</div>
-            <div style="font-size:12px;color:#666;">평균 +0.0%</div>
-            <div style="font-size:11px;color:#999;margin-top:5px;">🏆 신성이엔지 +0.0%</div>
-        </div>
-        
-        <div style="flex:1;min-width:120px;padding:15px;border-radius:12px;background:#747d8c15;border:2px solid #747d8c;text-align:center;">
-            <div style="font-size:20px;font-weight:700;color:#747d8c;">건설</div>
-            <div style="font-size:24px;font-weight:800;color:#2d3748;margin:5px 0;">83개</div>
-            <div style="font-size:12px;color:#666;">평균 +0.0%</div>
-            <div style="font-size:11px;color:#999;margin-top:5px;">🏆 대우건설 +0.0%</div>
-        </div>
-        
-        <div style="flex:1;min-width:120px;padding:15px;border-radius:12px;background:#747d8c15;border:2px solid #747d8c;text-align:center;">
-            <div style="font-size:20px;font-weight:700;color:#747d8c;">배터리</div>
-            <div style="font-size:24px;font-weight:800;color:#2d3748;margin:5px 0;">54개</div>
-            <div style="font-size:12px;color:#666;">평균 +0.0%</div>
-            <div style="font-size:11px;color:#999;margin-top:5px;">🏆 GS건설 +0.0%</div>
-        </div>
-        
-        <div style="flex:1;min-width:120px;padding:15px;border-radius:12px;background:#747d8c15;border:2px solid #747d8c;text-align:center;">
-            <div style="font-size:20px;font-weight:700;color:#747d8c;">반도체</div>
-            <div style="font-size:24px;font-weight:800;color:#2d3748;margin:5px 0;">42개</div>
-            <div style="font-size:12px;color:#666;">평균 +0.0%</div>
-            <div style="font-size:11px;color:#999;margin-top:5px;">🏆 솔루스첨단소재 +0.0%</div>
-        </div>
-        
-        <div style="flex:1;min-width:120px;padding:15px;border-radius:12px;background:#747d8c15;border:2px solid #747d8c;text-align:center;">
-            <div style="font-size:20px;font-weight:700;color:#747d8c;">철강</div>
-            <div style="font-size:24px;font-weight:800;color:#2d3748;margin:5px 0;">6개</div>
-            <div style="font-size:12px;color:#666;">평균 +0.0%</div>
-            <div style="font-size:11px;color:#999;margin-top:5px;">🏆 부국철강 +0.0%</div>
-        </div>
-        </div></div>
+    </div>
+</div>
+<div class="heatmap-cell heat-cool">
+    <span class="heatmap-emoji">🏗️</span>
+    <div class="heatmap-sector-name">건설</div>
+    <div class="heatmap-count">1개 종목 · ❄️ 차가움</div>
+    <div class="heatmap-avg">+0.0%</div>
+    <div class="heatmap-stocks">
+        <div style="font-weight:700;margin-bottom:4px;opacity:0.95;">🏆 상위 종목</div>
+        <div>• 대우건설 <strong>+0.0%</strong></div>
+
+    </div>
+</div>
+<div class="heatmap-cell heat-cool">
+    <span class="heatmap-emoji">🔋</span>
+    <div class="heatmap-sector-name">배터리</div>
+    <div class="heatmap-count">1개 종목 · ❄️ 차가움</div>
+    <div class="heatmap-avg">+0.0%</div>
+    <div class="heatmap-stocks">
+        <div style="font-weight:700;margin-bottom:4px;opacity:0.95;">🏆 상위 종목</div>
+        <div>• GS건설 <strong>+0.0%</strong></div>
+
+    </div>
+</div>
+<div class="heatmap-cell heat-cool">
+    <span class="heatmap-emoji">💻</span>
+    <div class="heatmap-sector-name">반도체</div>
+    <div class="heatmap-count">1개 종목 · ❄️ 차가움</div>
+    <div class="heatmap-avg">+0.0%</div>
+    <div class="heatmap-stocks">
+        <div style="font-weight:700;margin-bottom:4px;opacity:0.95;">🏆 상위 종목</div>
+        <div>• 솔루스첨단소재 <strong>+0.0%</strong></div>
+
+    </div>
+</div>
+    </div>
+    <div class="heatmap-legend">
+        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#ff4757"></span> 매우 뜨거움</div>
+        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#ff6348"></span> 뜨거움</div>
+        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#ffa502"></span> 따뜻함</div>
+        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#2ed573"></span> 미약</div>
+        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#747d8c"></span> 차가움</div>
+    </div>
+</div>
 <!-- DYNAMIC_HEATMAP_END -->
         
         <!-- ===== 동적 콘텐츠: 국내 급등주 (update_stocks.py가 교체) ===== -->
@@ -2002,6 +2161,139 @@
             <div class="stock-reason">
                 📊 급등 watch (점수: 2.6)
                 <div class="score-detail">등락 5.6% / 거래대금 2204억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+        </div>
+        <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">우진플라임 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">049800</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">3,245</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+16.10%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">6,239,133</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 3.1)
+                <div class="score-detail">등락 16.1% / 거래대금 202억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+        </div>
+        <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">현대리바트 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">079430</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">8,030</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+10.45%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,873,476</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 3.5)
+                <div class="score-detail">등락 10.4% / 거래대금 472억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+        </div>
+        <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">한농화성 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">011500</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">25,400</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+11.16%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,376,058</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 3.7)
+                <div class="score-detail">등락 11.2% / 거래대금 1366억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+        </div>
+        <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">STX엔진 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">077970</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">50,500</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+9.31%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,190,027</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 3.4)
+                <div class="score-detail">등락 9.3% / 거래대금 2621억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+        </div>
+        <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">솔루스첨단소재 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">336370</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">13,990</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+27.07%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,015,382</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 4.0)
+                <div class="score-detail">등락 27.1% / 거래대금 702억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+        </div>
+        <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">두산에너빌리티 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">034020</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">115,500</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+4.05%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">4,576,972</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 2.3)
+                <div class="score-detail">등락 4.0% / 거래대금 5286억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+        </div>
+        <div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">에코프로머티 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">450080</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">83,300</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+8.04%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">4,503,231</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 3.1)
+                <div class="score-detail">등락 8.0% / 거래대금 3751억</div>
             </div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
         </div>
