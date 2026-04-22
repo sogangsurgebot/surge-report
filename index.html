@@ -2707,7 +2707,7 @@
                     badge.title = '클릭하면 NPay 토론방으로 이동합니다';
                     badge.addEventListener('click', function(e) {
                         e.stopPropagation();
-                        window.open(`https://m.stock.naver.com/domestic/stock/${code}/community`, '_blank');
+                        window.open(`https://finance.naver.com/item/board.nhn?code=${code}`, '_blank');
                     });
                 }
             });
