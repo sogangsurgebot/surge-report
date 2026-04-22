@@ -1173,6 +1173,20 @@
             font-weight: 500;
         }
         
+        .sentiment-loading {
+            color: #a0aec0;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 14px;
+        }
+        
+        .sentiment-error {
+            color: #e53e3e;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 14px;
+        }
+        
         .sentiment-mood {
             font-size: 0.75rem;
             font-weight: 600;
@@ -2840,8 +2854,12 @@
         const PROXY_BASE_URL = 'https://surge-sentiment-proxy.onrender.com';
         
         async function fetchSentiment(code, card) {
+            const loadingId = 'sentiment-' + code.replace(/\D/g, '');
+            const loadingHtml = `<div class="sentiment-bar sentiment-loading" id="${loadingId}"><div class="sentiment-header">💬 토론방 분위기</div>토론방 데이터 분석 중... ⏳</div>`;
+            card.insertAdjacentHTML('beforeend', loadingHtml);
+            
             try {
-                const res = await fetch(`${PROXY_BASE_URL}/api/sentiment/${code}`, { timeout: 8000 });
+                const res = await fetch(`${PROXY_BASE_URL}/api/sentiment/${code}`, { signal: AbortSignal.timeout(8000) });
                 if (!res.ok) throw new Error('proxy error');
                 const data = await res.json();
                 if (data.error) throw new Error(data.error);
@@ -2852,7 +2870,6 @@
                 const keywords = data.keywords || [];
                 const mood = data.mood || '';
                 
-                // 분위기에 따른 이모지
                 let moodEmoji = '😐';
                 if (mood.includes('긍정') || mood.includes('🔥') || mood.includes('🟢')) moodEmoji = '😄';
                 else if (mood.includes('부정') || mood.includes('⚠️') || mood.includes('🔴')) moodEmoji = '😠';
@@ -2880,10 +2897,15 @@
                     </div>
                 `;
                 
-                card.insertAdjacentHTML('beforeend', html);
+                const el = document.getElementById(loadingId);
+                if (el) el.outerHTML = html;
+                else card.insertAdjacentHTML('beforeend', html);
             } catch (e) {
-                // 실패 시 조용히 넘어감 (UI 파손 방지)
                 console.log('Sentiment fetch failed for', code, e.message);
+                const errHtml = `<div class="sentiment-bar sentiment-error"><div class="sentiment-header">💬 토론방 분위기</div>⚠️ 토론방 데이터를 불러오지 못했어요</div>`;
+                const el = document.getElementById(loadingId);
+                if (el) el.outerHTML = errHtml;
+                else card.insertAdjacentHTML('beforeend', errHtml);
             }
         }
         
