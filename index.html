@@ -1174,10 +1174,22 @@
         }
         
         .sentiment-mood {
-            font-size: 0.7rem;
+            font-size: 0.75rem;
             font-weight: 600;
             color: #4a5568;
-            margin-top: 4px;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .sentiment-mood-emoji {
+            font-size: 1.2rem;
+        }
+        
+        .sentiment-face {
+            font-size: 1.1rem;
+            line-height: 1;
         }
         /* ============================================
            등급 필터 섹션
@@ -2840,6 +2852,12 @@
                 const keywords = data.keywords || [];
                 const mood = data.mood || '';
                 
+                // 분위기에 따른 이모지
+                let moodEmoji = '😐';
+                if (mood.includes('긍정') || mood.includes('🔥') || mood.includes('🟢')) moodEmoji = '😄';
+                else if (mood.includes('부정') || mood.includes('⚠️') || mood.includes('🔴')) moodEmoji = '😠';
+                else if (mood.includes('중립') || mood.includes('⚪')) moodEmoji = '😐';
+                
                 const kwHtml = keywords.length 
                     ? `<div class="sentiment-keywords">${keywords.map(k => `<span class="sentiment-keyword">${k}</span>`).join('')}</div>` 
                     : '';
@@ -2853,12 +2871,12 @@
                             <div class="sentiment-neg" style="width:${negPct}%"></div>
                         </div>
                         <div class="sentiment-labels">
-                            <span>🟢 ${posPct}%</span>
-                            <span>⚪ ${neuPct}%</span>
-                            <span>🔴 ${negPct}%</span>
+                            <span><span class="sentiment-face">😄</span> ${posPct}%</span>
+                            <span><span class="sentiment-face">😐</span> ${neuPct}%</span>
+                            <span><span class="sentiment-face">😠</span> ${negPct}%</span>
                         </div>
                         ${kwHtml}
-                        <div class="sentiment-mood">${mood}</div>
+                        <div class="sentiment-mood"><span class="sentiment-mood-emoji">${moodEmoji}</span> ${mood}</div>
                     </div>
                 `;
                 
