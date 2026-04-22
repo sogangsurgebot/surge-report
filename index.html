@@ -1023,7 +1023,53 @@
         }
         
         /* ============================================
-           빈 상태
+           전문가 인사이트
+           ============================================ */
+        .expert-insight {
+            margin-top: var(--space-sm);
+            padding: 10px 12px;
+            background: linear-gradient(135deg, rgba(255,154,158,0.08) 0%, rgba(161,140,209,0.08) 100%);
+            border-radius: 10px;
+            border-left: 3px solid #a18cd1;
+            font-size: 0.78rem;
+            line-height: 1.6;
+            color: #4a5568;
+        }
+        
+        .expert-insight-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: #a18cd1;
+        }
+        
+        .expert-insight-content {
+            word-break: keep-all;
+        }
+        
+        .expert-oil {
+            border-left-color: #38b2ac;
+            background: linear-gradient(135deg, rgba(56,178,172,0.08) 0%, rgba(168,237,234,0.08) 100%);
+        }
+        
+        .expert-oil .expert-insight-header {
+            color: #38b2ac;
+        }
+        
+        .expert-sesang {
+            border-left-color: #667eea;
+            background: linear-gradient(135deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%);
+        }
+        
+        .expert-sesang .expert-insight-header {
+            color: #667eea;
+        }
+        
+        /* ============================================
+           등급 필터 섹션
            ============================================ */
         .empty {
             text-align: center;
@@ -2489,6 +2535,147 @@
             });
         });
         
+
+        // 전문가 인사이트 삽입
+        document.addEventListener('DOMContentLoaded', function() {
+            const expertInsights = {
+                // 알루미늄/금속
+                '조일알미늄': {
+                    oil: '산업용 금소재 수요 회복세. 단기 급등했지만 원자재 가격 변동성에 주의하며 장기적 관점에서 실적 안정성을 봐야 함.',
+                    sesang: '알루미늄 가격 상승 모멘텀 + 인프라 투자 기대감으로 단기 수급 집중. 급등 후 조정 가능성 대비 필요.'
+                },
+                '남선알미늄': {
+                    oil: '비철금속 업황 개선 기대. 하지만 배당 수익률은 검토가 필요한 수준. 실적 턴어라운드 확인 후 접근.',
+                    sesang: '알루미늄 테마 동반 급등. 업황 사이클 상승 국면 진입 가능성. 단, 변동성 큰 섹터이니 분할 매수 전략 권장.'
+                },
+                '알루코': {
+                    oil: '소형 알루미늄 업체. 저평가 구간이었으나 단기 급등으로 밸류에이션 부담 증가. 배당 매력은 제한적.',
+                    sesang: '저가 매력으로 단기 자금 유입. 소형주 특성상 급등락 심하니 리스크 관리 필수.'
+                },
+                // 전자/반도체
+                'KEC': {
+                    oil: '전자부품 업체. 급등률이 높지만 배당 매력은 낮음. 실적 기반 투자보다는 단기 모멘텀 종목으로 적합.',
+                    sesang: '상한가 근접 급등. 수급 과열 신호. 추가 상승 여력보다는 차익 실현 압력에 주의.'
+                },
+                '이수페타시스': {
+                    oil: '반도체 PCB 소재 업체. IT 투자 사이클과 연동. 높은 급등률로 인해 현재는 관망 후 조정 시 접근.',
+                    sesang: 'AI 서버 투자 사이클 수혜 기대감 반영. 고점 논쟁 속에서도 업황 개선 모멘텀은 유효.'
+                },
+                'LG디스플레이': {
+                    oil: '디스플레이 대표주. 적자 지속 중이라 배당은 어려움. 구조적 전환 성공 여부가 관건.',
+                    sesang: 'OLED 전환 기대감으로 소폭 반등. 하지만 실적 턴어라운드까지는 시간 필요. 중기 관점 모니터링 종목.'
+                },
+                // 중공업/조선/기계
+                '삼성중공업': {
+                    oil: '조선업 수주 호황으로 실적 개선 중. 배당은 미미하지만 저평가 상태 유효. 장기 보유 가치는 있음.',
+                    sesang: '조선 슈퍼사이클 진입 확신. 수주 잔고 역대 최대. 업황 개선이 주가에 아직 다 반영되지 않았을 수 있음.'
+                },
+                'HJ중공업': {
+                    oil: '중공업 업황 회복 수혜. PER/PBR 저평가 구간. 다만 급등 후 조정 가능성은 염두에 둘 것.',
+                    sesang: '방산+조선 듀얼 모멘텀. 국방예산 확대 수혜 기대. 10% 급등 후 지지선 확인 필요.'
+                },
+                '퍼스텍': {
+                    oil: '기계/장비 업체. 급등했으나 시가총액이 작아 유동성 리스크 존재. 배당보다는 성장주 관점.',
+                    sesang: '13% 급등은 테마성 수급 가능성. 거래대금 3,500억으로 유동성 충분. 단기 모멘텀 종목.'
+                },
+                '신성이엔지': {
+                    oil: '플랜트/설비 업체. 인프라 투자 확대 기대감. 배당 매력은 보통. 실적 변동성이 큰 편.',
+                    sesang: '산업 설비 투자 회복 기대. 거래대금 2,300억으로 기관+외국인 관심 종목. 추가 상승 모멘텀은 제한적.'
+                },
+                // 화학
+                '애경케미칼': {
+                    oil: '화학 업황 부진 속 소폭 반등. 배당보다는 업황 사이클 베팅 종목. 실적 개선까지는 회복 시간 필요.',
+                    sesang: '25% 급등은 특정 테마/이슈 기반. 화학 섹터 전반적인 업황 개선 신호는 아직 미미. 단기 상승일 가능성.'
+                },
+                // 지주/금융
+                '한국전자홀딩스': {
+                    oil: '지주사 구조. 자회사 가치 대비 주가는 저평가 가능성. 배당 매력은 제한적.',
+                    sesang: '27% 급등은 재료주 성격. 거래대금은 89억으로 소형주. 추가 추격 리스크 매우 높음.'
+                },
+                // 무역/물류
+                'GS글로벌': {
+                    oil: '무역/물류 대형주. 안정적 실적 기반. 배당 수익률은 보통 수준. 저평가 상태는 아님.',
+                    sesang: '15% 급등. 무역/물류 업황 개선 기대감. 대형주라 추가 상승은 제한적일 수 있음.'
+                },
+                // 방산/항공
+                '휴니드': {
+                    oil: '항공/방산 부품 업체. 국방예산 확대 장기 수혜. 소형주라 변동성은 감수 필요.',
+                    sesang: '방산 테마 수혜. 16% 급등 후 차익 실현 압력 가능. 국방 투자 확대는 중기 모멘텀.'
+                }
+            };
+            
+            function getInsightByIndustry(stockName, industry, desc) {
+                // 정확한 매칭 먼저
+                if (expertInsights[stockName]) {
+                    return expertInsights[stockName];
+                }
+                
+                // 패턴 매칭
+                const name = stockName.toLowerCase();
+                if (name.includes('알미늄') || name.includes('알루')) {
+                    return expertInsights['조일알미늄'];
+                }
+                if (name.includes('금융') || name.includes('지주') || name.includes('은행')) {
+                    return {
+                        oil: '금융지주는 배당수익률과 PER이 핵심. 저평가+고배당 구간에서 장기 보유 전략 유효.',
+                        sesang: '금융 섹터는 기준금리 인하 기대감과 경기 회복 사이클 연동. 모멘텀보다는 가치 투자 적합.'
+                    };
+                }
+                if (name.includes('반도체') || name.includes('전자') || industry?.includes('반도체')) {
+                    return {
+                        oil: '반도체는 사이클 산업. 업황 저점 대비 PER이 낮을 때 분할 매수. 배당보다는 성장 관점.',
+                        sesang: '반도체 업황 회복 모멘텀. AI/서버 수요가 핵심 변수. 단기 급등 후 조정 시 추가 매수 고려.'
+                    };
+                }
+                if (name.includes('중공업') || name.includes('조선') || industry?.includes('조선')) {
+                    return {
+                        oil: '조선 슈퍼사이클 진행 중. 수주 잔고가 실적 보증. 저평가 구간 유효.',
+                        sesang: '조선업 장기 호황 확신. 수주→실적 전환 과정에서 주가는 단계적 상승 예상.'
+                    };
+                }
+                if (industry?.includes('화학') || name.includes('케미')) {
+                    return {
+                        oil: '화학 업황은 원자재 가격과 글로벌 수요에 민감. 배당보다는 업황 사이클 베팅.',
+                        sesang: '화학 섹터는 아직 업황 회복 초기. 단기 급등은 테마성. 실적 턴어라운드 확인 후 접근.'
+                    };
+                }
+                
+                // 기본값
+                return {
+                    oil: '급등주는 단기 모멘텀에 주의. 오일전문가 관점에서는 배당과 저평가를 우선시하므로, 급등 후 조정 시 실적 기반 재검토 필요.',
+                    sesang: '급등 상황에서는 추가 상승 여력보다 리스크 관리가 우선. 거래대금과 모멘텀 지속성을 모니터링하며 단기 대응 전략 수립 필요.'
+                };
+            }
+            
+            document.querySelectorAll('.stock-card').forEach(card => {
+                const stockNameEl = card.querySelector('.stock-name');
+                const stockName = stockNameEl ? stockNameEl.childNodes[0].textContent.trim() : '';
+                const industryEl = card.querySelector('.company-industry');
+                const industry = industryEl ? industryEl.textContent.trim() : '';
+                const descEl = card.querySelector('.company-desc');
+                const desc = descEl ? descEl.textContent.trim() : '';
+                
+                const insight = getInsightByIndustry(stockName, industry, desc);
+                
+                const insightHtml = `
+                    <div class="expert-insight expert-oil">
+                        <div class="expert-insight-header">🛢️ 오일전문가 한마디</div>
+                        <div class="expert-insight-content">${insight.oil}</div>
+                    </div>
+                    <div class="expert-insight expert-sesang">
+                        <div class="expert-insight-header">🎓 세상학개론 한마디</div>
+                        <div class="expert-insight-content">${insight.sesang}</div>
+                    </div>
+                `;
+                
+                // company-info 다음에 삽입
+                const companyInfo = card.querySelector('.company-info');
+                if (companyInfo) {
+                    companyInfo.insertAdjacentHTML('afterend', insightHtml);
+                }
+            });
+        });
+
         // 등급 필터 기능 — 실제 종목 필터링
         document.addEventListener('DOMContentLoaded', function() {
             const gradeBtns = document.querySelectorAll('.grade-btn');
