@@ -911,6 +911,53 @@
             box-shadow: 0 3px 10px rgba(255,143,163,0.3);
             flex-shrink: 0;
             white-space: nowrap;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        /* pulse glow */
+        .surge-badge::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            opacity: 0;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { opacity: 0; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.15); }
+        }
+        
+        .surge-badge:hover {
+            transform: scale(1.08);
+            box-shadow: 0 6px 20px rgba(255,107,107,0.5);
+        }
+        
+        .surge-badge:active {
+            transform: scale(0.95);
+        }
+        
+        .surge-badge::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.4s ease, height 0.4s ease;
+        }
+        
+        .surge-badge:active::after {
+            width: 120px;
+            height: 120px;
         }
         
         .price-info {
