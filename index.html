@@ -2695,6 +2695,23 @@
             });
         });
 
+
+        // Watch 버튼 → NPay 토론방 링크
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.stock-card').forEach(card => {
+                const badge = card.querySelector('.surge-badge');
+                const codeEl = card.querySelector('.stock-code');
+                if (badge && codeEl) {
+                    const code = codeEl.textContent.trim();
+                    badge.style.cursor = 'pointer';
+                    badge.title = '클릭하면 NPay 토론방으로 이동합니다';
+                    badge.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        window.open(`https://m.stock.naver.com/domestic/stock/${code}/community`, '_blank');
+                    });
+                }
+            });
+        });
         // 등급 필터 기능 — 실제 종목 필터링
         document.addEventListener('DOMContentLoaded', function() {
             const gradeBtns = document.querySelectorAll('.grade-btn');
