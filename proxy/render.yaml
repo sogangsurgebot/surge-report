@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: surge-sentiment-proxy
+    runtime: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn -b 0.0.0.0:5000 app:app"
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0

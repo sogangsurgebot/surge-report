@@ -1115,6 +1115,70 @@
             color: #667eea;
         }
         
+
+        /* ============================================
+           토론방 감성 분석
+           ============================================ */
+        .sentiment-bar {
+            margin-top: 10px;
+            padding: 10px 12px;
+            background: linear-gradient(135deg, rgba(56,178,172,0.06) 0%, rgba(167,139,250,0.06) 100%);
+            border-radius: 10px;
+            border: 1px solid rgba(56,178,172,0.15);
+        }
+        
+        .sentiment-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            color: #38b2ac;
+            margin-bottom: 6px;
+        }
+        
+        .sentiment-meter {
+            display: flex;
+            height: 6px;
+            border-radius: 3px;
+            overflow: hidden;
+            background: #e2e8f0;
+            margin-bottom: 6px;
+        }
+        
+        .sentiment-pos { background: #48bb78; }
+        .sentiment-neg { background: #f56565; }
+        .sentiment-neu { background: #a0aec0; }
+        
+        .sentiment-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: #718096;
+        }
+        
+        .sentiment-keywords {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        
+        .sentiment-keyword {
+            background: rgba(56,178,172,0.12);
+            color: #2c7a7b;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: 500;
+        }
+        
+        .sentiment-mood {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #4a5568;
+            margin-top: 4px;
+        }
         /* ============================================
            등급 필터 섹션
            ============================================ */
@@ -2756,6 +2820,61 @@
                         e.stopPropagation();
                         window.open(`https://m.stock.naver.com/domestic/stock/${code}#/community`, '_blank');
                     });
+                }
+            });
+        });
+
+        // 토론방 감성 분석 (프록시 서버 호출)
+        const PROXY_BASE_URL = 'https://surge-sentiment-proxy.onrender.com';
+        
+        async function fetchSentiment(code, card) {
+            try {
+                const res = await fetch(`${PROXY_BASE_URL}/api/sentiment/${code}`, { timeout: 8000 });
+                if (!res.ok) throw new Error('proxy error');
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                
+                const posPct = data.positive.ratio;
+                const negPct = data.negative.ratio;
+                const neuPct = data.neutral.ratio;
+                const keywords = data.keywords || [];
+                const mood = data.mood || '';
+                
+                const kwHtml = keywords.length 
+                    ? `<div class="sentiment-keywords">${keywords.map(k => `<span class="sentiment-keyword">${k}</span>`).join('')}</div>` 
+                    : '';
+                
+                const html = `
+                    <div class="sentiment-bar">
+                        <div class="sentiment-header">💬 토론방 분위기</div>
+                        <div class="sentiment-meter">
+                            <div class="sentiment-pos" style="width:${posPct}%"></div>
+                            <div class="sentiment-neu" style="width:${neuPct}%"></div>
+                            <div class="sentiment-neg" style="width:${negPct}%"></div>
+                        </div>
+                        <div class="sentiment-labels">
+                            <span>🟢 ${posPct}%</span>
+                            <span>⚪ ${neuPct}%</span>
+                            <span>🔴 ${negPct}%</span>
+                        </div>
+                        ${kwHtml}
+                        <div class="sentiment-mood">${mood}</div>
+                    </div>
+                `;
+                
+                card.insertAdjacentHTML('beforeend', html);
+            } catch (e) {
+                // 실패 시 조용히 넘어감 (UI 파손 방지)
+                console.log('Sentiment fetch failed for', code, e.message);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.stock-card').forEach(card => {
+                const codeEl = card.querySelector('.stock-code');
+                if (codeEl) {
+                    const code = codeEl.textContent.trim();
+                    fetchSentiment(code, card);
                 }
             });
         });
