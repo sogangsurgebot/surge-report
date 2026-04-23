@@ -568,6 +568,12 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
                 {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
             </div>
             {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
+            <div class="stock-chart">
+                <a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank" rel="noopener noreferrer">
+                    <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/{stock["code"]}.png" alt="{stock["name"]} 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                </a>
+                <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+            </div>
         </div>
 '''
 
