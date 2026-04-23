@@ -2043,8 +2043,15 @@
             </div>
         </div>
         
-        <!-- 오일전문가 추천 종목 - 별도 섹션 -->
-        <div class="card picks-section" id="oilPicksStandalone">
+        <!-- ===== 추천 종목 스와이프 ===== -->
+        <div class="card" style="padding: var(--space-md);">
+            <h2 class="gurus-title" style="margin-bottom: var(--space-sm);">🎯 투자 고수 추천 종목</h2>
+            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">◀ 좌우로 스와이프하여 전문가별 추천 종목 확인 ▶</p>
+            
+            <div class="swiper picks-swiper">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1: 오일전문가 추천 종목 -->
+            <div class="swiper-slide">
             <h2 class="gurus-title">🎯 오일전문가 추천 종목</h2>
             <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">배당+성장 전략 기반 선별 종목 · 투자 인사이트 적용</p>
             
@@ -2138,8 +2145,9 @@
             <!-- OILPRO_BLOG_INSIGHT_END -->
         </div>
         
+            </div>
         <!-- 세상학개론 추천 종목 - 별도 섹션 -->
-        <div class="card picks-section" id="sesangPicksStandalone">
+            <div class="swiper-slide">
             <h2 class="gurus-title">🎓 세상학개론 추천 종목</h2>
             <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">성장·테마 전략 기반 선별 종목 · 투자 인사이트 적용</p>
             
@@ -2239,6 +2247,9 @@
                 <span style="margin: 0 0.5rem; color: #ccc;">|</span>
                 <span style="font-size: var(--font-sm); color: var(--color-text-light);">📊 데이터: 2026년 4월 시장 기준</span>
             </div>
+        </div>
+            </div>
+            <div class="swiper-pagination picks-pagination"></div>
         </div>
         
         <!-- ===== 동적 콘텐츠: 히트맵 + 거래량 알림 (update_stocks.py가 교체) ===== -->
@@ -2624,6 +2635,51 @@
                 },
                 
                 // 스와이프
+                touchRatio: 1,
+                touchAngle: 45,
+                simulateTouch: true,
+                allowTouchMove: true,
+                threshold: 10
+            });
+        });
+        
+        // 추천 종목 스와이프 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            const picksSwiper = new Swiper('.picks-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                loop: false,
+                
+                pagination: {
+                    el: '.picks-pagination',
+                    clickable: true,
+                    bulletActiveClass: 'swiper-pagination-bullet-active'
+                },
+                
+                navigation: {
+                    nextEl: '.picks-swiper .swiper-button-next',
+                    prevEl: '.picks-swiper .swiper-button-prev'
+                },
+                
+                effect: 'slide',
+                speed: 500,
+                
+                breakpoints: {
+                    320: {
+                        slidesPerView: 1,
+                        spaceBetween: 16
+                    },
+                    768: {
+                        slidesPerView: 1,
+                        spaceBetween: 20
+                    }
+                },
+                
+                keyboard: {
+                    enabled: true,
+                    onlyInViewport: true
+                },
+                
                 touchRatio: 1,
                 touchAngle: 45,
                 simulateTouch: true,
