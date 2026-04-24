@@ -101,9 +101,9 @@ COMPANY_INFO = {
 
 
 def get_access_token():
-    """Access Token 발급"""
+    """Access Token 발급 - 실패 시 None 반환"""
     if not APP_KEY or not APP_SECRET:
-        print("⚠️ API 키 없음, 샘플 데이터 사용")
+        print("❌ API 키 미설정 - 토큰 발급 불가")
         return None
 
     url = f"{BASE_URL}/oauth2/tokenP"
@@ -117,11 +117,20 @@ def get_access_token():
         resp = requests.post(url, json=body, timeout=10)
         if resp.status_code == 200:
             token = resp.json().get("access_token")
-            print(f"✅ 토큰 발급 성공 ({SERVER_TYPE})")
-            return token
-        elif resp.status_code == 403:
-            print("⚠️ 토큰 rate limit - 1분 후 재시도 필요")
+            if token:
+                print(f"✅ 토큰 발급 성공 ({SERVER_TYPE})")
+                return token
+            print("❌ 토큰 응답에 access_token 없음")
             return None
+        elif resp.status_code == 403:
+            print("⚠️ 토큰 rate limit (403) - 잠시 후 재시도 필요")
+            return None
+        else:
+            print(f"❌ 토큰 발급 실패: HTTP {resp.status_code}")
+            return None
+    except requests.Timeout:
+        print("❌ 토큰 발급 타임아웃")
+        return None
     except Exception as e:
         print(f"❌ Token 오류: {e}")
 
@@ -130,14 +139,39 @@ def get_access_token():
 
 def calculate_stock_score(item: dict, market_type: str = "KOSPI") -> Optional[StockScore]:
     """
-    종목 점수 계산
+    종목 점수 계산 - API 응답 데이터 검증 포함
     """
     try:
         code = item.get("mksc_shrn_iscd", "")
         name = item.get("hts_kor_isnm", "")
-        price_change = float(item.get("prdy_ctrt", 0))
-        price = int(item.get('stck_prpr', 0))
-        volume = int(item.get('acml_vol', 0))
+        
+        # 필수 필드 검증
+        if not code or not name:
+            return None
+            
+        price_change_raw = item.get("prdy_ctrt", "")
+        price_raw = item.get('stck_prpr', "")
+        volume_raw = item.get('acml_vol', "")
+        
+        # 숫자 변환 및 검증
+        try:
+            price_change = float(price_change_raw)
+            price = int(price_raw)
+            volume = int(volume_raw)
+        except (ValueError, TypeError):
+            print(f"⚠️ 데이터 변환 실패: {name}({code}) - price_change={price_change_raw}, price={price_raw}, volume={volume_raw}")
+            return None
+        
+        # 데이터 sanity check
+        if price <= 0:
+            print(f"⚠️ 비정상 가격: {name}({code}) - 가격={price}")
+            return None
+        if volume <= 0:
+            print(f"⚠️ 비정상 거래량: {name}({code}) - 거래량={volume}")
+            return None
+        if abs(price_change) > 30:  # 30% 이상 변동은 이상치로 판단 (상한가 제외)
+            print(f"⚠️ 비정상 등락률: {name}({code}) - 등락률={price_change}%")
+            return None
 
         # 거래대금 계산
         trade_amount = price * volume
@@ -296,10 +330,24 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
 
         # KOSPI 조회
         resp = requests.get(url, headers=headers, params=params_kospi, timeout=15)
-        data = resp.json()
+        
+        # 응답 검증
+        if resp.status_code != 200:
+            print(f"❌ KOSPI API 응답 오류: HTTP {resp.status_code}")
+            return kospi_stocks, kosdaq_stocks
+            
+        try:
+            data = resp.json()
+        except json.JSONDecodeError:
+            print(f"❌ KOSPI API 응답 파싱 실패: 유효하지 않은 JSON")
+            return kospi_stocks, kosdaq_stocks
 
         if data.get("rt_cd") == "0":
-            for item in data.get("output", []):
+            output = data.get("output", [])
+            if not output:
+                print("⚠️ KOSPI API 응답: 데이터 없음 (빈 output)")
+            
+            for item in output:
                 score = calculate_stock_score(item, "KOSPI")
                 if score:
                     company = COMPANY_INFO.get(score.code, {"industry": "기타", "desc": "", "market": "KOSPI"})
@@ -314,13 +362,31 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
                         "badge": badge, "alert_level": score.alert_level,
                         "score_details": f"등락 {score.price_change:.1f}% / 거래대금 {score.trade_amount/1e8:.0f}억"
                     })
+        else:
+            rt_cd = data.get("rt_cd", "unknown")
+            msg = data.get("msg1", "unknown error")
+            print(f"❌ KOSPI API 오류: rt_cd={rt_cd}, msg={msg}")
 
         # KOSDAQ 조회
         resp = requests.get(url, headers=headers, params=params_kosdaq, timeout=15)
-        data = resp.json()
+        
+        # 응답 검증
+        if resp.status_code != 200:
+            print(f"❌ KOSDAQ API 응답 오류: HTTP {resp.status_code}")
+            return kospi_stocks, kosdaq_stocks
+            
+        try:
+            data = resp.json()
+        except json.JSONDecodeError:
+            print(f"❌ KOSDAQ API 응답 파싱 실패: 유효하지 않은 JSON")
+            return kospi_stocks, kosdaq_stocks
 
         if data.get("rt_cd") == "0":
-            for item in data.get("output", []):
+            output = data.get("output", [])
+            if not output:
+                print("⚠️ KOSDAQ API 응답: 데이터 없음 (빈 output)")
+                
+            for item in output:
                 score = calculate_stock_score(item, "KOSDAQ")
                 if score:
                     company = COMPANY_INFO.get(score.code, {"industry": "기타", "desc": "", "market": "KOSDAQ"})
@@ -335,9 +401,15 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
                         "badge": badge, "alert_level": score.alert_level,
                         "score_details": f"등락 {score.price_change:.1f}% / 거래대금 {score.trade_amount/1e8:.0f}억"
                     })
+        else:
+            rt_cd = data.get("rt_cd", "unknown")
+            msg = data.get("msg1", "unknown error")
+            print(f"❌ KOSDAQ API 오류: rt_cd={rt_cd}, msg={msg}")
 
         print(f"   📊 KOSPI: {len(kospi_stocks)}개, KOSDAQ: {len(kosdaq_stocks)}개")
 
+    except requests.Timeout:
+        print(f"❌ API 타임아웃 (15초)")
     except Exception as e:
         print(f"❌ API 오류: {e}")
 
@@ -391,7 +463,7 @@ def get_nasdaq_surge_stocks(token):
     return []
 
 
-def get_sample_data():
+def get_fallback_data():
     """API 실패 시 이전 저장된 데이터를 재사용하거나 실패 상태 반환"""
     saved = load_market_data()
     if saved:
@@ -718,9 +790,10 @@ def update_html(data):
         nasdaq_html
     )
 
-    # 4. 업데이트 시간 교체
+    # 4. 업데이트 시간 교체 (캐시 버스팅용 타임스탬프 포함)
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
-    update_time_html = f'<span>🕐 마지막 업데이트: {current_time}</span>'
+    cache_buster = datetime.now().strftime('%Y%m%d%H%M')
+    update_time_html = f'<span data-cache-buster="{cache_buster}">🕐 마지막 업데이트: {current_time}</span>'
     replace_between_markers(
         'index.html',
         '<!-- DYNAMIC_UPDATE_TIME_START -->',
@@ -750,10 +823,19 @@ def fetch_surge_stocks():
 
     token = get_access_token()
     if not token:
-        return get_sample_data()
+        return get_fallback_data()
 
     # KOSPI/KOSDAQ 분리 조회
     kospi_stocks, kosdaq_stocks = get_volume_rank_surge_stocks(token)
+    
+    # 데이터 무결성 검증: API는 성공했지만 데이터가 비어있는 경우
+    total_stocks = len(kospi_stocks) + len(kosdaq_stocks)
+    if total_stocks == 0:
+        print("⚠️ API 응답은 성공했지만 선정된 종목이 0개 - 이전 데이터 재사용 시도")
+        saved = load_market_data()
+        if saved and (saved.get('kospi_stocks') or saved.get('kosdaq_stocks')):
+            print("📂 이전 저장 데이터로 대체")
+            return saved
 
     # 해외 주식
     us_stocks = get_nasdaq_surge_stocks(token)
