@@ -392,19 +392,20 @@ def get_nasdaq_surge_stocks(token):
 
 
 def get_sample_data():
+    """API 실패 시 이전 저장된 데이터를 재사용하거나 실패 상태 반환"""
+    saved = load_market_data()
+    if saved:
+        print("📂 API 실패 - 이전 저장된 데이터 재사용")
+        return saved
+    
     return {
         "date": datetime.now().strftime("%Y-%m-%d"),
-        "source": "📋 샘플 데이터",
+        "source": "⚠️ 데이터 수집 실패",
         "server": "N/A",
-        "kospi_stocks": [
-            {"name": "삼성전자", "code": "005930", "market": "KOSPI", "price": "72,300", "change": "+5.2%", "volume": "15,234,567",
-             "reason": "급등 확인 (점수: 7.5)", "industry": "반도체/전자", "desc": "세계 최대 메모리 반도체", "badge": "⚡ NORMAL", "alert_level": "NORMAL"},
-        ],
-        "kosdaq_stocks": [
-            {"name": "기가레인", "code": "049080", "market": "KOSDAQ", "price": "12,300", "change": "+15.2%", "volume": "5,234,567",
-             "reason": "급등 강력 (점수: 10.5)", "industry": "반도체/장비", "desc": "반도체 테스트 소켓", "badge": "🔥 STRONG", "alert_level": "STRONG"},
-        ],
-        "us_stocks": []
+        "kospi_stocks": [],
+        "kosdaq_stocks": [],
+        "us_stocks": [],
+        "error": True
     }
 
 
