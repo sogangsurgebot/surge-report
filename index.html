@@ -399,15 +399,6 @@
         /* ============================================
            Swiper 슬라이더 (추천종목용)
            ============================================ */
-        .expert-swiper {
-            width: 100%;
-            padding-bottom: 50px;
-            position: relative;
-        }
-        
-        .swiper-slide {
-            height: auto;
-        }
         
         /* 페이지네이션 (dots) */
         .swiper-pagination {
@@ -2080,7 +2071,7 @@
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
                 <!-- DYNAMIC_VERSION_START -->
-<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.5109d05 | 2026-05-04 15:20</a>
+<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.42558c8 | 2026-05-04 15:20</a>
 <!-- DYNAMIC_VERSION_END -->
             </div>
         </header>
@@ -3105,7 +3096,7 @@
         <div class="update-time-wrapper">
             <div class="update-time">
                 <!-- DYNAMIC_UPDATE_TIME_START -->
-<span data-cache-buster="202605041520">🕐 마지막 업데이트: 2026-05-04 15:20</span>
+<span data-cache-buster="202605041530">🕐 마지막 업데이트: 2026-05-04 15:30</span>
 <!-- DYNAMIC_UPDATE_TIME_END -->
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
@@ -3249,69 +3240,6 @@
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // Swiper 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            const swiper = new Swiper('.expert-swiper', {
-                // 기본 설정
-                slidesPerView: 1,
-                spaceBetween: 20,
-                
-                // 루프
-                loop: true,
-                
-                // 자동 재생
-                autoplay: {
-                    delay: 5000,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true
-                },
-                
-                // 페이지네이션 (dots)
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    bulletActiveClass: 'swiper-pagination-bullet-active'
-                },
-                
-                // 네비게이션 화살표
-                navigation: {
-                    nextEl: '.swiper-button-next',
-                    prevEl: '.swiper-button-prev'
-                },
-                
-                // 효과
-                effect: 'slide',
-                speed: 500,
-                
-                // 반응형
-                breakpoints: {
-                    // 모바일 (기본)
-                    320: {
-                        slidesPerView: 1,
-                        spaceBetween: 16
-                    },
-                    // 태블릿 이상
-                    768: {
-                        slidesPerView: 1,
-                        spaceBetween: 20
-                    }
-                },
-                
-                // 키보드 네비게이션
-                keyboard: {
-                    enabled: true,
-                    onlyInViewport: true
-                },
-                
-                // 스와이프
-                touchRatio: 1,
-                touchAngle: 45,
-                simulateTouch: true,
-                allowTouchMove: true,
-                threshold: 10
-            });
-        });
-        
         // 추천 종목 스와이프 초기화
         document.addEventListener('DOMContentLoaded', function() {
             const picksSwiper = new Swiper('.picks-swiper', {
