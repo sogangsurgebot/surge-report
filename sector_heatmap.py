@@ -167,96 +167,75 @@ def get_sector_heatmap(date_str=None):
 
 
 def generate_heatmap_html(heatmap_data):
-    """진짜 히트맵 HTML 생성 — 섹터별 heat intensity + 이모티콘"""
+    """컴팩트 히트맵 HTML 생성 — chip/badge 형태"""
     if not heatmap_data["sectors"]:
-        return '<div style="padding:20px;text-align:center;color:#999;">📊 오늘의 급등주 데이터가 없습니다</div>'
+        return '<div style="padding:20px;text-align:center;color:#999;font-size:0.85rem;">📊 오늘의 급등주 데이터가 없습니다</div>'
     
     # Heat intensity 점수 계산: 평균 등락률 가중치 + 종목 수 가중치
     def get_heat_score(sector):
         avg = sector["avg_change"]
         cnt = sector["count"]
-        # 등락률이 더 중요. 평균 10% + 종목 5개면 max 근접
         return avg * 3 + cnt * 0.8
     
-    # 최고 점수 기준으로 상대적 레벨 결정
     scores = [get_heat_score(s) for s in heatmap_data["sectors"]]
     max_score = max(scores) if scores else 1
     
-    def get_heat_class(score):
+    def get_heat_bg(score):
         ratio = score / max_score if max_score > 0 else 0
+        # 연한 배경색들
         if ratio >= 0.8:
-            return "heat-intense"   # 🔥 매우 뜨거움
+            return "#ffebee"  # 매우 뜨거움 — 연한 빨강
         elif ratio >= 0.6:
-            return "heat-hot"       # 뜨거움
+            return "#fff3e0"  # 뜨거움 — 연한 주황
         elif ratio >= 0.4:
-            return "heat-warm"      # 따뜻함
+            return "#fff8e1"  # 따뜻함 — 연한 노랑
         elif ratio >= 0.2:
-            return "heat-mild"      # 미약
+            return "#e8f5e9"  # 미약 — 연한 초록
         else:
-            return "heat-cool"      # 차가움
+            return "#eceff1"  # 차가움 — 연한 회청
     
-    def get_heat_label(score):
+    def get_heat_color(score):
         ratio = score / max_score if max_score > 0 else 0
         if ratio >= 0.8:
-            return "🔥 매우 뜨거움"
+            return "#d32f2f"
         elif ratio >= 0.6:
-            return "🌡️ 뜨거움"
+            return "#e65100"
         elif ratio >= 0.4:
-            return "☀️ 따뜻함"
+            return "#f57c00"
         elif ratio >= 0.2:
-            return "🍃 미약"
+            return "#388e3c"
         else:
-            return "❄️ 차가움"
+            return "#546e7a"
     
     total_stocks = heatmap_data["total_stocks"]
     date_str = heatmap_data["date"]
     
-    html = f'''<div class="heatmap-container">
-    <div class="heatmap-title">🔥 오늘 뜨는 섹터 히트맵</div>
-    <div class="heatmap-subtitle">{date_str} 기준 총 {total_stocks}개 급등주 분석</div>
-    <div class="heatmap-grid">
+    html = f'''<div class="heatmap-compact">
+    <div class="heatmap-compact-header">
+        <span>🔥 오늘 뜨는 섹터</span>
+        <span class="heatmap-compact-count">총 {total_stocks}개</span>
+    </div>
+    <div class="heatmap-chips">
 '''
     
-    for sector in heatmap_data["sectors"][:10]:  # 상위 10개 섹터
+    for sector in heatmap_data["sectors"][:8]:  # 상위 8개 섹터
         score = get_heat_score(sector)
-        heat_class = get_heat_class(score)
+        bg = get_heat_bg(score)
+        color = get_heat_color(score)
         emoji = SECTOR_EMOJIS.get(sector["name"], "📦")
         name = sector["name"]
         count = sector["count"]
         avg = sector["avg_change"]
-        max_chg = sector["max_change"]
         
-        # 상위 종목 3개 리스트
-        top_stocks_html = ""
-        for stock in sector["stocks"][:3]:
-            chg = stock.get("change", 0)
-            # change가 문자열일 수 있으니 float 처리
-            try:
-                chg_float = float(chg)
-            except (ValueError, TypeError):
-                chg_float = 0.0
-            top_stocks_html += f'<div>• {stock["name"]} <strong>+{chg_float:.1f}%</strong></div>\n'
-        
-        html += f'''<div class="heatmap-cell {heat_class}">
-    <span class="heatmap-emoji">{emoji}</span>
-    <div class="heatmap-sector-name">{name}</div>
-    <div class="heatmap-count">{count}개 종목 · {get_heat_label(score)}</div>
-    <div class="heatmap-avg">+{avg:.1f}%</div>
-    <div class="heatmap-stocks">
-        <div style="font-weight:700;margin-bottom:4px;opacity:0.95;">🏆 상위 종목</div>
-        {top_stocks_html}
-    </div>
+        html += f'''<div class="heat-chip" style="background:{bg};color:{color};">
+    <span class="chip-emoji">{emoji}</span>
+    <span class="chip-name">{name}</span>
+    <span class="chip-count">{count}종목</span>
+    <span class="chip-avg">+{avg:.1f}%</span>
 </div>
 '''
     
     html += '''    </div>
-    <div class="heatmap-legend">
-        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#ff4757"></span> 매우 뜨거움</div>
-        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#ff6348"></span> 뜨거움</div>
-        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#ffa502"></span> 따뜻함</div>
-        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#2ed573"></span> 미약</div>
-        <div class="heatmap-legend-item"><span class="heatmap-legend-dot" style="background:#747d8c"></span> 차가움</div>
-    </div>
 </div>'''
     
     return html
