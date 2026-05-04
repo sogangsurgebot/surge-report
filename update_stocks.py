@@ -482,18 +482,14 @@ def get_fallback_data():
 
 
 def generate_stock_section(stocks, title, market_type, is_primary=False):
-    """주식 섹션 HTML 생성 (등급 필터 항상 포함)"""
+    """주식 섹션 HTML 생성 (A+C 하이브리드 UI)"""
 
     # 시장별 테두리 색상
-    border_colors = {
-        "kospi": "#ff6b6b", "kosdaq": "#4ecdc4", "nasdaq": "#667eea"
-    }
+    border_colors = {"kospi": "#ff6b6b", "kosdaq": "#4ecdc4", "nasdaq": "#667eea"}
     border_color = border_colors.get(market_type, "#667eea")
-
-    # 주요 섹션 여부에 따른 스타일
     section_class = "market-section-primary" if is_primary else "market-section-secondary"
 
-    # 등급별 종목 개수 계산 (JS와 동일한 min/max 범위 사용)
+    # 등급별 분류
     grade_ranges = {
         "S": {"min": 29, "max": 999},
         "A": {"min": 20, "max": 29},
@@ -501,84 +497,39 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
         "C": {"min": 3, "max": 10},
         "D": {"min": 0, "max": 3},
     }
-    grade_counts = {"S": 0, "A": 0, "B": 0, "C": 0, "D": 0, "W": len(stocks)}
-    
+
+    grade_stocks = {"S": [], "A": [], "B": [], "C": [], "D": []}
     for stock in stocks:
         change_str = stock.get("change", "0%")
         try:
             change_rate = float(change_str.replace("%", "").replace("+", ""))
         except (ValueError, TypeError):
             change_rate = 0.0
-        
-        # JS와 동일한 로직: min <= rate < max
-        found = False
         for grade, rng in grade_ranges.items():
             if rng["min"] <= change_rate < rng["max"]:
-                grade_counts[grade] += 1
-                found = True
+                grade_stocks[grade].append(stock)
                 break
-        if not found and change_rate >= 0:
-            grade_counts["D"] += 1  # 0~3% 범위
-    
-    # 디버깅 로그
+
+    grade_counts = {g: len(v) for g, v in grade_stocks.items()}
+    grade_counts["ALL"] = len(stocks)
+
+    # 디버깅
     if stocks:
         print(f"   📊 등급 분포: S:{grade_counts['S']} A:{grade_counts['A']} B:{grade_counts['B']} C:{grade_counts['C']} D:{grade_counts['D']} (총 {len(stocks)}개)")
-        for s in stocks:
-            c = s.get('change', '0%')
-            try:
-                r = float(c.replace('%','').replace('+',''))
-            except:
-                r = 0.0
-            g = 'W'
-            for gr, rng in grade_ranges.items():
-                if rng["min"] <= r < rng["max"]:
-                    g = gr
-                    break
-            print(f"      {s.get('name','N/A')} ({s.get('code','N/A')}): {c} → {g}")
 
-    # 등급 요약 배너 HTML
-    grade_dots = {
-        "S": "#ff4757", "A": "#e67e22", "B": "#f39c12",
-        "C": "#2ecc71", "D": "#3498db", "W": "#95a5a6"
-    }
-    summary_items = []
-    for g in ["S", "A", "B", "C", "D", "W"]:
-        dot = grade_dots[g]
-        cnt = grade_counts[g]
-        summary_items.append(f'<span class="grade-summary-item"><span class="grade-summary-dot" style="background:{dot}"></span><span class="grade-summary-count">{g}:{cnt}</span></span>')
-    summary_bar_html = '<div class="grade-summary-bar">' + ''.join(summary_items) + '</div>'
+    # 등급 탭 HTML
+    grade_tab_colors = {"S": "#ff4757", "A": "#e67e22", "B": "#f39c12", "C": "#2ecc71", "D": "#3498db", "ALL": "#95a5a6"}
+    tabs_html = '<div class="grade-tabs">'
+    for grade in ["ALL", "S", "A", "B", "C", "D"]:
+        count = grade_counts[grade]
+        disabled = ' disabled' if count == 0 else ''
+        active = ' active' if grade == "ALL" else ''
+        color = grade_tab_colors[grade]
+        label = "전체" if grade == "ALL" else grade
+        tabs_html += f'<button class="grade-tab{active}{disabled}" data-grade="{grade}" style="border-bottom-color:{color}"><span>{label}</span><span class="tab-count">{count}</span></button>'
+    tabs_html += '</div>'
 
-    # 등급 필터 HTML (데이터 유무와 관계없이 항상 표시)
-    result_id = f"{market_type}GradeResult"
-    
-    def grade_btn_html(grade, min_rate, label, desc, count):
-        badge = f'<span class="grade-count-badge">{count}</span>' if count > 0 else ''
-        active = ' active' if grade == 'C' and count > 0 else ''
-        return f'''            <button class="grade-btn {grade.lower()}-grade{active}" data-grade="{grade}" data-min="{min_rate}">
-                {badge}
-                <span class="grade-label">{grade}</span>
-                <span class="grade-range">{label}</span>
-                <span class="grade-desc">{desc}</span>
-            </button>'''
-
-    grade_filter_html = f'''<div class="grade-filter-section">
-        <div class="grade-filter-header">
-            <span class="grade-filter-title">📊 등락률 대역 필터</span>
-            <span class="grade-filter-sub">클릭하여 해당 등급 종목 확인</span>
-        </div>
-        {summary_bar_html}
-        <div class="grade-filter-grid">
-{grade_btn_html("S", "29", "+29% ~", "상한가 근접", grade_counts["S"])}
-{grade_btn_html("A", "20", "+20% ~ 29%", "강한 급등", grade_counts["A"])}
-{grade_btn_html("B", "10", "+10% ~ 20%", "중간 급등", grade_counts["B"])}
-{grade_btn_html("C", "3", "+3% ~ 10%", "초기 급등", grade_counts["C"])}
-{grade_btn_html("D", "0", "0% ~ 3%", "주목 단계", grade_counts["D"])}
-{grade_btn_html("W", "-100", "전체", "모든 종목", grade_counts["W"])}
-        </div>
-        <div class="grade-result" id="{result_id}"></div>
-    </div>'''
-
-    # 빈 상태 메시지
+    # 빈 상태
     if not stocks:
         empty_messages = {
             "kospi": "📊 현재 KOSPI 시장에서 급등주(+3% 이상)가 감지되지 않았습니다",
@@ -586,44 +537,66 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
             "nasdaq": "🇺🇸 현재 나스닥 시장이 마감되었거나 급등주가 없습니다"
         }
         empty_msg = empty_messages.get(market_type, "현재 급등주가 없습니다")
-        
         return f'''<div class="market-section {section_class}" data-market="{market_type}">
     <div class="market-header" style="border-left: 4px solid {border_color};">
         <h3 class="market-title">{title} <span class="market-count">0개</span></h3>
     </div>
-    {grade_filter_html}
+    {tabs_html}
     <div class="empty-state">
         <div class="empty-icon">🔍</div>
         <div class="empty-text">{empty_msg}</div>
         <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
     </div>
 </div>'''
-    
-    html = f'''<div class="market-section {section_class}" data-market="{market_type}">
+
+    # S등급 카드 HTML
+    s_cards_html = ''
+    if grade_stocks["S"]:
+        s_cards_html = '<div class="grade-content" data-grade="S"><div class="s-grade-grid">'
+        for stock in grade_stocks["S"]:
+            s_cards_html += _generate_stock_card_html(stock, market_type)
+        s_cards_html += '</div></div>'
+
+    # A/B/C/D 테이블 + 상세 카드 HTML
+    table_html = ''
+    for grade in ["A", "B", "C", "D"]:
+        if not grade_stocks[grade]:
+            continue
+        table_html += f'<div class="grade-content" data-grade="{grade}"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody>'
+        for stock in grade_stocks[grade]:
+            table_html += _generate_table_row_html(stock, market_type, grade)
+            table_html += _generate_detail_row_html(stock, market_type, grade)
+        table_html += '</tbody></table></div></div>'
+
+    # 전체 콘텐츠
+    content_html = '<div class="market-content">' + s_cards_html + table_html + '</div>'
+
+    return f'''<div class="market-section {section_class}" data-market="{market_type}">
     <div class="market-header" style="border-left: 4px solid {border_color};">
         <h3 class="market-title">{title} <span class="market-count">{len(stocks)}개</span></h3>
     </div>
-    {grade_filter_html}
-    <div class="stocks-grid {'stocks-grid-3col' if is_primary else 'stocks-grid-2col'}">
-'''
+    {tabs_html}
+    {content_html}
+</div>'''
 
-    for stock in stocks:  # 모든 종목 표시 (필터링 위해 전체 필요)
-        change_class = "up" if "+" in stock["change"] else "down"
-        badge = stock.get("badge", "급등")
-        alert_level = stock.get("alert_level", "NORMAL")
-        market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
 
-        # 알림 레벨별 스타일
-        if alert_level == "STRONG":
-            card_style = f'border: 2px solid #ff4757; background: linear-gradient(135deg, rgba(255,71,87,0.05) 0%, rgba(255,71,87,0.1) 100%);'
-        elif alert_level == "NORMAL":
-            card_style = f'border: 2px solid #ffa502; background: linear-gradient(135deg, rgba(255,165,2,0.05) 0%, rgba(255,165,2,0.1) 100%);'
-        else:
-            card_style = f'border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);'
+def _generate_stock_card_html(stock, market_type):
+    """S등급 카드 HTML (기존 스타일 유지)"""
+    change_class = "up" if "+" in stock["change"] else "down"
+    badge = stock.get("badge", "급등")
+    alert_level = stock.get("alert_level", "NORMAL")
+    market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
 
-        score_detail = stock.get('score_details', '')
+    if alert_level == "STRONG":
+        card_style = f'border: 2px solid #ff4757; background: linear-gradient(135deg, rgba(255,71,87,0.05) 0%, rgba(255,71,87,0.1) 100%);'
+    elif alert_level == "NORMAL":
+        card_style = f'border: 2px solid #ffa502; background: linear-gradient(135deg, rgba(255,165,2,0.05) 0%, rgba(255,165,2,0.1) 100%);'
+    else:
+        card_style = f'border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);'
 
-        html += f'''        <div class="card stock-card" style="{card_style}">
+    score_detail = stock.get('score_details', '')
+
+    return f'''<div class="card stock-card" style="{card_style}">
             <div class="stock-header">
                 <div>
                     <div class="stock-name">{stock["name"]} {market_badge}</div>
@@ -647,12 +620,75 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
                 </a>
                 <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
             </div>
-        </div>
-'''
+        </div>'''
 
-    html += '''    </div>
-</div>'''
-    return html
+
+def _generate_table_row_html(stock, market_type, grade):
+    """테이블 row HTML"""
+    change_class = "up" if "+" in stock["change"] else "down"
+    grade_colors = {"A": "#e67e22", "B": "#f39c12", "C": "#2ecc71", "D": "#3498db"}
+    grade_color = grade_colors.get(grade, "#95a5a6")
+    badge_text = stock.get("badge", "급등")
+
+    # 거래대금 파싱 (점수 상세에서 추출)
+    trade_amount = "-"
+    score_detail = stock.get('score_details', '')
+    if '거래대금' in score_detail:
+        parts = score_detail.split('/')
+        for p in parts:
+            if '거래대금' in p:
+                trade_amount = p.replace('거래대금', '').strip()
+                break
+    if trade_amount == "-":
+        trade_amount = stock.get("trade_amount", "-")
+
+    return f'''<tr data-stock="{stock["code"]}">
+                <td class="col-name"><div><div>{stock["name"]}</div><div class="col-code">{stock["code"]}</div></div></td>
+                <td class="col-change {change_class}">{stock["change"]}</td>
+                <td><span class="surge-badge" style="background:{grade_color};color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">{grade}</span></td>
+                <td class="col-amount">{trade_amount}</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr>'''
+
+
+def _generate_detail_row_html(stock, market_type, grade):
+    """테이블 row 클릭 시 펼쳐지는 상세 카드 HTML"""
+    change_class = "up" if "+" in stock["change"] else "down"
+    badge = stock.get("badge", "급등")
+    alert_level = stock.get("alert_level", "NORMAL")
+    market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
+    score_detail = stock.get('score_details', '')
+
+    return f'''<tr class="stock-detail-row" data-stock="{stock["code"]}">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">{stock["name"]} {market_badge}</div>
+                                <div class="stock-code">{stock["code"]}</div>
+                            </div>
+                            <span class="surge-badge badge-{alert_level.lower()}">{badge}</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">{stock["price"]}</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value {change_class}">{stock["change"]}</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">{stock["volume"]}</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 {stock["reason"]}
+                            {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
+                        </div>
+                        {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/{stock["code"]}.png" alt="{stock["name"]} 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr>'''
 
 
 def generate_domestic_section(kospi_stocks, kosdaq_stocks):
