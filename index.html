@@ -382,7 +382,22 @@
         }
         
         /* ============================================
-           Swiper 슬라이더
+           전문가 카드 2열 그리드
+           ============================================ */
+        .expert-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+        }
+        
+        @media (min-width: 768px) {
+            .expert-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        /* ============================================
+           Swiper 슬라이더 (추천종목용)
            ============================================ */
         .expert-swiper {
             width: 100%;
@@ -2065,7 +2080,7 @@
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
                 <!-- DYNAMIC_VERSION_START -->
-<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.4e61f6f | 2026-05-04 15:10</a>
+<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.452dad3 | 2026-05-04 15:10</a>
 <!-- DYNAMIC_VERSION_END -->
             </div>
         </header>
@@ -2085,12 +2100,8 @@
         <div class="card gurus-section">
             <h2 class="gurus-title">🏆 투자 고수 인사이트</h2>
             
-            <!-- Swiper 컨테이너 -->
-            <div class="swiper expert-swiper">
-                <div class="swiper-wrapper">
-                    
-                    <!-- 오일전문가 슬라이드 -->
-                    <div class="swiper-slide">
+            <!-- 두 전문가 카드 나란히 -->
+            <div class="expert-grid">
                         <div class="expert-card oil-card" id="expertSection">
                             <div class="expert-header">
                                 <div class="expert-avatar">🛢️</div>
@@ -2152,9 +2163,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- 세상학개론 슬라이드 -->
-                    <div class="swiper-slide">
                         <div class="expert-card sesang-card" id="sesangSection">
                             <div class="expert-header">
                                 <div class="expert-avatar">🎓</div>
@@ -3097,7 +3105,7 @@
         <div class="update-time-wrapper">
             <div class="update-time">
                 <!-- DYNAMIC_UPDATE_TIME_START -->
-<span data-cache-buster="202605041510">🕐 마지막 업데이트: 2026-05-04 15:10</span>
+<span data-cache-buster="202605041520">🕐 마지막 업데이트: 2026-05-04 15:20</span>
 <!-- DYNAMIC_UPDATE_TIME_END -->
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
