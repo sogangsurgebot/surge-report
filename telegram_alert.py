@@ -2,7 +2,7 @@
 """
 급등주 텔레그램 알람 모듈
 - S등급(+29% 이상) / A등급(+20% ~ 29%) 종목 감지 시 텔레그램 알람 발송
-- 중복 알람 방지 (날짜별 종목 코드 기록, 하루 한 종목 한 번)
+- 중복 알람 방지: 같은 날 + 같은 종목 + 같은 등급 조합은 하루 한 번만 발송
 """
 
 import os
@@ -28,8 +28,9 @@ _load_env()
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "8562807424:AAEF2vvvWA0hL8tvXpqayHtvJWs7OAFHRsk")
 TELEGRAM_CHAT_IDS = [cid.strip() for cid in os.getenv("TELEGRAM_CHAT_ID", "").split(",") if cid.strip()]
 
-# 알람 기록 파일
-ALERT_HISTORY_FILE = Path(__file__).parent / "telegram_alert_history.json"
+# 알람 기록 파일 (v2: 등급 포함 키)
+ALERT_HISTORY_FILE = Path(__file__).parent / "telegram_alert_history_v2.json"
+OLD_HISTORY_FILE = Path(__file__).parent / "telegram_alert_history.json"
 
 # 등급 기준
 S_GRADE_THRESHOLD = 29.0
@@ -43,11 +44,14 @@ def get_kst_now():
 
 
 def load_alert_history():
-    """알람 기록 로드"""
+    """알람 기록 로드 (v2 형식)"""
     if ALERT_HISTORY_FILE.exists():
         try:
             with open(ALERT_HISTORY_FILE, 'r', encoding='utf-8') as f:
-                return json.load(f)
+                data = json.load(f)
+            # v2 형식 검증: { "2026-05-04": { "000001": {"S": true}, "000002": {"A": true} } }
+            if isinstance(data, dict):
+                return data
         except Exception:
             pass
     return {}
@@ -59,21 +63,32 @@ def save_alert_history(history):
         json.dump(history, f, ensure_ascii=False, indent=2)
 
 
-def get_today_alerted_codes():
-    """오늘 이미 알람 발송한 종목 코드 목록"""
+def get_today_alerted_keys():
+    """
+    오늘 이미 알람 발송한 (종목코드_등급) 키 목록 반환
+    예: {"000001_S", "000002_A"}
+    """
     history = load_alert_history()
     today = get_kst_now().strftime("%Y-%m-%d")
-    return set(history.get(today, []))
+    today_records = history.get(today, {})
+
+    keys = set()
+    for code, grades_dict in today_records.items():
+        if isinstance(grades_dict, dict):
+            for grade in grades_dict.keys():
+                keys.add(f"{code}_{grade}")
+    return keys
 
 
-def record_alert(stock_code):
-    """알람 발송 기록"""
+def record_alert(stock_code, grade):
+    """알람 발송 기록 (종목코드 + 등급 조합)"""
     history = load_alert_history()
     today = get_kst_now().strftime("%Y-%m-%d")
     if today not in history:
-        history[today] = []
+        history[today] = {}
     if stock_code not in history[today]:
-        history[today].append(stock_code)
+        history[today][stock_code] = {}
+    history[today][stock_code][grade] = True
     save_alert_history(history)
 
 
@@ -249,7 +264,7 @@ def build_alert_message(stocks: list, market_name: str) -> str:
 def check_and_alert_s_grade(kospi_stocks: list, kosdaq_stocks: list) -> dict:
     """
     S/A등급 종목 체크 및 텔레그램 알람 발송
-    - 중복 알람 방지 (날짜별 종목 코드 기록)
+    - 중복 알람 방지: 같은 날 + 같은 종목 + 같은 등급은 하루 한 번만
     - S등급과 A등급은 별도 메시지로 발송
     - 반환: {"sent": bool, "stocks": list, "message": str}
     """
@@ -268,12 +283,16 @@ def check_and_alert_s_grade(kospi_stocks: list, kosdaq_stocks: list) -> dict:
     if not all_alert:
         return {"sent": False, "stocks": [], "message": "S/A등급 종목 없음"}
 
-    # 오늘 이미 알람 보낸 종목 필터링
-    alerted_codes = get_today_alerted_codes()
-    new_stocks = [s for s in all_alert if s.get("code") not in alerted_codes]
+    # 오늘 이미 (종목+등급) 조합으로 알람 보낸 것 필터링
+    alerted_keys = get_today_alerted_keys()
+    new_stocks = []
+    for s in all_alert:
+        key = f"{s.get('code')}_{s.get('alert_grade')}"
+        if key not in alerted_keys:
+            new_stocks.append(s)
 
     if not new_stocks:
-        print(f"📵 오늘 이미 알람 발송한 종목 ({len(all_alert)}개) - 중복 방지")
+        print(f"📵 오늘 이미 알람 발송한 (종목+등급) 조합 ({len(all_alert)}개 중 0개 신규) - 중복 방지")
         return {"sent": False, "stocks": all_alert, "message": "이미 알람 발송 완료"}
 
     # 등급별 카운트
@@ -286,21 +305,21 @@ def check_and_alert_s_grade(kospi_stocks: list, kosdaq_stocks: list) -> dict:
 
     sent_any = False
 
-    # KOSPI 알람 (S+A 통합 메시지, 등급별 구분 표시)
+    # KOSPI 알람
     if kospi_new:
         msg = build_alert_message(kospi_new, "KOSPI")
         if msg and send_telegram_message(msg):
             sent_any = True
             for s in kospi_new:
-                record_alert(s.get("code", ""))
+                record_alert(s.get("code", ""), s.get("alert_grade", ""))
 
-    # KOSDAQ 알람 (S+A 통합 메시지, 등급별 구분 표시)
+    # KOSDAQ 알람
     if kosdaq_new:
         msg = build_alert_message(kosdaq_new, "KOSDAQ")
         if msg and send_telegram_message(msg):
             sent_any = True
             for s in kosdaq_new:
-                record_alert(s.get("code", ""))
+                record_alert(s.get("code", ""), s.get("alert_grade", ""))
 
     return {
         "sent": sent_any,
