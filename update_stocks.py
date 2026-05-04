@@ -955,14 +955,28 @@ def main():
         else:
             print("⚠️ 저장된 데이터 없음 - 현재 데이터 사용")
 
-    # 3. 히트맵 & 거래량 알림 생성 (DB 기반)
+    # 3. S등급 급등주 알람 체크 (텔레그램)
+    try:
+        from telegram_alert import check_and_alert_s_grade
+        kospi = fresh_data.get('kospi_stocks', [])
+        kosdaq = fresh_data.get('kosdaq_stocks', [])
+        alert_result = check_and_alert_s_grade(kospi, kosdaq)
+        if alert_result.get('sent'):
+            alerted_names = [s.get('name', '') for s in alert_result.get('stocks', [])]
+            print(f"🚨 S등급 알람 발송: {', '.join(alerted_names)}")
+        else:
+            print(f"📵 {alert_result.get('message', '알람 없음')}")
+    except Exception as e:
+        print(f"⚠️ S등급 알람 체크 실패: {e}")
+
+    # 4. 히트맵 & 거래량 알림 생성 (DB 기반)
     extra_sections = generate_extra_sections(
         fresh_data.get('kospi_stocks', []),
         fresh_data.get('kosdaq_stocks', [])
     )
     fresh_data["extra_sections"] = extra_sections
 
-    # 4. HTML 업데이트 (최종 데이터)
+    # 5. HTML 업데이트 (최종 데이터)
     update_html(fresh_data)
 
     print(f"\n✨ 작업 완료!")
