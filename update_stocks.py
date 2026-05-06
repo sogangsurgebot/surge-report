@@ -826,7 +826,16 @@ def update_html(data):
         nasdaq_html
     )
 
-    # 4. 업데이트 시간 교체 (캐시 버스팅용 타임스탬프 포함)
+    # 5. 저평가 주식 섹션 교체 (정적 데이터지만 마커 통일성 유지)
+    value_stocks_html = generate_value_stocks_section()
+    replace_between_markers(
+        'index.html',
+        '<!-- DYNAMIC_VALUE_STOCKS_START -->',
+        '<!-- DYNAMIC_VALUE_STOCKS_END -->',
+        value_stocks_html
+    )
+
+    # 6. 업데이트 시간 교체 (캐시 버스팅용 타임스탬프 포함)
     current_time = datetime.now().strftime('%Y-%m-%d %H:%M')
     cache_buster = datetime.now().strftime('%Y%m%d%H%M')
     update_time_html = f'<span data-cache-buster="{cache_buster}">🕐 마지막 업데이트: {current_time}</span>'
@@ -837,7 +846,7 @@ def update_html(data):
         update_time_html
     )
 
-    # 5. 깃 버전 정보 갱신
+    # 7. 깃 버전 정보 갱신
     version_info = get_git_version_info()
     version_html = f'<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 {version_info}</a>'
     replace_between_markers(
@@ -848,7 +857,7 @@ def update_html(data):
     )
 
     total_domestic = len(kospi) + len(kosdaq)
-    print(f"✅ HTML 부분 교체 완료: 국내 {total_domestic}개 (KOSPI {len(kospi)}, KOSDAQ {len(kosdaq)}) / 해외 {len(us)}개")
+    print(f"✅ HTML 부분 교체 완료: 국내 {total_domestic}개 (KOSPI {len(kospi)}, KOSDAQ {len(kosdaq)}) / 해외 {len(us)}개 / 저평가 6개")
 
 
 def fetch_surge_stocks():
@@ -900,6 +909,127 @@ def fetch_surge_stocks():
         "kosdaq_stocks": kosdaq_stocks,
         "us_stocks": us_stocks
     }
+
+
+def generate_value_stocks_section():
+    """저평가 주식 섹션 HTML 생성 (오일전문가 × 세상학개론 전략)"""
+    stocks = [
+        {
+            "name": "KB금융지주",
+            "code": "105560",
+            "per": "6.5배",
+            "dividend": "5.2%",
+            "sector": "금융지주",
+            "oil_comment": "황금거위 1순위. 분기배당 도입으로 안정성 확보.",
+            "sesang_comment": "밸류업 정책 수혜 기대"
+        },
+        {
+            "name": "신한지주",
+            "code": "055550",
+            "per": "6.8배",
+            "dividend": "5.0%",
+            "sector": "금융지주",
+            "oil_comment": "주주환원 강화로 배당성향 상승 중.",
+            "sesang_comment": "금리 인하 시 NIM 압박 해소 예상"
+        },
+        {
+            "name": "SK텔레콤",
+            "code": "017670",
+            "per": "8.2배",
+            "dividend": "5.5%",
+            "sector": "통신",
+            "oil_comment": "구독 기반 안정 현금흐름.",
+            "sesang_comment": "5G 투자 마무리 후 배당 여력 확대"
+        },
+        {
+            "name": "하나금융지주",
+            "code": "086790",
+            "per": "6.2배",
+            "dividend": "5.3%",
+            "sector": "금융지주",
+            "oil_comment": "오일전문가 압도적 1위 보유종목.",
+            "sesang_comment": "밸류업 프로그램 직접 수혜"
+        },
+        {
+            "name": "KT",
+            "code": "030200",
+            "per": "7.5배",
+            "dividend": "5.8%",
+            "sector": "통신",
+            "oil_comment": "배당 매력도 업계 최상위.",
+            "sesang_comment": "AI 데이터센터 연계 가치 재평가 가능"
+        },
+        {
+            "name": "삼성화재",
+            "code": "000810",
+            "per": "8.8배",
+            "dividend": "4.2%",
+            "sector": "보험",
+            "oil_comment": "보험업 안정적 수익구조.",
+            "sesang_comment": "금리 하락 시 채권 평가이익 기대"
+        }
+    ]
+
+    rows = ""
+    for s in stocks:
+        rows += f'''<tr>
+            <td class="col-name"><div><div>{s['name']}</div><div class="col-code">{s['code']}</div></div></td>
+            <td class="col-per">{s['per']}</td>
+            <td class="col-dividend" style="color: #e74c3c; font-weight: 700;">{s['dividend']}</td>
+            <td>{s['sector']}</td>
+            <td style="font-size: var(--font-sm);">🛢️ {s['oil_comment']} 🎓 {s['sesang_comment']}</td>
+            <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code={s['code']}" target="_blank">📈</a></td>
+        </tr>'''
+
+    return f'''<details class="collapse-section value-collapse" style="margin-top: var(--space-lg);">
+    <summary class="collapse-header" style="background: linear-gradient(135deg, rgba(46,204,113,0.15) 0%, rgba(46,204,113,0.05) 100%); border: 1px solid rgba(46,204,113,0.4); border-radius: 16px; padding: var(--space-md); cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: var(--font-md); font-weight: 700; color: var(--color-text);">💎 저평가 주식 발굴</span>
+        <span style="font-size: var(--font-sm); color: var(--color-text-light);">오일전문가 × 세상학개론 전략 ▼</span>
+    </summary>
+    <div class="collapse-content" style="padding-top: var(--space-md);">
+        <div class="card value-stocks-section">
+            <h2 class="gurus-title">💎 저평가 주식 발굴</h2>
+            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">PER 10배 이하 · 배당 5% 이상 · 오일전문가의 황금거위 전략 × 세상학개론 거시 흐름</p>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-item"><div class="portfolio-label">스크리닝 기준</div><div class="portfolio-value">PER ≤ 10 · 배당 ≥ 5%</div></div>
+                <div class="portfolio-item"><div class="portfolio-label">투자 철학</div><div class="portfolio-value">황금 거위 × 거시 흐름</div></div>
+                <div class="portfolio-item"><div class="portfolio-label">리밸런싱</div><div class="portfolio-value positive">분기별 점검</div></div>
+                <div class="portfolio-item"><div class="portfolio-label">현금 보유</div><div class="portfolio-value">20% 탄약 확보</div></div>
+            </div>
+
+            <div class="value-stocks-table-wrap" style="margin-top: var(--space-lg); overflow-x: auto;">
+                <table class="stock-table" style="min-width: 640px;">
+                    <thead><tr><th>종목</th><th>PER</th><th>배당률</th><th>업종</th><th>전문가 코멘트</th><th>네이버</th></tr></thead>
+                    <tbody>{rows}</tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: var(--space-lg); background: linear-gradient(135deg, rgba(46,204,113,0.08) 0%, rgba(52,152,219,0.08) 100%); border-radius: var(--card-radius); padding: var(--card-padding); border: 1px solid rgba(46,204,113,0.2);">
+                <h3 style="font-size: var(--font-lg); margin-bottom: var(--space-md); color: #27ae60;">📚 저평가 전략 요약</h3>
+                <div style="display: grid; gap: var(--space-md);">
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <span style="font-size: 1.2rem;">🛢️</span>
+                        <div><strong style="color: #2d3748;">오일전문가의 황금 거위</strong>
+                        <p style="font-size: var(--font-sm); color: var(--color-text-light); margin-top: 4px;">PER 10배 이하, 배당 5% 이상, 5년 연속 배당 이력. 배당금으로 더 저렴한 거위를 사서 거위 수를 늘린다.</p></div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <span style="font-size: 1.2rem;">🎓</span>
+                        <div><strong style="color: #2d3748;">세상학개론의 거시 흐름</strong>
+                        <p style="font-size: var(--font-sm); color: var(--color-text-light); margin-top: 4px;">금리 인하 사이클 진입 시 금융지주 NIM 압박 해소, 밸류업 프로그램 수혜, AI 인프라 투자로 통신사 재평가.</p></div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <span style="font-size: 1.2rem;">⚠️</span>
+                        <div><strong style="color: #2d3748;">리스크 관리</strong>
+                        <p style="font-size: var(--font-sm); color: var(--color-text-light); margin-top: 4px;">금융 비중 30% 이하, 섹터 집중 금지. PER 20배 이상 재평가 시 절반 매도. 현금 20%는 탄약.</p></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="date-note" style="margin-top: var(--space-md);">📅 기준일: 2026년 5월 | ⚠️ 투자 유의사항: 본 정보는 참고용이며 투자 권유가 아닙니다</div>
+        </div>
+    </div>
+</details>'''
 
 
 def generate_extra_sections(kospi_stocks, kosdaq_stocks):
