@@ -26,8 +26,21 @@ STATE_FILE = BASE_DIR / ".oilpro_blog_state.json"
 EXPERTS_HTML = BASE_DIR / "sections" / "experts.html"
 INDEX_HTML = BASE_DIR / "index.html"
 
-# 텔레그램 설정 (선택적)
-BOT_TOKEN = os.getenv("OILPRO_BOT_TOKEN", "8562807424:AAEF2vvvWA0hL8tvXpqayHtvJWs7OAFHRsk")
+# .env 파일에서 환경변수 로드
+def _load_env():
+    env_path = BASE_DIR / '.env'
+    if env_path.exists():
+        with open(env_path, 'r', encoding='utf-8') as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith('#') and '=' in line:
+                    key, value = line.split('=', 1)
+                    os.environ[key] = value
+
+_load_env()
+
+# 텔레그램 설정 (선택적) — OILPRO_BOT_TOKEN 우선, 없으면 TELEGRAM_BOT_TOKEN fallback
+BOT_TOKEN = os.getenv("OILPRO_BOT_TOKEN") or os.getenv("TELEGRAM_BOT_TOKEN")
 CHAT_ID = os.getenv("OILPRO_CHAT_ID", "8713262502")
 
 # 네이버 블로그 RSS

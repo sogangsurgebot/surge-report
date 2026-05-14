@@ -25,8 +25,11 @@ def _load_env():
 _load_env()
 
 # 텔레그램 봇 설정
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "8562807424:AAEF2vvvWA0hL8tvXpqayHtvJWs7OAFHRsk")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 TELEGRAM_CHAT_IDS = [cid.strip() for cid in os.getenv("TELEGRAM_CHAT_ID", "").split(",") if cid.strip()]
+
+if not TELEGRAM_BOT_TOKEN:
+    print("⚠️ 텔레그램 봇 토큰 미설정 — .env 파일에 TELEGRAM_BOT_TOKEN을 추가하세요")
 
 # 알람 기록 파일 (v2: 등급 포함 키)
 ALERT_HISTORY_FILE = Path(__file__).parent / "telegram_alert_history_v2.json"

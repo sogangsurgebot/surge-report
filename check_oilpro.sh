@@ -2,12 +2,21 @@
 # 오일전문가 YouTube 채널 주간 업데이트 확인 스크립트
 # 매주 금요일 실행: 새 "주식 현황" 영상 확인 및 텔레그램 알림
 
-BOT_TOKEN="8562807424:AAEF2vvvWA0hL8tvXpqayHtvJWs7OAFHRsk"
-CHAT_ID="8713262502"
+# .env에서 환경변수 로드
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+set -a
+source "${SCRIPT_DIR}/.env"
+set +a
+
 LOG_FILE="/tmp/oilpro-check.log"
 STATE_FILE="/root/.openclaw/workspace/surge-report/.oilpro_last_video"
 
 echo "[$(date '+%Y-%m-%d %H:%M:%S')] Checking oilpro channel..." >> "$LOG_FILE"
+
+if [ -z "$TELEGRAM_BOT_TOKEN" ]; then
+    echo "[$(date)] ERROR: TELEGRAM_BOT_TOKEN not set in .env" >> "$LOG_FILE"
+    exit 1
+fi
 
 # YouTube 채널 RSS 피드 가져오기
 RSS_URL="https://www.youtube.com/feeds/videos.xml?channel_id=UCkK2KC4ltG_y5x8S1d4T8DQ"
@@ -33,8 +42,8 @@ if echo "$LATEST_VIDEO" | grep -q "주식 현황" && [ "$LATEST_VIDEO" != "$LAST
     # 새 영상 발견! 텔레그램 알림 전송
     MESSAGE="🛢️ *오일전문가 주간 업데이트 알림*%0A%0A📅 새 영상이 업로드되었습니다!%0A%0A🎬 *$LATEST_VIDEO*%0A%0A▶️ [영상 보기]($LATEST_URL)%0A%0A📊 매주 금요일 정기 업데이트 확인됨."
     
-    curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-        -d "chat_id=${CHAT_ID}" \
+    curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+        -d "chat_id=${OILPRO_CHAT_ID:-8713262502}" \
         -d "text=${MESSAGE}" \
         -d "parse_mode=Markdown" \
         -d "disable_web_page_preview=false" >> "$LOG_FILE" 2>&1
