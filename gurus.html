@@ -1367,6 +1367,8 @@
             .tab-nav { gap: 6px; }
             .tab-link { padding: 8px 14px; font-size: 0.8rem; }
         }
+        .tab-link:focus { outline: none; }
+        .tab-link:not(.active):focus { color: #667eea; }
 </style>
 
 <style>
@@ -2911,5 +2913,14 @@
     </div>
 </details>
     </div>
+
+<script>
+window.addEventListener('pageshow', function(e) {
+    if (e.persisted) { window.location.reload(); }
+});
+document.querySelectorAll('.tab-link').forEach(function(l) {
+    l.addEventListener('click', function() { this.blur(); });
+});
+</script>
 </body>
 </html>

@@ -80,6 +80,8 @@
             .tab-nav { gap: 6px; }
             .tab-link { padding: 8px 14px; font-size: 0.8rem; }
         }
+        .tab-link:focus { outline: none; }
+        .tab-link:not(.active):focus { color: #667eea; }
 
         .notice {
             margin-top: 40px;
@@ -122,5 +124,14 @@
             <p style="margin-top: 12px; font-size: 0.8rem; color: #a0aec0;">.env 파일에 <code style="background:rgba(0,0,0,0.05);padding:2px 6px;border-radius:4px;">DART_API_KEY=인증키</code> 를 추가해주세요.</p>
         </div>
     </div>
+
+<script>
+window.addEventListener('pageshow', function(e) {
+    if (e.persisted) { window.location.reload(); }
+});
+document.querySelectorAll('.tab-link').forEach(function(l) {
+    l.addEventListener('click', function() { this.blur(); });
+});
+</script>
 </body>
 </html>

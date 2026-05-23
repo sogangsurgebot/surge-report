@@ -1364,7 +1364,14 @@
         }
         @media (max-width: 480px) {
             .tab-nav { gap: 6px; }
+        .tab-link:focus { outline: none; }
+        .tab-link:not(.active):focus { color: #667eea; }
+
             .tab-link { padding: 8px 14px; font-size: 0.8rem; }
+        }
+
+
+        /* ── 탭 내비게이션 ───────────────────────── */
         }
 
 
@@ -3657,5 +3664,14 @@
         });
     })();
     </script>
+
+<script>
+window.addEventListener('pageshow', function(e) {
+    if (e.persisted) { window.location.reload(); }
+});
+document.querySelectorAll('.tab-link').forEach(function(l) {
+    l.addEventListener('click', function() { this.blur(); });
+});
+</script>
 </body>
 </html>
