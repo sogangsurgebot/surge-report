@@ -1,24 +1,37 @@
 #!/usr/bin/env python3
 """
-국민연금공단 대량보유주식 보고내역 수집 (공공데이터포털 API)
-data.go.kr 데이터 ID: 15106890
+국민연금공단 대량보유주식 보고내역 수집 (DART OpenAPI)
+금융감독원 전자공시시스템 opendart.fss.or.kr
 
 [필요 사항]
-1. data.go.kr 회원 가입
-2. "국민연금공단 대량보유주식 보고내역" 오픈API 활용신청
-3. 마이페이지 > 오픈API > 인증키 확인 후 .env 에 DATA_GO_KR_KEY=키 추가
-4. API 상세 기능 정보의 엔드포인트를 NPS_API_ENDPOINT 에 설정
+1. https://opendart.fss.or.kr/ 에서 인증키 발급 (회원가입 후 OpenAPI 신청)
+2. .env 에 DART_API_KEY=인증키 추가
 
-[참고] 더 넓은 보유 현황을 원하면 data.go.kr 3070507 "국민연금공단 국내주식 투자정보"
-(연도말 기준 전체 국내주식 종목별 평가액/지분율/비중) 을 추천.
+[API 흐름]
+1. list.json — 대량보유상황보고서 목록 (최근 1년)
+2. flr_nm "국민연금공단" 필터
+3. 종목별 최신 보고 기준으로 테이블 생성
+4. 지분율은 DART 목록에 없으므로 rcept_no 기반 상세 링크 제공
+
+[참고] list.json 응답 예시:
+  {
+    "corp_code": "00126380",
+    "corp_name": "삼성전자",       ← 발행회사
+    "stock_code": "005930",       ← 종목코드 (네이버 금융 링크용)
+    "report_nm": "주식등의대량보유상황보고서(변동보고)",
+    "rcept_no": "20250513000778", ← 접수번호 (상세 링크용)
+    "flr_nm": "국민연금공단",     ← 보고자명
+    "rcept_dt": "20250513",       ← 접수일
+    "rm": "지분율 변동"            ← 비고
+  }
 """
 
 import os
 import sys
 import json
+import re
 import requests
-import urllib.parse
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Dict, Optional
 
@@ -35,149 +48,170 @@ def load_env():
 
 load_env()
 
-DATA_GO_KR_KEY = os.getenv("DATA_GO_KR_KEY", "")
-# 실제 엔드포인트는 data.go.kr 활용신청 후 확인 (예시)
-NPS_API_ENDPOINT = os.getenv(
-    "NPS_API_ENDPOINT",
-    "http://apis.data.go.kr/1352000/service/NpsMassHoldStkRpt/getNpsMassHoldStkRptList"
-)
+DART_API_KEY = os.getenv("DART_API_KEY", "")
+DART_BASE = "https://opendart.fss.or.kr/api"
 
 BASE_DIR = Path(__file__).parent
 NPS_JSON_PATH = BASE_DIR / "nps_holdings.json"
 NPS_HTML_PATH = BASE_DIR / "nps_holdings.html"
-TEMPLATE_HTML_PATH = BASE_DIR / "template.html"
 
 
-def fetch_nps_holdings() -> Optional[List[Dict]]:
-    """
-    공공데이터포털 API 호출 → 대량보유주식 목록 반환
-    응답 구조는 공공데이터포털 일반 형태로 가정:
-    {
-      "response": {
-        "header": { "resultCode": "00", "resultMsg": "NORMAL SERVICE." },
-        "body": {
-          "items": { "item": [ { ... }, ... ] },
-          "totalCount": N
-        }
-      }
-    }
-    """
-    if not DATA_GO_KR_KEY:
-        print("❌ DATA_GO_KR_KEY 미설정 — .env 에 공공데이터포털 인증키를 추가하세요")
+def dart_list(params: Dict) -> Optional[Dict]:
+    """DART list.json 호출"""
+    url = f"{DART_BASE}/list.json"
+    try:
+        resp = requests.get(url, params=params, timeout=20)
+        if resp.status_code != 200:
+            print(f"❌ DART HTTP {resp.status_code}: {resp.text[:200]}")
+            return None
+        return resp.json()
+    except requests.RequestException as e:
+        print(f"❌ DART 요청 실패: {e}")
         return None
 
-    # 공공데이터포털은 URL-encoded serviceKey 가 필요한 경우가 많음
-    service_key = urllib.parse.unquote(DATA_GO_KR_KEY)
 
-    # 페이지 단위로 전체 데이터 수집 (최대 1000건 가정)
+def fetch_nps_reports() -> Optional[List[Dict]]:
+    """
+    DART에서 국민연금공단 대량보유상황보고서 목록 수집
+    최근 1년간, 100개씩 페이지 순회
+    """
+    if not DART_API_KEY:
+        print("❌ DART_API_KEY 미설정 — .env 에 DART 인증키를 추가하세요")
+        print("   → https://opendart.fss.or.kr/ 에서 발급 가능")
+        return None
+
+    end_dt = datetime.now()
+    bgn_dt = end_dt - timedelta(days=365)
+
     all_items: List[Dict] = []
     page_no = 1
-    num_of_rows = 100
+    page_count = 100
 
     while True:
         params = {
-            "serviceKey": service_key,
-            "pageNo": page_no,
-            "numOfRows": num_of_rows,
-            # 일부 API는 _type=json 또는 type=json 파라미터 필요
-            "_type": "json",
+            "crtfc_key": DART_API_KEY,
+            "bgn_de": bgn_dt.strftime("%Y%m%d"),
+            "end_de": end_dt.strftime("%Y%m%d"),
+            "pblntf_detail_ty": "C",      # 대량보유상황보고서
+            "page_count": page_count,
+            "page_no": page_no,
         }
 
-        try:
-            resp = requests.get(NPS_API_ENDPOINT, params=params, timeout=20)
-            print(f"   → API 요청: page={page_no}, status={resp.status_code}")
-        except requests.RequestException as e:
-            print(f"❌ API 요청 실패: {e}")
+        data = dart_list(params)
+        if data is None:
             return None
 
-        if resp.status_code != 200:
-            print(f"❌ API 오류: HTTP {resp.status_code} — {resp.text[:200]}")
+        # DART 에러 코드 처리
+        status = data.get("status", "")
+        if status != "000":
+            msg = data.get("message", "unknown")
+            print(f"❌ DART 에러: [{status}] {msg}")
             return None
 
-        # 공공데이터포털 응답 파싱 (JSON 가정)
-        try:
-            data = resp.json()
-        except json.JSONDecodeError:
-            # JSON 파싱 실패 시 XML일 수 있음 — 일단 None 반환
-            print("⚠️ JSON 파싱 실패 — 응답이 XML일 수 있습니다. 응답 일부:")
-            print(resp.text[:500])
-            return None
-
-        # 공공데이터포털 표준 응답 구조 탐색
-        body = data.get("response", {}).get("body", {})
-        items_wrap = body.get("items", {})
-        items = items_wrap.get("item", []) if isinstance(items_wrap, dict) else []
-        total_count = body.get("totalCount", 0)
-
+        items = data.get("list", [])
         if not items:
             break
 
-        all_items.extend(items)
-        print(f"   ✅ page {page_no}: {len(items)}건 수집 (누적 {len(all_items)} / {total_count})")
+        # 국민연금공단 필터
+        for item in items:
+            flr = item.get("flr_nm", "")
+            if "국민연금" in flr or "NPS" in flr.upper():
+                all_items.append(item)
 
-        if len(all_items) >= total_count:
+        total_page = data.get("total_page", 1)
+        print(f"   → page {page_no}/{total_page}: {len(items)}건 중 NPS {sum(1 for i in items if '국민연금' in i.get('flr_nm',''))}건")
+
+        if page_no >= total_page:
             break
         page_no += 1
 
-        # 안전장치
         if page_no > 20:
             print("⚠️ 페이지 상한 도달")
             break
 
+    print(f"   ✅ 총 수집: {len(all_items)}건")
     return all_items
 
 
-def parse_nps_items(items: List[Dict]) -> List[Dict]:
+def parse_report_name(report_nm: str) -> Dict[str, str]:
     """
-    API 원본 → 표준화된 딕셔너리 리스트
-    필드명은 실제 API 응답에 따라 조정 필요.
-    공공데이터포털 컬럼정의서 기반 가정 필드:
-      - 종목명, 종목코드, 발행기관, 보고서작성기준일, 지분율, 보고사유, 보고일
+    report_nm 에서 종목명/사유 추출
+    예: "주식등의대량보유상황보고서(변동보고)" → {"type": "변동보고"}
+    예: "주식등의대량보유상황보고서(삼성전자)" → {"stock": "삼성전자"}
     """
-    parsed = []
+    m = re.search(r'\(([^)]+)\)', report_nm)
+    inner = m.group(1) if m else ""
+
+    # 괄호 안 내용이 종목명인지 사유인지 추론
+    # 사유 패턴: 임의변경, 변동보고, 처분보고, 신규보고 등
+    reason_keywords = ["변동", "신규", "처분", "임의변경", "변경", "보고"]
+    is_reason = any(k in inner for k in reason_keywords) and len(inner) <= 10
+
+    if is_reason:
+        return {"reason": inner, "stock": ""}
+    else:
+        return {"reason": "", "stock": inner}
+
+
+def deduplicate_by_stock(items: List[Dict]) -> List[Dict]:
+    """
+    같은 종목(stock_code 기준)이 여러 번 보고된 경우 최신 접수일(rcept_dt)만 남김
+    """
+    by_stock: Dict[str, Dict] = {}
+    for item in items:
+        code = item.get("stock_code", "").strip()
+        if not code or code == "000000":
+            # 종목코드가 없으면 corp_name 기준
+            key = item.get("corp_name", "")
+        else:
+            key = code
+
+        if key not in by_stock:
+            by_stock[key] = item
+        else:
+            # 더 최신 보고로 교체
+            existing_dt = by_stock[key].get("rcept_dt", "0")
+            new_dt = item.get("rcept_dt", "0")
+            if new_dt > existing_dt:
+                by_stock[key] = item
+
+    # 접수일 기준 내림차순
+    result = list(by_stock.values())
+    result.sort(key=lambda x: x.get("rcept_dt", ""), reverse=True)
+    return result
+
+
+def enrich_records(items: List[Dict]) -> List[Dict]:
+    """DART 원본 → 표준화된 레코드"""
+    records = []
     for raw in items:
-        # 필드명 매핑 (실제 응답에 맞게 수정 필요)
-        # 아래는 컬럼정의서상 이름을 기반으로 한 추정
+        parsed = parse_report_name(raw.get("report_nm", ""))
+        code = raw.get("stock_code", "").strip()
+        corp = raw.get("corp_name", "").strip()
+
         record = {
-            "stock_name": _str(raw, "종목명", "stockName", "corp_name", "item_nm"),
-            "stock_code": _str(raw, "종목코드", "stockCode", "item_cd", "stock_cd"),
-            "corp_name": _str(raw, "발행기관", "발행기관명", "corpName", "issu_cmpy_nm"),
-            "base_date": _str(raw, "보고서작성기준일", "보고서 작성기준일", "baseDate", "rpt_dt"),
-            "holding_ratio": _float(raw, "지분율", "지분율퍼센트", "holdRate", "hold_per"),
-            "report_reason": _str(raw, "보고사유", "reportReason", "report_reason", "rpt_rsn"),
-            "report_date": _str(raw, "보고일", "reportDate", "report_date", "rcept_dt"),
-            "market": _infer_market(raw),
+            "stock_name": parsed.get("stock") or corp,
+            "stock_code": code if code and code != "000000" else "",
+            "corp_name": corp,
+            "report_type": parsed.get("reason") or raw.get("rm", ""),
+            "report_date": _fmt_date(raw.get("rcept_dt", "")),
+            "rcept_no": raw.get("rcept_no", ""),
+            "flr_nm": raw.get("flr_nm", ""),
+            "report_nm": raw.get("report_nm", ""),
+            "market": _infer_market(code),
         }
-        parsed.append(record)
-
-    # 지분율 높은 순 정렬
-    parsed.sort(key=lambda x: x["holding_ratio"], reverse=True)
-    return parsed
+        records.append(record)
+    return records
 
 
-def _str(raw: Dict, *candidates) -> str:
-    for key in candidates:
-        if key in raw and raw[key] is not None:
-            return str(raw[key]).strip()
-    return ""
+def _fmt_date(ymd: str) -> str:
+    if len(ymd) == 8:
+        return f"{ymd[:4]}-{ymd[4:6]}-{ymd[6:]}"
+    return ymd
 
 
-def _float(raw: Dict, *candidates) -> float:
-    for key in candidates:
-        if key in raw and raw[key] is not None:
-            try:
-                val = str(raw[key]).replace("%", "").replace(",", "").strip()
-                return float(val)
-            except (ValueError, TypeError):
-                pass
-    return 0.0
-
-
-def _infer_market(raw: Dict) -> str:
-    """시장 구분 추론 — 종목코드 6자리 기준"""
-    code = _str(raw, "종목코드", "stockCode", "item_cd", "stock_cd")
+def _infer_market(code: str) -> str:
     if len(code) == 6:
-        # KOSDAQ: 코드가 0으로 시작하는 경우가 많음 (정확하지 않음, 참고용)
         if code.startswith("0") and code[1] != "0":
             return "KOSDAQ"
     return "KOSPI"
@@ -187,17 +221,16 @@ def generate_nps_html(records: List[Dict]) -> str:
     """nps_holdings.html 생성"""
     now_kst = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
 
-    # 상위 20개만 테이블로, 전체는 JSON으로
-    top_n = 20
+    # 상위 30개
+    top_n = 30
     top_records = records[:top_n]
 
     rows_html = ""
     for i, r in enumerate(top_records, 1):
-        ratio = r["holding_ratio"]
-        ratio_bar = min(ratio / 10 * 100, 100)  # 10% 기준 max width
-        ratio_color = "#ff4757" if ratio >= 10 else "#e67e22" if ratio >= 7 else "#3498db"
-
+        dart_link = f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={r['rcept_no']}"
         naver_link = f"https://finance.naver.com/item/main.nhn?code={r['stock_code']}" if r["stock_code"] else "#"
+
+        type_badge_color = "#e67e22" if "변동" in r["report_type"] else "#3498db" if "신규" in r["report_type"] else "#95a5a6"
 
         rows_html += f'''<tr>
             <td class="col-rank">{i}</td>
@@ -205,36 +238,32 @@ def generate_nps_html(records: List[Dict]) -> str:
                 <div class="stock-name">{r["stock_name"]}</div>
                 <div class="stock-code">{r["stock_code"]} <span class="market-badge {r["market"].lower()}">{r["market"]}</span></div>
             </td>
-            <td class="col-corp">{r["corp_name"]}</td>
-            <td class="col-ratio">
-                <div class="ratio-bar-wrap">
-                    <div class="ratio-bar" style="width:{ratio_bar}%;background:{ratio_color}"></div>
-                    <span class="ratio-text">{ratio:.2f}%</span>
-                </div>
+            <td class="col-type">
+                <span class="type-badge" style="background:{type_badge_color}15;color:{type_badge_color};border:1px solid {type_badge_color}40">{r["report_type"]}</span>
             </td>
-            <td class="col-date">{r["base_date"]}<br><small>{r["report_reason"]}</small></td>
+            <td class="col-date">{r["report_date"]}</td>
             <td class="col-link">
                 <a href="{naver_link}" target="_blank" rel="noopener noreferrer">📈</a>
+                <a href="{dart_link}" target="_blank" rel="noopener noreferrer" style="margin-left:8px">📋</a>
             </td>
         </tr>\n'''
 
-    # 전체 건수 요약
     total = len(records)
     kospi_count = sum(1 for r in records if r["market"] == "KOSPI")
     kosdaq_count = sum(1 for r in records if r["market"] == "KOSDAQ")
 
-    # 상위 3개 종목 카드
+    # TOP3 카드 (최신 3건)
     top3_cards = ""
-    for r in records[:3]:
+    medal = ["🥇", "🥈", "🥉"]
+    for idx, r in enumerate(records[:3], 0):
         top3_cards += f'''<div class="nps-top-card">
-            <div class="top-rank">🥇</div>
+            <div class="top-rank">{medal[idx]}</div>
             <div class="top-name">{r["stock_name"]}</div>
-            <div class="top-code">{r["stock_code"]}</div>
-            <div class="top-ratio">{r["holding_ratio"]:.2f}%</div>
-            <div class="top-corp">{r["corp_name"]}</div>
+            <div class="top-code">{r["stock_code"]} · {r["market"]}</div>
+            <div class="top-type">{r["report_type"]}</div>
+            <div class="top-date">{r["report_date"]}</div>
         </div>'''
 
-    # 기존 템플릿의 스타일을 재사용하면서 NPS 전용 스타일 추가
     html = f'''<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -243,7 +272,6 @@ def generate_nps_html(records: List[Dict]) -> str:
     <title>국민연금 대량보유주식 | Surge Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* ── 기본 ─────────────────────────────── */
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
             font-family: 'Noto Sans KR', -apple-system, sans-serif;
@@ -257,8 +285,6 @@ def generate_nps_html(records: List[Dict]) -> str:
             margin: 0 auto;
             padding: 20px 20px 40px;
         }}
-
-        /* ── 헤더 ─────────────────────────────── */
         header {{
             text-align: center;
             padding: 40px 0 20px;
@@ -290,8 +316,6 @@ def generate_nps_html(records: List[Dict]) -> str:
             font-size: 0.8rem;
             margin: 15px 0 25px;
         }}
-
-        /* ── 요약 카드 ────────────────────────── */
         .summary-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -316,8 +340,6 @@ def generate_nps_html(records: List[Dict]) -> str:
             color: #a0aec0;
             margin-top: 4px;
         }}
-
-        /* ── TOP3 ─────────────────────────────── */
         .top3-grid {{
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -336,10 +358,18 @@ def generate_nps_html(records: List[Dict]) -> str:
         .top-rank {{ font-size: 1.4rem; margin-bottom: 8px; }}
         .top-name {{ font-size: 1.1rem; font-weight: 600; color: #2d3748; }}
         .top-code {{ font-size: 0.75rem; color: #a0aec0; margin: 4px 0; }}
-        .top-ratio {{ font-size: 1.3rem; font-weight: 700; color: #ff4757; margin: 8px 0; }}
-        .top-corp {{ font-size: 0.8rem; color: #718096; }}
+        .top-type {{
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e67e22;
+            margin: 8px 0;
+            padding: 2px 10px;
+            background: rgba(230,126,34,0.1);
+            border-radius: 12px;
+            display: inline-block;
+        }}
+        .top-date {{ font-size: 0.8rem; color: #718096; }}
 
-        /* ── 테이블 ────────────────────────────── */
         .table-card {{
             background: rgba(255,255,255,0.7);
             border-radius: 24px;
@@ -354,11 +384,7 @@ def generate_nps_html(records: List[Dict]) -> str:
             color: #2d3748;
             margin-bottom: 16px;
         }}
-        table {{
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.85rem;
-        }}
+        table {{ width: 100%; border-collapse: collapse; font-size: 0.85rem; }}
         th {{
             text-align: left;
             padding: 10px 8px;
@@ -385,25 +411,18 @@ def generate_nps_html(records: List[Dict]) -> str:
         }}
         .market-badge.kospi {{ background: #e6fffa; color: #319795; }}
         .market-badge.kosdaq {{ background: #fff5f5; color: #e53e3e; }}
-        .col-corp {{ color: #718096; font-size: 0.85rem; }}
-        .col-ratio {{ min-width: 120px; }}
-        .ratio-bar-wrap {{
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .col-type {{ min-width: 100px; }}
+        .type-badge {{
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            white-space: nowrap;
         }}
-        .ratio-bar {{
-            height: 6px;
-            border-radius: 3px;
-            min-width: 4px;
-            transition: width 0.6s ease;
-        }}
-        .ratio-text {{ font-weight: 600; color: #2d3748; font-size: 0.9rem; white-space: nowrap; }}
-        .col-date {{ color: #718096; font-size: 0.8rem; line-height: 1.4; }}
-        .col-link {{ text-align: center; font-size: 1.1rem; }}
+        .col-date {{ color: #718096; font-size: 0.85rem; }}
+        .col-link {{ text-align: center; font-size: 1.1rem; white-space: nowrap; }}
         .col-link a {{ text-decoration: none; }}
 
-        /* ── 안내 문구 ────────────────────────── */
         .notice {{
             margin-top: 24px;
             padding: 16px 20px;
@@ -414,11 +433,16 @@ def generate_nps_html(records: List[Dict]) -> str:
             color: #856404;
             line-height: 1.5;
         }}
+        .notice code {{
+            background: rgba(0,0,0,0.05);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }}
 
         @media (max-width: 640px) {{
             .top3-grid {{ grid-template-columns: 1fr; }}
             th, td {{ font-size: 0.8rem; padding: 8px 4px; }}
-            .col-corp {{ display: none; }}
         }}
     </style>
 </head>
@@ -427,12 +451,11 @@ def generate_nps_html(records: List[Dict]) -> str:
         <header>
             <a href="index.html" class="back-link">← 급등주 알림으로 돌아가기</a>
             <h1>🏛️ 국민연금 대량보유주식</h1>
-            <p>지분율 5% 이상 보유 및 변동 보고 내역 (공공데이터포털 기반)</p>
+            <p>DART 공시 기반 — 국민연금공단 대량보유상황보고서 목록</p>
         </header>
 
-        <div class="update-time">📅 업데이트: {now_kst} KST | 총 {total}개 종목</div>
+        <div class="update-time">📅 업데이트: {now_kst} KST | 총 {total}개 종목 | 최근 1년</div>
 
-        <!-- 요약 카드 -->
         <div class="summary-grid">
             <div class="summary-card">
                 <div class="summary-number">{total}</div>
@@ -447,28 +470,25 @@ def generate_nps_html(records: List[Dict]) -> str:
                 <div class="summary-label">KOSDAQ</div>
             </div>
             <div class="summary-card">
-                <div class="summary-number">{records[0]["holding_ratio"]:.1f}%</div>
-                <div class="summary-label">최고 지분율</div>
+                <div class="summary-number">{records[0]["report_date"] if records else "-"}</div>
+                <div class="summary-label">최신 보고일</div>
             </div>
         </div>
 
-        <!-- TOP3 -->
         <div class="top3-grid">
             {top3_cards}
         </div>
 
-        <!-- 테이블 -->
         <div class="table-card">
-            <div class="table-title">📊 보유 현황 상위 {top_n}개</div>
+            <div class="table-title">📊 보고 현황 상위 {top_n}개</div>
             <table>
                 <thead>
                     <tr>
                         <th class="col-rank">#</th>
                         <th>종목</th>
-                        <th class="col-corp">발행기관</th>
-                        <th>지분율</th>
-                        <th>기준일 / 사유</th>
-                        <th>차트</th>
+                        <th>보고 유형</th>
+                        <th>접수일</th>
+                        <th>링크</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -479,32 +499,36 @@ def generate_nps_html(records: List[Dict]) -> str:
 
         <div class="notice">
             <strong>ℹ️ 데이터 안내</strong><br>
-            • 본 데이터는 국민연금공단이 DART에 제출한 <strong>대량보유상황보고서</strong>(지분율 5% 이상 또는 1% 이상 변동) 내역입니다.<br>
-            • 지분율 5% 미만 종목은 포함되지 않으며, 전체 보유 현황과는 다를 수 있습니다.<br>
-            • 더 넓은 범위의 국내주식 투자 현황을 원하시면 data.go.kr "국민연금공단 국내주식 투자정보"(ID: 3070507)를 참고하세요.
+            • 본 데이터는 <strong>금융감독원 DART</strong>에서 제공하는 공시 목록입니다.<br>
+            • 지분율은 DART 목록 API에 포함되지 않아 <strong>📋 버튼</strong>으로 원문 보고서를 확인하세요.<br>
+            • 같은 종목이 여러 번 보고된 경우 <strong>최신 접수일 기준</strong>으로 중복 제거됩니다.<br>
+            • 📈 버튼: 네이버 금융 종목 페이지 · 📋 버튼: DART 공시 원문 보기<br>
+            • DART API 키 발급: <code>https://opendart.fss.or.kr</code>
         </div>
     </div>
 </body>
 </html>'''
-
     return html
 
 
 def main():
-    print("🏛️ 국민연금 대량보유주식 데이터 수집 시작")
+    print("🏛️ 국민연금 대량보유주식 데이터 수집 시작 (DART)")
+    print(f"   → DART API 키: {'설정됨' if DART_API_KEY else '미설정'}")
 
-    items = fetch_nps_holdings()
+    items = fetch_nps_reports()
     if items is None:
-        print("⚠️ API 미설정 또는 오류 — nps_holdings.json 기존 데이터 사용 시도")
+        print("⚠️ API 미설정 또는 오류 — 기존 데이터 사용 시도")
         if NPS_JSON_PATH.exists():
             with open(NPS_JSON_PATH, 'r', encoding='utf-8') as f:
                 records = json.load(f)
             print(f"   → 기존 데이터 {len(records)}건 로드")
         else:
             print("❌ 기존 데이터도 없음 — 종료")
-            sys.exit(1)
+            # 빈 페이지라도 생성 (사용자 경험)
+            records = []
     else:
-        records = parse_nps_items(items)
+        deduped = deduplicate_by_stock(items)
+        records = enrich_records(deduped)
         with open(NPS_JSON_PATH, 'w', encoding='utf-8') as f:
             json.dump(records, f, ensure_ascii=False, indent=2)
         print(f"   ✅ {len(records)}건 저장 → {NPS_JSON_PATH}")

@@ -1145,7 +1145,7 @@ def main():
     # 5. HTML 업데이트 (최종 데이터)
     update_html(fresh_data)
 
-    # 7. 국민연금 대량보유주식 페이지 갱신 (공공데이터포털 API)
+    # 7. 국민연금 대량보유주식 페이지 갱신 (DART OpenAPI)
     try:
         import subprocess
         nps_script = Path(__file__).parent / "nps_holdings.py"
