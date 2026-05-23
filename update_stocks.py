@@ -1145,6 +1145,21 @@ def main():
     # 5. HTML 업데이트 (최종 데이터)
     update_html(fresh_data)
 
+    # 7. 국민연금 대량보유주식 페이지 갱신 (공공데이터포털 API)
+    try:
+        import subprocess
+        nps_script = Path(__file__).parent / "nps_holdings.py"
+        result = subprocess.run(
+            [sys.executable, str(nps_script)],
+            capture_output=True, text=True, timeout=60
+        )
+        if result.returncode == 0:
+            print("🏛️ 국민연금 페이지 갱신 완료")
+        else:
+            print(f"⚠️ NPS 페이지 갱신 실패: {result.stderr[:200]}")
+    except Exception as e:
+        print(f"⚠️ NPS 페이지 갱신 중 오류: {e}")
+
     print(f"\n✨ 작업 완료!")
     print(f"💡 장 마감 후에는 마지막 장중 데이터를 표시합니다.")
 
