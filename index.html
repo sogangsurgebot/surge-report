@@ -1327,6 +1327,86 @@
             color: var(--color-text-light);
         }
 
+        /* ── 탭 내비게이션 ───────────────────────── */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+        .tab-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 24px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            color: #a0aec0;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .tab-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            color: #667eea;
+        }
+        .tab-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(102,126,234,0.3);
+        }
+        @media (max-width: 480px) {
+            .tab-nav { gap: 6px; }
+            .tab-link { padding: 8px 14px; font-size: 0.8rem; }
+        }
+
+
+        /* ── 탭 내비게이션 ───────────────────────── */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+        .tab-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 24px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            color: #a0aec0;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .tab-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            color: #667eea;
+        }
+        .tab-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(102,126,234,0.3);
+        }
+        @media (max-width: 480px) {
+            .tab-nav { gap: 6px; }
+            .tab-link { padding: 8px 14px; font-size: 0.8rem; }
+        }
 </style>
 
 <style>
@@ -2075,12 +2155,799 @@
 <!-- DYNAMIC_VERSION_END -->
             </div>
         </header>
+
+        <!-- 탭 내비게이션 -->
+        <nav class="tab-nav">
+            <a href="index.html" class="tab-link active">📈 급등주</a>
+            <a href="gurus.html" class="tab-link">🏆 투자고수</a>
+            <a href="nps_holdings.html" class="tab-link">🏛️ 국민연금</a>
+        </nav>
         <!-- 급등주 판단 로직 상세 설명 (접기/펼치기) -->
         
         
 
 
         
+        
+            <div class="collapse-content" style="padding-top: var(--space-md);">
+<!-- 투자 고수 인사이트 - 슬라이드 형식 -->
+        <div class="card gurus-section">
+            <h2 class="gurus-title">🏆 투자 고수 인사이트</h2>
+            
+            <!-- 두 전문가 카드 나란히 -->
+            <div class="expert-grid">
+                        <div class="expert-card oil-card" id="expertSection">
+                            <div class="expert-header">
+                                <div class="expert-avatar">🛢️</div>
+                                <div class="expert-info">
+                                    <h2>오일전문가 (임인홍)</h2>
+                                    <p>10년 연평균 24% 수익률 · 80억 자산 보유</p>
+                                </div>
+                            </div>
+                            
+                            <div class="portfolio-grid">
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">총 주식 자산</div>
+                                    <div class="portfolio-value positive">80억+</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">국내 주식</div>
+                                    <div class="portfolio-value">금융·에너지</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">해외 주식</div>
+                                    <div class="portfolio-value">오일 메이저</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">6년 성과</div>
+                                    <div class="portfolio-value positive">10억→80억</div>
+                                </div>
+                            </div>
+                            
+                            <div class="top-holdings">
+                                <h3>🏆 보유종목 TOP 3</h3>
+                                <ul class="holding-list">
+                                    <li class="holding-item">
+                                        <div class="holding-rank gold">1</div>
+                                        <span class="holding-name">하나금융지주</span>
+                                        <span class="holding-code">압도적 1위</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank silver">2</div>
+                                        <span class="holding-name">엑슨모빌 (XOM)</span>
+                                        <span class="holding-code">해외 에너지</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank bronze">3</div>
+                                        <span class="holding-name">현대차2우</span>
+                                        <span class="holding-code">제조·수출</span>
+                                    </li>
+                                </ul>
+                                <div class="date-note">📅 기준일: 2026년 4월 마지막 주 | 정제마진 현황 반영 | 🎥 최신 영상 기준</div>
+                            </div>
+                            
+                            <div class="philosophy">
+                                <h4>📚 투자 철학</h4>
+                                <p>"황금알을 낳는 거위를 사고, 황금 알로는 다시 저렴한 거위를 사면서 거위 수를 계속 늘린다" — 배당금 전액 재투자를 통한 복리 가속화 전략</p>
+                            </div>
+                            
+                            <div class="source-link">
+                                <a href="https://blog.naver.com/oilpro1" target="_blank">📎 네이버 블로그</a>
+                                <a href="https://youtu.be/_bWceueb5r8" target="_blank" style="margin-left: 1rem;">🎥 최신 영상: 2026년 4월 마지막 주 주식 현황</a>
+                            </div>
+                        </div>
+                    </div>
+                        <div class="expert-card sesang-card" id="sesangSection">
+                            <div class="expert-header">
+                                <div class="expert-avatar">🎓</div>
+                                <div class="expert-info">
+                                    <h2>세상학개론 (한정수)</h2>
+                                    <p>경제·투자 유튜버 · 시사·재테크 인플루언서</p>
+                                </div>
+                            </div>
+                            
+                            <div class="portfolio-grid">
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">총 콘텐츠</div>
+                                    <div class="portfolio-value">500+</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">주요 분야</div>
+                                    <div class="portfolio-value">시사·경제</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">투자 스타일</div>
+                                    <div class="portfolio-value">성장+가치</div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <div class="portfolio-label">핵심 콘텐츠</div>
+                                    <div class="portfolio-value positive">급등주분석</div>
+                                </div>
+                            </div>
+                            
+                            <div class="top-holdings">
+                                <h3>🔥 최신 콘텐츠 TOP 3</h3>
+                                <ul class="holding-list">
+                                    <li class="holding-item">
+                                        <div class="holding-rank gold">1</div>
+                                        <span class="holding-name">AI 인프라 투자 전망</span>
+                                        <span class="holding-code">OpenAI 스타게이트 심층 분석</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank silver">2</div>
+                                        <span class="holding-name">시장 전망 총정리</span>
+                                        <span class="holding-code">주간 리포트</span>
+                                    </li>
+                                    <li class="holding-item">
+                                        <div class="holding-rank bronze">3</div>
+                                        <span class="holding-name">기업 펀더멘털 분석</span>
+                                        <span class="holding-code">심층 리서치</span>
+                                    </li>
+                                </ul>
+                                <div class="date-note">📅 기준: 2026년 5월</div>
+                            </div>
+                            
+                            <div class="philosophy">
+                                <h4>📚 최신 인사이트</h4>
+                                <p><strong>🤖 AI 인프라 슈퍼사이클:</strong> OpenAI 스타게이트, 10GW 목표 초과 달성 · 지난 90일간 3GW 추가 가동 · 텍사스 애빌린 부지에서 GPT-5.5 학습 완료. "연산력이 AI의 미래를 결정한다" — 데이터센터, 전력·에너지, 반도체 3대 수혜 국면 진입.</p>
+                                <p style="margin-top:0.5rem;font-size:var(--font-sm);color:var(--color-text-light);">📎 출처: 세상학개론 커뮤니티 글 (19시간 전) · OpenAI 'Building the compute infrastructure for the Intelligence Age'</p>
+                            </div>
+                            
+                            <div class="source-link">
+                                <a href="https://youtube.com/@sesang101" target="_blank">📺 유튜브</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- 페이지네이션 (dots) -->
+                <div class="swiper-pagination"></div>
+                
+                <!-- 네비게이션 화살표 -->
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+            </div>
+        </div>
+        
+        <!-- ===== 추천 종목 스와이프 ===== -->
+<!-- ===== 추천 종목 스와이프 ===== -->
+        <div class="card" style="padding: var(--space-md);">
+            <h2 class="gurus-title" style="margin-bottom: var(--space-sm);">🎯 투자 고수 추천 종목</h2>
+            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">◀ 좌우로 스와이프하여 전문가별 추천 종목 확인 ▶</p>
+            
+            <div class="swiper picks-swiper">
+                <div class="swiper-wrapper">
+                    <!-- Slide 1: 오일전문가 추천 종목 -->
+            <div class="swiper-slide">
+            <h2 class="gurus-title">🎯 오일전문가 추천 종목</h2>
+            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">배당+성장 전략 기반 선별 종목 · 투자 인사이트 적용</p>
+            
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-label">추천 섹터</div>
+                    <div class="portfolio-value">금융·통신·에너지</div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-label">선별 기준</div>
+                    <div class="portfolio-value">배당수익률 5%+</div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-label">투자 스타일</div>
+                    <div class="portfolio-value">장기 보유</div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-label">리스크 관리</div>
+                    <div class="portfolio-value positive">분산 투자</div>
+                </div>
+            </div>
+            
+            <div class="top-holdings" style="background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(250,208,196,0.15) 100%); border: 1px solid rgba(255,154,158,0.3);">
+                <h3 style="color: #ff6b6b;">⭐ 오일전문가 추천 TOP 3 (분석 기반)</h3>
+                <ul class="holding-list">
+                    <li class="holding-item">
+                        <div class="holding-rank gold">1</div>
+                        <span class="holding-name">KB금융지주</span>
+                        <span class="holding-code">105560 · 배당수익률 5.2% · PER 6.5배</span>
+                    </li>
+                    <li class="holding-item">
+                        <div class="holding-rank silver">2</div>
+                        <span class="holding-name">신한지주</span>
+                        <span class="holding-code">055550 · 배당수익률 5.0% · PER 6.8배</span>
+                    </li>
+                    <li class="holding-item">
+                        <div class="holding-rank bronze">3</div>
+                        <span class="holding-name">SK텔레콤</span>
+                        <span class="holding-code">017670 · 배당수익률 5.5% · PER 8.2배</span>
+                    </li>
+                </ul>
+                <div class="date-note">📅 기준일: 2026년 4월 | ⚠️ 투자 유의사항 참고</div>
+            </div>
+            
+            <details class="logic-details oil-details" style="margin-top:1rem;">
+                <summary class="logic-summary" style="cursor:pointer;padding:0.8rem;background:rgba(255,154,158,0.1);border-radius:8px;border:2px solid rgba(255,154,158,0.3);display:flex;flex-direction:column;gap:4px;">
+                    <span style="font-weight:700;color:#ff6b6b;font-size:1rem;display:flex;align-items:center;gap:8px;">
+                        ▶ 📚 선별 근거 및 판단 기준 보기
+                    </span>
+                    <span style="font-size:var(--font-sm);color:#666;">오일전문가 투자 철학 기반 상세 분석</span>
+                </summary>
+                
+                <div class="logic-content" style="padding:1rem 0;">
+                    <p style="margin-bottom: 0.8rem;"><strong>오일전문가 투자 철학 적용:</strong> "황금알을 낳는 거위를 선별하라" — 배당 안정성(5년 이상 연속 배당), 저평가(PER 15배 미만), 성장성(연평균 10%+)을 모두 충족하는 종목 중심으로 선별했습니다.</p>
+                    
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
+                        <strong style="color: #ff6b6b;">🥇 KB금융지주 (105560)</strong>
+                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
+                            <li>국내 금융지주 중 가장 높은 배당수익률(5.2%)과 낮은 PER(6.5배) 기록</li>
+                            <li>분기배당 도입으로 배당 안정성 확보, 10년 연속 배당 증가 추세</li>
+                            <li><strong>선별 근거:</strong> 오일전문가의 "황금 거위" 전략에 부합하는 대표 저평가 고배당주</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
+                        <strong style="color: #4ecdc4;">🥈 신한지주 (055550)</strong>
+                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
+                            <li>안정적 수익구조 기반 꾸준한 배당 증가 이력, PER 6.8배로 저평가 상태</li>
+                            <li>주주환원 정책 강화로 배당성향 상승 중, 밸류업 정책 수혜 기대</li>
+                            <li><strong>선별 근거:</strong> 배당 성장성 + 저평가 조합으로 장기 복리 효과 극대화 가능</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem;">
+                        <strong style="color: #cd853f;">🥉 SK텔레콤 (017670)</strong>
+                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
+                            <li>통신업계 최고 배당수익률(5.5%), 구독 기반 안정적 현금흐름 보유</li>
+                            <li>5G 투자 마무리 후 배당 여력 확대 예상, 경기방어적 성격 강함</li>
+                            <li><strong>선별 근거:</strong> 오일전문가의 안정적 "황금 거위" 포트폴리오 구성에 적합</li>
+                        </ul>
+                    </div>
+                </div>
+            </details>
+<!-- ===== 동적 콘텐츠: 국내 급등주 (update_stocks.py가 교체) ===== -->
+        <!-- DYNAMIC_STOCK_CARDS_START -->
+<div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2><div class="market-section market-section-primary" data-market="kospi">
+    <div class="market-header" style="border-left: 4px solid #ff6b6b;">
+        <h3 class="market-title">📈 KOSPI <span class="market-count">10개</span></h3>
+    </div>
+    <div class="grade-tabs"><button class="grade-tab active" data-grade="ALL" style="border-bottom-color:#95a5a6"><span>전체</span><span class="tab-count">10</span></button><button class="grade-tab" data-grade="S" style="border-bottom-color:#ff4757"><span>S</span><span class="tab-count">2</span></button><button class="grade-tab" data-grade="A" style="border-bottom-color:#e67e22"><span>A</span><span class="tab-count">1</span></button><button class="grade-tab" data-grade="B" style="border-bottom-color:#f39c12"><span>B</span><span class="tab-count">2</span></button><button class="grade-tab" data-grade="C" style="border-bottom-color:#2ecc71"><span>C</span><span class="tab-count">5</span></button><button class="grade-tab disabled" data-grade="D" style="border-bottom-color:#3498db"><span>D</span><span class="tab-count">0</span></button></div>
+    <div class="market-content"><div class="grade-content" data-grade="S"><div class="s-grade-grid"><div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">삼화콘덴서 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">001820</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">102,000</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+29.94%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">2,643,860</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 4.0)
+                <div class="score-detail">등락 29.9% / 거래대금 2697억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+            <div class="stock-chart">
+                <a href="https://finance.naver.com/item/main.nhn?code=001820" target="_blank" rel="noopener noreferrer">
+                    <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/001820.png" alt="삼화콘덴서 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                </a>
+                <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+            </div>
+        </div><div class="card stock-card" style="border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);">
+            <div class="stock-header">
+                <div>
+                    <div class="stock-name">삼화전자 <span class="market-badge kospi">KOSPI</span></div>
+                    <div class="stock-code">011230</div>
+                </div>
+                <span class="surge-badge badge-watch">👀 WATCH</span>
+            </div>
+            <div class="price-info">
+                <div class="price-item"><div class="price-label">현재가</div><div class="price-value">2,680</div></div>
+                <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+29.78%</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">2,526,093</div></div>
+            </div>
+            <div class="stock-reason">
+                📊 급등 watch (점수: 2.5)
+                <div class="score-detail">등락 29.8% / 거래대금 68억</div>
+            </div>
+            <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+            <div class="stock-chart">
+                <a href="https://finance.naver.com/item/main.nhn?code=011230" target="_blank" rel="noopener noreferrer">
+                    <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/011230.png" alt="삼화전자 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                </a>
+                <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+            </div>
+        </div></div></div><div class="grade-content" data-grade="A"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="092200">
+                <td class="col-name"><div><div>디아이씨</div><div class="col-code">092200</div></div></td>
+                <td class="col-change up">+23.58%</td>
+                <td><span class="surge-badge" style="background:#e67e22;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">A</span></td>
+                <td class="col-amount">529억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=092200" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="092200">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">디아이씨 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">092200</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">9,120</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+23.58%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,796,150</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 4.0)
+                            <div class="score-detail">등락 23.6% / 거래대금 529억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=092200" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/092200.png" alt="디아이씨 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr></tbody></table></div></div><div class="grade-content" data-grade="B"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="004150">
+                <td class="col-name"><div><div>한솔홀딩스</div><div class="col-code">004150</div></div></td>
+                <td class="col-change up">+12.14%</td>
+                <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
+                <td class="col-amount">318억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=004150" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="004150">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">한솔홀딩스 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">004150</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">4,110</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+12.14%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">7,725,917</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 3.4)
+                            <div class="score-detail">등락 12.1% / 거래대금 318억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=004150" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/004150.png" alt="한솔홀딩스 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr><tr data-stock="092220">
+                <td class="col-name"><div><div>KEC</div><div class="col-code">092220</div></div></td>
+                <td class="col-change up">+16.47%</td>
+                <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
+                <td class="col-amount">364억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=092220" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="092220">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">KEC <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">092220</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">6,790</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+16.47%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,364,039</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 3.6)
+                            <div class="score-detail">등락 16.5% / 거래대금 364억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=092220" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/092220.png" alt="KEC 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr></tbody></table></div></div><div class="grade-content" data-grade="C"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="018880">
+                <td class="col-name"><div><div>한온시스템</div><div class="col-code">018880</div></div></td>
+                <td class="col-change up">+4.65%</td>
+                <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
+                <td class="col-amount">851억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=018880" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="018880">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">한온시스템 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">018880</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">5,060</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+4.65%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">16,813,150</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 2.4)
+                            <div class="score-detail">등락 4.7% / 거래대금 851억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=018880" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/018880.png" alt="한온시스템 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr><tr data-stock="001740">
+                <td class="col-name"><div><div>SK네트웍스</div><div class="col-code">001740</div></div></td>
+                <td class="col-change up">+3.06%</td>
+                <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
+                <td class="col-amount">752억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=001740" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="001740">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">SK네트웍스 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">001740</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">8,420</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+3.06%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">8,926,609</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 2.1)
+                            <div class="score-detail">등락 3.1% / 거래대금 752억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=001740" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/001740.png" alt="SK네트웍스 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr><tr data-stock="005880">
+                <td class="col-name"><div><div>대한해운</div><div class="col-code">005880</div></div></td>
+                <td class="col-change up">+5.09%</td>
+                <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
+                <td class="col-amount">143억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=005880" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="005880">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">대한해운 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">005880</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">2,580</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+5.09%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,543,932</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 1.4)
+                            <div class="score-detail">등락 5.1% / 거래대금 143억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=005880" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/005880.png" alt="대한해운 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr><tr data-stock="008350">
+                <td class="col-name"><div><div>남선알미늄</div><div class="col-code">008350</div></div></td>
+                <td class="col-change up">+4.48%</td>
+                <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
+                <td class="col-amount">80억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=008350" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="008350">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">남선알미늄 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">008350</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">1,704</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+4.48%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">4,677,273</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 0.9)
+                            <div class="score-detail">등락 4.5% / 거래대금 80억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=008350" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/008350.png" alt="남선알미늄 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr><tr data-stock="064400">
+                <td class="col-name"><div><div>LG씨엔에스</div><div class="col-code">064400</div></div></td>
+                <td class="col-change up">+3.24%</td>
+                <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
+                <td class="col-amount">2689억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=064400" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="064400">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">LG씨엔에스 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">064400</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">82,800</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+3.24%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">3,247,942</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 2.1)
+                            <div class="score-detail">등락 3.2% / 거래대금 2689억</div>
+                        </div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=064400" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/064400.png" alt="LG씨엔에스 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
+            </tr></tbody></table></div></div></div>
+</div><div class="market-section market-section-primary" data-market="kosdaq">
+    <div class="market-header" style="border-left: 4px solid #4ecdc4;">
+        <h3 class="market-title">🚀 KOSDAQ <span class="market-count">0개</span></h3>
+    </div>
+    <div class="grade-tabs"><button class="grade-tab active disabled" data-grade="ALL" style="border-bottom-color:#95a5a6"><span>전체</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="S" style="border-bottom-color:#ff4757"><span>S</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="A" style="border-bottom-color:#e67e22"><span>A</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="B" style="border-bottom-color:#f39c12"><span>B</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="C" style="border-bottom-color:#2ecc71"><span>C</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="D" style="border-bottom-color:#3498db"><span>D</span><span class="tab-count">0</span></button></div>
+    <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <div class="empty-text">🚀 현재 KOSDAQ 시장에서 급등주(+3% 이상)가 감지되지 않았습니다</div>
+        <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
+    </div>
+</div></div>
+<!-- DYNAMIC_STOCK_CARDS_END -->
+        
+        <!-- ===== 동적 콘텐츠: 해외 급등주 (update_stocks.py가 교체) ===== -->
+        <!-- DYNAMIC_NASDAQ_START -->
+
+<!-- DYNAMIC_NASDAQ_END -->        
+    </div>
+    <!-- ===== 동적 콘텐츠: 히트맵 + 거래량 알림 (update_stocks.py가 교체) ===== -->
+        <!-- DYNAMIC_HEATMAP_START -->
+<div class="heatmap-compact">
+    <div class="heatmap-compact-header">
+        <span>🔥 오늘 뜨는 섹터</span>
+        <span class="heatmap-compact-count">총 9개</span>
+    </div>
+    <div class="heatmap-chips">
+<div class="heat-chip" style="background:#ffebee;color:#d32f2f;">
+    <span class="chip-emoji">📦</span>
+    <span class="chip-name">기타</span>
+    <span class="chip-count">9종목</span>
+    <span class="chip-avg">+11.5%</span>
+</div>
+    </div>
+</div>
+<!-- DYNAMIC_HEATMAP_END -->
+        
+        <details class="logic-details">
+            <summary class="logic-summary">
+                <span class="summary-title">🔍 급등주 판별 로직</span>
+                <span class="summary-hint">한국투자증권 OpenAPI 기반 실시간 데이터 분석</span>
+            </summary>
+            <div class="logic-content">
+                <div class="card logic-card" style="border: 2px solid var(--color-accent); background: linear-gradient(135deg, rgba(102,126,234,0.05) 0%, rgba(118,75,162,0.05) 100%);">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--space-md);">
+                        <!-- 1단계 -->
+                        <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #667eea;">
+                            <h4 style="color: #667eea; margin-bottom: 0.5rem;">1️⃣ 데이터 수집</h4>
+                            <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                                <li>KIS OpenAPI 거래량 순위 API 호출</li>
+                                <li>TR_ID: FHPST01710000 (거래량 순위)</li>
+                                <li>조회 범위: KOSPI + KOSDAQ 전 종목</li>
+                                <li>실시간 체결 데이터 기반</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 2단계 -->
+                        <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #764ba2;">
+                            <h4 style="color: #764ba2; margin-bottom: 0.5rem;">2️⃣ 필터링 조건</h4>
+                            <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                                <li><strong>등락률 ≥ +5.00%</strong> (전일 종가 대비)</li>
+                                <li><strong>거래량 활성화</strong>: 평균 대비 200% 이상</li>
+                                <li>상한가 근접 종목 우선 포함</li>
+                                <li>유동성 확보 (일일 거래대금 10억원 이상)</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 3단계 -->
+                        <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #f093fb;">
+                            <h4 style="color: #f093fb; margin-bottom: 0.5rem;">3️⃣ 정렬 및 선별</h4>
+                            <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                                <li>등락률 기준 <strong>내림차순 정렬</strong></li>
+                                <li>상위 6개 종목만 선별 표시</li>
+                                <li>동일 등락률 시 거래량 우선</li>
+                                <li>30분마다 자동 갱신</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- 4단계 -->
+                        <div style="background: rgba(255,255,255,0.7); border-radius: 12px; padding: var(--space-md); border-left: 4px solid #4facfe;">
+                            <h4 style="color: #4facfe; margin-bottom: 0.5rem;">4️⃣ 품질 검증</h4>
+                            <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
+                                <li>프리보드/관리종목 제외</li>
+                                <li>거래 정지 종목 필터링</li>
+                                <li>비정상적 급등(공시 없는 급락 후 반등) 제외</li>
+                                <li>시가총액 50억원 이상 종목만</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- 판단 근거 요약 -->
+                    <div style="margin-top: var(--space-md); padding: var(--space-md); background: rgba(102,126,234,0.1); border-radius: 12px;">
+                        <h4 style="color: var(--color-accent); margin-bottom: 0.8rem;">📋 판단 근거 요약</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.8rem; font-size: var(--font-sm);">
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #667eea;">✓</span>
+                                <span><strong>+5% 이상:</strong> 단기 모멘텀 확보</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #667eea;">✓</span>
+                                <span><strong>거래량 급등:</strong> 수급 확인</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #667eea;">✓</span>
+                                <span><strong>유동성 확보:</strong> 진입/청산 용이</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                <span style="color: #667eea;">✓</span>
+                                <span><strong>시총 필터:</strong> 소형주 리스크 방지</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="source-link" style="margin-top: var(--space-md); text-align: center;">
+                        <span style="font-size: var(--font-sm); color: var(--color-text-light);">
+                            📡 데이터 출처: 한국투자증권 OpenAPI (실전서버) | 
+                            ⏱️ 업데이트: 30분 간격 | 
+                            🔴 실시간 데이터 기반
+                        </span>
+                    </div>
+                </div>
+            </div>
+        
+
+        <!-- ===== 동적 콘텐츠: 저평가 주식 (update_stocks.py가 교체) ===== -->
+        <!-- DYNAMIC_VALUE_STOCKS_START -->
+<details class="collapse-section value-collapse" style="margin-top: var(--space-lg);">
+    <summary class="collapse-header" style="background: linear-gradient(135deg, rgba(46,204,113,0.15) 0%, rgba(46,204,113,0.05) 100%); border: 1px solid rgba(46,204,113,0.4); border-radius: 16px; padding: var(--space-md); cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+        <span style="font-size: var(--font-md); font-weight: 700; color: var(--color-text);">💎 저평가 주식 발굴</span>
+        <span style="font-size: var(--font-sm); color: var(--color-text-light);">오일전문가 × 세상학개론 전략 ▼</span>
+    </summary>
+    <div class="collapse-content" style="padding-top: var(--space-md);">
+        <div class="card value-stocks-section">
+            <h2 class="gurus-title">💎 저평가 주식 발굴</h2>
+            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">PER 10배 이하 · 배당 5% 이상 · 오일전문가의 황금거위 전략 × 세상학개론 거시 흐름</p>
+
+            <div class="portfolio-grid">
+                <div class="portfolio-item"><div class="portfolio-label">스크리닝 기준</div><div class="portfolio-value">PER ≤ 10 · 배당 ≥ 5%</div></div>
+                <div class="portfolio-item"><div class="portfolio-label">투자 철학</div><div class="portfolio-value">황금 거위 × 거시 흐름</div></div>
+                <div class="portfolio-item"><div class="portfolio-label">리밸런싱</div><div class="portfolio-value positive">분기별 점검</div></div>
+                <div class="portfolio-item"><div class="portfolio-label">현금 보유</div><div class="portfolio-value">20% 탄약 확보</div></div>
+            </div>
+
+            <div class="value-stocks-table-wrap" style="margin-top: var(--space-lg); overflow-x: auto;">
+                <table class="stock-table" style="min-width: 640px;">
+                    <thead><tr><th>종목</th><th>PER</th><th>배당률</th><th>업종</th><th>전문가 코멘트</th><th>네이버</th></tr></thead>
+                    <tbody><tr>
+            <td class="col-name"><div><div>KB금융지주</div><div class="col-code">105560</div></div></td>
+            <td class="col-per">6.5배</td>
+            <td class="col-dividend" style="color: #e74c3c; font-weight: 700;">5.2%</td>
+            <td>금융지주</td>
+            <td style="font-size: var(--font-sm);">🛢️ 황금거위 1순위. 분기배당 도입으로 안정성 확보. 🎓 밸류업 정책 수혜 기대</td>
+            <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=105560" target="_blank">📈</a></td>
+        </tr><tr>
+            <td class="col-name"><div><div>신한지주</div><div class="col-code">055550</div></div></td>
+            <td class="col-per">6.8배</td>
+            <td class="col-dividend" style="color: #e74c3c; font-weight: 700;">5.0%</td>
+            <td>금융지주</td>
+            <td style="font-size: var(--font-sm);">🛢️ 주주환원 강화로 배당성향 상승 중. 🎓 금리 인하 시 NIM 압박 해소 예상</td>
+            <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=055550" target="_blank">📈</a></td>
+        </tr><tr>
+            <td class="col-name"><div><div>SK텔레콤</div><div class="col-code">017670</div></div></td>
+            <td class="col-per">8.2배</td>
+            <td class="col-dividend" style="color: #e74c3c; font-weight: 700;">5.5%</td>
+            <td>통신</td>
+            <td style="font-size: var(--font-sm);">🛢️ 구독 기반 안정 현금흐름. 🎓 5G 투자 마무리 후 배당 여력 확대</td>
+            <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=017670" target="_blank">📈</a></td>
+        </tr><tr>
+            <td class="col-name"><div><div>하나금융지주</div><div class="col-code">086790</div></div></td>
+            <td class="col-per">6.2배</td>
+            <td class="col-dividend" style="color: #e74c3c; font-weight: 700;">5.3%</td>
+            <td>금융지주</td>
+            <td style="font-size: var(--font-sm);">🛢️ 오일전문가 압도적 1위 보유종목. 🎓 밸류업 프로그램 직접 수혜</td>
+            <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=086790" target="_blank">📈</a></td>
+        </tr><tr>
+            <td class="col-name"><div><div>KT</div><div class="col-code">030200</div></div></td>
+            <td class="col-per">7.5배</td>
+            <td class="col-dividend" style="color: #e74c3c; font-weight: 700;">5.8%</td>
+            <td>통신</td>
+            <td style="font-size: var(--font-sm);">🛢️ 배당 매력도 업계 최상위. 🎓 AI 데이터센터 연계 가치 재평가 가능</td>
+            <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=030200" target="_blank">📈</a></td>
+        </tr><tr>
+            <td class="col-name"><div><div>삼성화재</div><div class="col-code">000810</div></div></td>
+            <td class="col-per">8.8배</td>
+            <td class="col-dividend" style="color: #e74c3c; font-weight: 700;">4.2%</td>
+            <td>보험</td>
+            <td style="font-size: var(--font-sm);">🛢️ 보험업 안정적 수익구조. 🎓 금리 하락 시 채권 평가이익 기대</td>
+            <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=000810" target="_blank">📈</a></td>
+        </tr></tbody>
+                </table>
+            </div>
+
+            <div style="margin-top: var(--space-lg); background: linear-gradient(135deg, rgba(46,204,113,0.08) 0%, rgba(52,152,219,0.08) 100%); border-radius: var(--card-radius); padding: var(--card-padding); border: 1px solid rgba(46,204,113,0.2);">
+                <h3 style="font-size: var(--font-lg); margin-bottom: var(--space-md); color: #27ae60;">📚 저평가 전략 요약</h3>
+                <div style="display: grid; gap: var(--space-md);">
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <span style="font-size: 1.2rem;">🛢️</span>
+                        <div><strong style="color: #2d3748;">오일전문가의 황금 거위</strong>
+                        <p style="font-size: var(--font-sm); color: var(--color-text-light); margin-top: 4px;">PER 10배 이하, 배당 5% 이상, 5년 연속 배당 이력. 배당금으로 더 저렴한 거위를 사서 거위 수를 늘린다.</p></div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <span style="font-size: 1.2rem;">🎓</span>
+                        <div><strong style="color: #2d3748;">세상학개론의 거시 흐름</strong>
+                        <p style="font-size: var(--font-sm); color: var(--color-text-light); margin-top: 4px;">금리 인하 사이클 진입 시 금융지주 NIM 압박 해소, 밸류업 프로그램 수혜, AI 인프라 투자로 통신사 재평가.</p></div>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 0.75rem;">
+                        <span style="font-size: 1.2rem;">⚠️</span>
+                        <div><strong style="color: #2d3748;">리스크 관리</strong>
+                        <p style="font-size: var(--font-sm); color: var(--color-text-light); margin-top: 4px;">금융 비중 30% 이하, 섹터 집중 금지. PER 20배 이상 재평가 시 절반 매도. 현금 20%는 탄약.</p></div>
+                    </div>
                 </div>
             </div>
 

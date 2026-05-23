@@ -1327,6 +1327,46 @@
             color: var(--color-text-light);
         }
 
+
+        /* ── 탭 내비게이션 ───────────────────────── */
+        .tab-nav {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 20px 0 30px;
+            flex-wrap: wrap;
+        }
+        .tab-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 20px;
+            border-radius: 24px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            color: #a0aec0;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .tab-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+            color: #667eea;
+        }
+        .tab-link.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(102,126,234,0.3);
+        }
+        @media (max-width: 480px) {
+            .tab-nav { gap: 6px; }
+            .tab-link { padding: 8px 14px; font-size: 0.8rem; }
+        }
 </style>
 
 <style>
@@ -2066,10 +2106,17 @@
 <body>
     <div class="container">
         <header>
-            <a href="index.html" style="display:inline-block;margin-bottom:15px;color:#a0aec0;text-decoration:none;font-size:0.9rem;">← 급등주 알림으로 돌아가기</a>
             <div class="logo">🏆</div>
             <h1>투자 고수 인사이트</h1>
             <p>오일전문가 × 세상학개론 — 검증된 전문가들의 시장 분석</p>
+        </header>
+
+        <!-- 탭 내비게이션 -->
+        <nav class="tab-nav">
+            <a href="index.html" class="tab-link">📈 급등주</a>
+            <a href="gurus.html" class="tab-link active">🏆 투자고수</a>
+            <a href="nps_holdings.html" class="tab-link">🏛️ 국민연금</a>
+        </nav>
         </header>
 
         <details open class="collapse-section gurus-collapse" style="margin-top: var(--space-lg);">
