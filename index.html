@@ -1417,7 +1417,6 @@
 </style>
 
 <style>
-/* KOSDAQ 가시성 개선 - 추가 CSS */
 .section-main-title {
     font-size: var(--font-xl);
     font-weight: 700;
@@ -1463,11 +1462,6 @@
 
 .market-badge.kospi {
     background: #ff6b6b;
-    color: white;
-}
-
-.market-badge.kosdaq {
-    background: #4ecdc4;
     color: white;
 }
 
@@ -2169,100 +2163,8 @@
             <a href="gurus.html" class="tab-link">🏆 투자고수</a>
             <a href="nps_holdings.html" class="tab-link">🏛️ 국민연금</a>
         </nav>
-        
-        <!-- ===== 추천 종목 스와이프 ===== -->
-        <div class="card" style="padding: var(--space-md);">
-            <h2 class="gurus-title" style="margin-bottom: var(--space-sm);">🎯 투자 고수 추천 종목</h2>
-            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">◀ 좌우로 스와이프하여 전문가별 추천 종목 확인 ▶</p>
-            
-            <div class="swiper picks-swiper">
-                <div class="swiper-wrapper">
-                    <!-- Slide 1: 오일전문가 추천 종목 -->
-            <div class="swiper-slide">
-            <h2 class="gurus-title">🎯 오일전문가 추천 종목</h2>
-            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">배당+성장 전략 기반 선별 종목 · 투자 인사이트 적용</p>
-            
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-label">추천 섹터</div>
-                    <div class="portfolio-value">금융·통신·에너지</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">선별 기준</div>
-                    <div class="portfolio-value">배당수익률 5%+</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">투자 스타일</div>
-                    <div class="portfolio-value">장기 보유</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">리스크 관리</div>
-                    <div class="portfolio-value positive">분산 투자</div>
-                </div>
-            </div>
-            
-            <div class="top-holdings" style="background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(250,208,196,0.15) 100%); border: 1px solid rgba(255,154,158,0.3);">
-                <h3 style="color: #ff6b6b;">⭐ 오일전문가 추천 TOP 3 (분석 기반)</h3>
-                <ul class="holding-list">
-                    <li class="holding-item">
-                        <div class="holding-rank gold">1</div>
-                        <span class="holding-name">KB금융지주</span>
-                        <span class="holding-code">105560 · 배당수익률 5.2% · PER 6.5배</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank silver">2</div>
-                        <span class="holding-name">신한지주</span>
-                        <span class="holding-code">055550 · 배당수익률 5.0% · PER 6.8배</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank bronze">3</div>
-                        <span class="holding-name">SK텔레콤</span>
-                        <span class="holding-code">017670 · 배당수익률 5.5% · PER 8.2배</span>
-                    </li>
-                </ul>
-                <div class="date-note">📅 기준일: 2026년 4월 | ⚠️ 투자 유의사항 참고</div>
-            </div>
-            
-            <details class="logic-details oil-details" style="margin-top:1rem;">
-                <summary class="logic-summary" style="cursor:pointer;padding:0.8rem;background:rgba(255,154,158,0.1);border-radius:8px;border:2px solid rgba(255,154,158,0.3);display:flex;flex-direction:column;gap:4px;">
-                    <span style="font-weight:700;color:#ff6b6b;font-size:1rem;display:flex;align-items:center;gap:8px;">
-                        ▶ 📚 선별 근거 및 판단 기준 보기
-                    </span>
-                    <span style="font-size:var(--font-sm);color:#666;">오일전문가 투자 철학 기반 상세 분석</span>
-                </summary>
-                
-                <div class="logic-content" style="padding:1rem 0;">
-                    <p style="margin-bottom: 0.8rem;"><strong>오일전문가 투자 철학 적용:</strong> "황금알을 낳는 거위를 선별하라" — 배당 안정성(5년 이상 연속 배당), 저평가(PER 15배 미만), 성장성(연평균 10%+)을 모두 충족하는 종목 중심으로 선별했습니다.</p>
-                    
-                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                        <strong style="color: #ff6b6b;">🥇 KB금융지주 (105560)</strong>
-                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                            <li>국내 금융지주 중 가장 높은 배당수익률(5.2%)과 낮은 PER(6.5배) 기록</li>
-                            <li>분기배당 도입으로 배당 안정성 확보, 10년 연속 배당 증가 추세</li>
-                            <li><strong>선별 근거:</strong> 오일전문가의 "황금 거위" 전략에 부합하는 대표 저평가 고배당주</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                        <strong style="color: #4ecdc4;">🥈 신한지주 (055550)</strong>
-                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                            <li>안정적 수익구조 기반 꾸준한 배당 증가 이력, PER 6.8배로 저평가 상태</li>
-                            <li>주주환원 정책 강화로 배당성향 상승 중, 밸류업 정책 수혜 기대</li>
-                            <li><strong>선별 근거:</strong> 배당 성장성 + 저평가 조합으로 장기 복리 효과 극대화 가능</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem;">
-                        <strong style="color: #cd853f;">🥉 SK텔레콤 (017670)</strong>
-                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                            <li>통신업계 최고 배당수익률(5.5%), 구독 기반 안정적 현금흐름 보유</li>
-                            <li>5G 투자 마무리 후 배당 여력 확대 예상, 경기방어적 성격 강함</li>
-                            <li><strong>선별 근거:</strong> 오일전문가의 안정적 "황금 거위" 포트폴리오 구성에 적합</li>
-                        </ul>
-                    </div>
-                </div>
-            </details>
-<!-- ===== 동적 콘텐츠: 국내 급등주 (update_stocks.py가 교체) ===== -->
+
+        <!-- ===== 동적 콘텐츠: 국내 급등주 (update_stocks.py가 교체) ===== -->
         <!-- DYNAMIC_STOCK_CARDS_START -->
 <div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2><div class="market-section market-section-primary" data-market="kospi">
     <div class="market-header" style="border-left: 4px solid #ff6b6b;">
@@ -2574,17 +2476,7 @@
                     </div>
                 </td>
             </tr></tbody></table></div></div></div>
-</div><div class="market-section market-section-primary" data-market="kosdaq">
-    <div class="market-header" style="border-left: 4px solid #4ecdc4;">
-        <h3 class="market-title">🚀 KOSDAQ <span class="market-count">0개</span></h3>
-    </div>
-    <div class="grade-tabs"><button class="grade-tab active disabled" data-grade="ALL" style="border-bottom-color:#95a5a6"><span>전체</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="S" style="border-bottom-color:#ff4757"><span>S</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="A" style="border-bottom-color:#e67e22"><span>A</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="B" style="border-bottom-color:#f39c12"><span>B</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="C" style="border-bottom-color:#2ecc71"><span>C</span><span class="tab-count">0</span></button><button class="grade-tab disabled" data-grade="D" style="border-bottom-color:#3498db"><span>D</span><span class="tab-count">0</span></button></div>
-    <div class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <div class="empty-text">🚀 현재 KOSDAQ 시장에서 급등주(+3% 이상)가 감지되지 않았습니다</div>
-        <div class="empty-hint">장중에 다시 확인해주세요 (10분마다 자동 갱신)</div>
-    </div>
-</div></div>
+</div>
 <!-- DYNAMIC_STOCK_CARDS_END -->
         
         <!-- ===== 동적 콘텐츠: 해외 급등주 (update_stocks.py가 교체) ===== -->
@@ -2624,7 +2516,7 @@
                             <ul style="font-size: var(--font-sm); padding-left: 1.2rem; color: var(--color-text);">
                                 <li>KIS OpenAPI 거래량 순위 API 호출</li>
                                 <li>TR_ID: FHPST01710000 (거래량 순위)</li>
-                                <li>조회 범위: KOSPI + KOSDAQ 전 종목</li>
+                                <li>조회 범위: KOSPI 전 종목</li>
                                 <li>실시간 체결 데이터 기반</li>
                             </ul>
                         </div>
@@ -2832,164 +2724,10 @@
         </div>
         
             </div>
-        <!-- 세상학개론 추천 종목 - 별도 섹션 -->
-            <div class="swiper-slide">
-            <h2 class="gurus-title">🎓 세상학개론 추천 종목</h2>
-            <p style="text-align:center; color:var(--color-text-light); font-size:var(--font-sm); margin-bottom:var(--space-md);">성장·테마 전략 기반 선별 종목 · 투자 인사이트 적용</p>
-            
-            <div class="portfolio-grid">
-                <div class="portfolio-item">
-                    <div class="portfolio-label">추천 섹터</div>
-                    <div class="portfolio-value">반도체·디스플레이</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">선별 기준</div>
-                    <div class="portfolio-value">성장률 20%+</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">투자 스타일</div>
-                    <div class="portfolio-value">모멘텀 추구</div>
-                </div>
-                <div class="portfolio-item">
-                    <div class="portfolio-label">리스크 관리</div>
-                    <div class="portfolio-value positive">손절 라인</div>
-                </div>
-            </div>
-            
-            <div class="top-holdings" style="background: linear-gradient(135deg, rgba(78,205,196,0.15) 0%, rgba(68,160,141,0.15) 100%); border: 1px solid rgba(78,205,196,0.3);">
-                <h3 style="color: #4ecdc4;">⭐ 세상학개론 추천 TOP 3 (AI 인프라 테마)</h3>
-                <ul class="holding-list">
-                    <li class="holding-item">
-                        <div class="holding-rank gold">1</div>
-                        <span class="holding-name">삼성전자</span>
-                        <span class="holding-code">005930 · HBM3E 수요 폭증 · AI 반도체 핵심 수혜</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank silver">2</div>
-                        <span class="holding-name">SK하이닉스</span>
-                        <span class="holding-code">000660 · AI 메모리 독점적 지위 · 스타게이트 HBM 공급 기대</span>
-                    </li>
-                    <li class="holding-item">
-                        <div class="holding-rank bronze">3</div>
-                        <span class="holding-name">한전KPS</span>
-                        <span class="holding-code">051600 · 데이터센터 전력 인프라 · AI 발전소 정비 수혜</span>
-                    </li>
-                </ul>
-                <div class="date-note">📅 기준일: 2026년 5월 | ⚠️ 투자 유의사항 참고</div>
-            </div>
-            
-            <details class="logic-details sesang-details" style="margin-top:1rem;">
-                <summary class="logic-summary" style="cursor:pointer;padding:0.8rem;background:rgba(78,205,196,0.1);border-radius:8px;border:2px solid rgba(78,205,196,0.3);display:flex;flex-direction:column;gap:4px;">
-                    <span style="font-weight:700;color:#4ecdc4;font-size:1rem;display:flex;align-items:center;gap:8px;">
-                        ▶ 📚 AI 인프라 테마 선별 근거 및 판단 기준 보기
-                    </span>
-                    <span style="font-size:var(--font-sm);color:#666;">세상학개론 투자 철학 기반 상세 분석</span>
-                </summary>
-                
-                <div class="logic-content" style="padding:1rem 0;">
-                    <p style="margin-bottom: 0.8rem;"><strong>세상학개론 AI 인프라 투자 철학 적용:</strong> "연산력이 AI의 미래를 결정한다" — OpenAI 스타게이트가 10GW 목표를 초과 달성하고 텍사스 애빌린에서 GPT-5.5를 학습시킨 시점. 데이터센터 건설, 전력 인프라, 반도체 3대 수혜군에 집중합니다.</p>
-                    
-                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                        <strong style="color: #4ecdc4;">🥇 삼성전자 (005930)</strong>
-                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                            <li>HBM3E 수요 폭증 — OpenAI, MS, Google 등 초대형 CSP들의 AI 데이터센터 투자 가속</li>
-                            <li>파운드리 2나노 GAA 공정 양산 시작, AI 반도체 시장에서 TSMC와 2강 구도 형성 가속</li>
-                            <li><strong>선별 근거:</strong> AI 연산 인프라 확대의 최정상 수혜주 · 메모리+파운드리 듀얼 모멘텀</li>
-                        </ul>
-                    </div>
-                    
-                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                        <strong style="color: #667eea;">🥈 SK하이닉스 (000660)</strong>
-                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                            <li>AI 메모리(HBM) 시장에서 사실상 독점적 지위 — NVIDIA H100/H200/B200 공급</li>
-                            <li>스타게이트 등 초대형 AI 인프라 프로젝트의 HBM 공급 기대감, 2025년 HBM 매출 비중 40%↑</li>
-                            <li><strong>선별 근거:</strong> AI 연산력의 핵심 투입 요소인 HBM의 최대 수혜주</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(255,255,255,0.5); border-radius: 8px; padding: 0.8rem; margin-bottom: 0.5rem;">
-                        <strong style="color: #f39c12;">🥉 한전KPS (051600)</strong>
-                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm); color: var(--color-text);">
-                            <li>데이터센터 전력 인프라 수혜 — AI 데이터센터의 전력 소비량이 기존 대비 5~10배 증가</li>
-                            <li>한전 계열 발전소 정비 전문기업, 신재생+원전 정비 사업 확대로 중장기 성장성 확보</li>
-                            <li><strong>선별 근거:</strong> AI 인프라의 숨은 수혜주(전력) · 배당+성장 겸비 방어주</li>
-                        </ul>
-                    </div>
-
-                    <div style="background: rgba(78,205,196,0.05); border-radius: 8px; padding: 0.8rem; border-left: 3px solid #4ecdc4;">
-                        <strong>📊 세상학개론 AI 인프라 투자 철학 요약:</strong>
-                        <ul style="margin-top: 0.3rem; padding-left: 1.2rem; font-size: var(--font-sm);">
-                            <li><strong>연산력 핵심:</strong> "더 많은 연산력이 더 강한 AI를 만든다" — OpenAI 스타게이트 10GW+ 확보</li>
-                            <li><strong>3대 수혜군 집중:</strong> 반도체(메모리/파운드리) · 전력/에너지 · 데이터센터 인프라</li>
-                            <li><strong>사이클 베팅:</strong> AI 인프라 투자 사이클은 2025~2029년 지속 예상, 중장기 보유</li>
-                            <li><strong>리스크 관리:</strong> 20% 손절 원칙, 분할 매수로 진입 타이밍 분산</li>
-                            <li><strong>기대 수익:</strong> 단기 15~30% / 중기 50~100% 목표</li>
-                        </ul>
-                    </div>
-                </div>
-            </details>
-            
-            <div class="source-link">
-                <a href="http://youtube.com/post/Ugkxek_5iVypOoP54iPkC72EVmfRLZYmpbb6?si=R9eKIebbVimDKfHP" target="_blank" style="color: #4ecdc4;">📎 출처: 세상학개론 커뮤니티 글 (19시간 전)</a>
-                <span style="margin: 0 0.5rem; color: #ccc;">|</span>
-                <span style="font-size: var(--font-sm); color: var(--color-text-light);">📊 데이터: 2026년 5월 AI 인프라 테마</span>
-            </div>
-        </div>
-            </div>
-            <div class="swiper-pagination picks-pagination"></div>
-        </div>
-        
-        
-            </div>
-        </details>
-
-    <!-- Swiper JS -->
+        <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-        // 추천 종목 스와이프 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            const picksSwiper = new Swiper('.picks-swiper', {
-                slidesPerView: 1,
-                spaceBetween: 20,
-                loop: false,
-                
-                pagination: {
-                    el: '.picks-pagination',
-                    clickable: true,
-                    bulletActiveClass: 'swiper-pagination-bullet-active'
-                },
-                
-                navigation: {
-                    nextEl: '.picks-swiper .swiper-button-next',
-                    prevEl: '.picks-swiper .swiper-button-prev'
-                },
-                
-                effect: 'slide',
-                speed: 500,
-                
-                breakpoints: {
-                    320: {
-                        slidesPerView: 1,
-                        spaceBetween: 16
-                    },
-                    768: {
-                        slidesPerView: 1,
-                        spaceBetween: 20
-                    }
-                },
-                
-                keyboard: {
-                    enabled: true,
-                    onlyInViewport: true
-                },
-                
-                touchRatio: 1,
-                touchAngle: 45,
-                simulateTouch: true,
-                allowTouchMove: true,
-                threshold: 10
-            });
-        });
+        // 전문가 인사이트 삽입
         
 
         // 전문가 인사이트 삽입
@@ -3246,7 +2984,7 @@
                     };
                     
                     const range = gradeRanges[grade];
-                    const marketName = market === 'kospi' ? 'KOSPI' : market === 'kosdaq' ? 'KOSDAQ' : '';
+                    const marketName = market === 'kospi' ? 'KOSPI' : '';
                     
                     // 해당 시장의 종목 카드 필터링
                     const stockCards = marketSection?.querySelectorAll('.stock-card') || [];
