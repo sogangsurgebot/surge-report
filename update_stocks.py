@@ -12,6 +12,7 @@
 import os
 import requests
 import subprocess
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Dict, Optional, Tuple
@@ -826,10 +827,10 @@ def update_html(data):
         nasdaq_html
     )
 
-    # 5. 저평가 주식 섹션 교체 (정적 데이터지만 마커 통일성 유지)
+    # 5. 저평가 주식 섹션 교체 (정적 데이터지만 마커 통일성 유지) → gurus.html로 이동
     value_stocks_html = generate_value_stocks_section()
     replace_between_markers(
-        'index.html',
+        'gurus.html',
         '<!-- DYNAMIC_VALUE_STOCKS_START -->',
         '<!-- DYNAMIC_VALUE_STOCKS_END -->',
         value_stocks_html
