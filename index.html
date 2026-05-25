@@ -1086,53 +1086,6 @@
         }
         
         /* ============================================
-           전문가 인사이트
-           ============================================ */
-        .expert-insight {
-            margin-top: var(--space-sm);
-            padding: 10px 12px;
-            background: linear-gradient(135deg, rgba(255,154,158,0.08) 0%, rgba(161,140,209,0.08) 100%);
-            border-radius: 10px;
-            border-left: 3px solid #a18cd1;
-            font-size: 0.78rem;
-            line-height: 1.6;
-            color: #4a5568;
-        }
-        
-        .expert-insight-header {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 4px;
-            font-weight: 600;
-            font-size: 0.7rem;
-            color: #a18cd1;
-        }
-        
-        .expert-insight-content {
-            word-break: keep-all;
-        }
-        
-        .expert-oil {
-            border-left-color: #38b2ac;
-            background: linear-gradient(135deg, rgba(56,178,172,0.08) 0%, rgba(168,237,234,0.08) 100%);
-        }
-        
-        .expert-oil .expert-insight-header {
-            color: #38b2ac;
-        }
-        
-        .expert-sesang {
-            border-left-color: #667eea;
-            background: linear-gradient(135deg, rgba(102,126,234,0.08) 0%, rgba(118,75,162,0.08) 100%);
-        }
-        
-        .expert-sesang .expert-insight-header {
-            color: #667eea;
-        }
-        
-
-        /* ============================================
            주식 카드 차트 영역
            ============================================ */
         .stock-chart {
@@ -2842,31 +2795,8 @@
             }
             
             document.querySelectorAll('.stock-card').forEach(card => {
-                const stockNameEl = card.querySelector('.stock-name');
-                const stockName = stockNameEl ? stockNameEl.childNodes[0].textContent.trim() : '';
-                const industryEl = card.querySelector('.company-industry');
-                const industry = industryEl ? industryEl.textContent.trim() : '';
-                const descEl = card.querySelector('.company-desc');
-                const desc = descEl ? descEl.textContent.trim() : '';
-                
-                const insight = getInsightByIndustry(stockName, industry, desc);
-                
-                const insightHtml = `
-                    <div class="expert-insight expert-oil">
-                        <div class="expert-insight-header">🛢️ 오일전문가 한마디</div>
-                        <div class="expert-insight-content">${insight.oil}</div>
-                    </div>
-                    <div class="expert-insight expert-sesang">
-                        <div class="expert-insight-header">🎓 세상학개론 한마디</div>
-                        <div class="expert-insight-content">${insight.sesang}</div>
-                    </div>
-                `;
-                
-                // company-info 다음에 삽입
-                const companyInfo = card.querySelector('.company-info');
-                if (companyInfo) {
-                    companyInfo.insertAdjacentHTML('afterend', insightHtml);
-                }
+                // 전문가 인사이트 제거됨 - gurus.html로 이동
+            });
             });
         });
 
@@ -3158,43 +3088,7 @@
                 return { oil: '급등주는 단기 모멘텀에 주의. 오일전문가 관점에서는 배당과 저평가를 우선.', sesang: '급등 상황에서는 추가 상승 여력보다 리스크 관리가 우선. 단기 대응 전략 수립 필요.' };
             }
 
-            // 기존 카드에 인사이트 삽입
-            document.querySelectorAll('.stock-card .company-info').forEach(info => {
-                const card = info.closest('.stock-card');
-                if (!card || card.querySelector('.expert-insight')) return;
-                const nameEl = card.querySelector('.stock-name');
-                const stockName = nameEl ? nameEl.childNodes[0].textContent.trim() : '';
-                const insight = getInsight(stockName);
-                const html = `
-                    <div class="expert-insight expert-oil">
-                        <div class="expert-insight-header">🛢️ 오일전문가 한마디</div>
-                        <div class="expert-insight-content">${insight.oil}</div>
-                    </div>
-                    <div class="expert-insight expert-sesang">
-                        <div class="expert-insight-header">🎓 세상학개론 한마디</div>
-                        <div class="expert-insight-content">${insight.sesang}</div>
-                    </div>`;
-                info.insertAdjacentHTML('afterend', html);
-            });
-
-            // 상세 카드에도 인사이트 삽입
-            document.querySelectorAll('.stock-detail-card .company-info').forEach(info => {
-                const card = info.closest('.stock-detail-card');
-                if (!card || card.querySelector('.expert-insight')) return;
-                const nameEl = card.querySelector('.stock-name');
-                const stockName = nameEl ? nameEl.childNodes[0].textContent.trim() : '';
-                const insight = getInsight(stockName);
-                const html = `
-                    <div class="expert-insight expert-oil">
-                        <div class="expert-insight-header">🛢️ 오일전문가 한마디</div>
-                        <div class="expert-insight-content">${insight.oil}</div>
-                    </div>
-                    <div class="expert-insight expert-sesang">
-                        <div class="expert-insight-header">🎓 세상학개론 한마디</div>
-                        <div class="expert-insight-content">${insight.sesang}</div>
-                    </div>`;
-                info.insertAdjacentHTML('afterend', html);
-            });
+            // 전문가 인사이트 제거됨 - gurus.html로 이동
         }
 
         // Watch 버튼 → NPay 토론방 링크 (기존 로직 유지)
