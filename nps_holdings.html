@@ -23,10 +23,14 @@
             text-align: center;
             padding: 40px 0 20px;
         }
-        .logo {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: #a0aec0;
+            text-decoration: none;
+            font-size: 0.9rem;
         }
+        .back-link:hover { color: #667eea; }
         header h1 {
             font-size: 1.9rem;
             font-weight: 700;
@@ -40,98 +44,201 @@
             font-size: 0.95rem;
             font-weight: 300;
         }
-
-        /* ── 탭 내비게이션 ───────────────────────── */
-        .tab-nav {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin: 20px 0 30px;
-            flex-wrap: wrap;
-        }
-        .tab-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 10px 20px;
-            border-radius: 24px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
+        .update-time {
+            text-align: center;
             color: #a0aec0;
-            transition: all 0.25s ease;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            font-size: 0.8rem;
+            margin: 15px 0 25px;
         }
-        .tab-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-            color: #667eea;
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
         }
-        .tab-link.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 16px rgba(102,126,234,0.3);
-        }
-        @media (max-width: 480px) {
-            .tab-nav { gap: 6px; }
-            .tab-link { padding: 8px 14px; font-size: 0.8rem; }
-        }
-        .tab-link:focus { outline: none; }
-        .tab-link:not(.active):focus { color: #667eea; }
-
-        .notice {
-            margin-top: 40px;
-            padding: 30px;
+        .summary-card {
             background: rgba(255,255,255,0.7);
-            border-radius: 24px;
+            border-radius: 16px;
+            padding: 16px;
             text-align: center;
             border: 1px solid rgba(255,255,255,0.8);
             backdrop-filter: blur(10px);
         }
-        .notice h2 {
-            font-size: 1.2rem;
+        .summary-number {
+            font-size: 1.6rem;
+            font-weight: 700;
             color: #667eea;
-            margin-bottom: 12px;
         }
-        .notice p {
-            color: #718096;
-            font-size: 0.9rem;
-            line-height: 1.6;
+        .summary-label {
+            font-size: 0.75rem;
+            color: #a0aec0;
+            margin-top: 4px;
+        }
+        .top3-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+        .nps-top-card {
+            background: rgba(255,255,255,0.75);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+        }
+        .top-rank { font-size: 1.4rem; margin-bottom: 8px; }
+        .top-name { font-size: 1.1rem; font-weight: 600; color: #2d3748; }
+        .top-code { font-size: 0.75rem; color: #a0aec0; margin: 4px 0; }
+        .top-type {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #e67e22;
+            margin: 8px 0;
+            padding: 2px 10px;
+            background: rgba(230,126,34,0.1);
+            border-radius: 12px;
+            display: inline-block;
+        }
+        .top-date { font-size: 0.8rem; color: #718096; }
+
+        .table-card {
+            background: rgba(255,255,255,0.7);
+            border-radius: 24px;
+            padding: 24px;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+            overflow-x: auto;
+        }
+        .table-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 16px;
+        }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        th {
+            text-align: left;
+            padding: 10px 8px;
+            color: #a0aec0;
+            font-weight: 500;
+            border-bottom: 1px solid #e2e8f0;
+            white-space: nowrap;
+        }
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid #edf2f7;
+            vertical-align: middle;
+        }
+        tr:hover td { background: rgba(102,126,234,0.03); }
+
+        .col-rank { width: 40px; text-align: center; color: #a0aec0; font-weight: 600; }
+        .col-name .stock-name { font-weight: 600; color: #2d3748; font-size: 0.95rem; }
+        .col-name .stock-code { font-size: 0.75rem; color: #a0aec0; margin-top: 2px; }
+        .market-badge {
+            font-size: 0.65rem;
+            padding: 1px 5px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .market-badge.kospi { background: #e6fffa; color: #319795; }
+        .market-badge.kosdaq { background: #fff5f5; color: #e53e3e; }
+        .col-type { min-width: 100px; }
+        .type-badge {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .col-date { color: #718096; font-size: 0.85rem; }
+        .col-link { text-align: center; font-size: 1.1rem; white-space: nowrap; }
+        .col-link a { text-decoration: none; }
+
+        .notice {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: rgba(255,243,205,0.6);
+            border-radius: 12px;
+            border-left: 4px solid #ffc107;
+            font-size: 0.8rem;
+            color: #856404;
+            line-height: 1.5;
+        }
+        .notice code {
+            background: rgba(0,0,0,0.05);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+
+        @media (max-width: 640px) {
+            .top3-grid { grid-template-columns: 1fr; }
+            th, td { font-size: 0.8rem; padding: 8px 4px; }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <div class="logo">🏛️</div>
-            <h1>국민연금 대량보유주식</h1>
+            <a href="index.html" class="back-link">← 급등주 알림으로 돌아가기</a>
+            <h1>🏛️ 국민연금 대량보유주식</h1>
             <p>DART 공시 기반 — 국민연금공단 대량보유상황보고서 목록</p>
         </header>
 
-        <nav class="tab-nav">
-            <a href="index.html" class="tab-link">📈 급등주</a>
-            <a href="gurus.html" class="tab-link">🏆 투자고수</a>
-            <a href="nps_holdings.html" class="tab-link active">🏛️ 국민연금</a>
-        </nav>
+        <div class="update-time">📅 업데이트: 2026-05-26 16:20 KST | 총 0개 종목 | 최근 1년</div>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <div class="summary-number">0</div>
+                <div class="summary-label">보고 종목 수</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-number">0</div>
+                <div class="summary-label">KOSPI</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-number">0</div>
+                <div class="summary-label">KOSDAQ</div>
+            </div>
+            <div class="summary-card">
+                <div class="summary-number">-</div>
+                <div class="summary-label">최신 보고일</div>
+            </div>
+        </div>
+
+        <div class="top3-grid">
+            
+        </div>
+
+        <div class="table-card">
+            <div class="table-title">📊 보고 현황 상위 30개</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-rank">#</th>
+                        <th>종목</th>
+                        <th>보고 유형</th>
+                        <th>접수일</th>
+                        <th>링크</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+        </div>
 
         <div class="notice">
-            <h2>⏳ 데이터 준비 중</h2>
-            <p>국민연금 대량보유주식 데이터는 DART OpenAPI 인증키 설정 후<br>자동으로 수집되어 이 페이지에 표시됩니다.</p>
-            <p style="margin-top: 12px; font-size: 0.8rem; color: #a0aec0;">.env 파일에 <code style="background:rgba(0,0,0,0.05);padding:2px 6px;border-radius:4px;">DART_API_KEY=인증키</code> 를 추가해주세요.</p>
+            <strong>ℹ️ 데이터 안내</strong><br>
+            • 본 데이터는 <strong>금융감독원 DART</strong>에서 제공하는 공시 목록입니다.<br>
+            • 지분율은 DART 목록 API에 포함되지 않아 <strong>📋 버튼</strong>으로 원문 보고서를 확인하세요.<br>
+            • 같은 종목이 여러 번 보고된 경우 <strong>최신 접수일 기준</strong>으로 중복 제거됩니다.<br>
+            • 📈 버튼: 네이버 금융 종목 페이지 · 📋 버튼: DART 공시 원문 보기<br>
+            • DART API 키 발급: <code>https://opendart.fss.or.kr</code>
         </div>
     </div>
-
-<script>
-window.addEventListener('pageshow', function(e) {
-    if (e.persisted) { window.location.reload(); }
-});
-document.querySelectorAll('.tab-link').forEach(function(l) {
-    l.addEventListener('click', function() { this.blur(); });
-});
-</script>
 </body>
 </html>

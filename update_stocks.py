@@ -762,7 +762,6 @@ def generate_domestic_section(kospi_stocks, kosdaq_stocks):
     """국내 급등주 섹션 HTML 생성 (마커 교체용)"""
     html = '<div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2>'
     html += generate_stock_section(kospi_stocks, "📈 KOSPI", "kospi", is_primary=True)
-    html += generate_stock_section(kosdaq_stocks, "🚀 KOSDAQ", "kosdaq", is_primary=True)
     html += '</div>'
     return html
 
@@ -808,7 +807,6 @@ def generate_domestic_section(kospi_stocks, kosdaq_stocks):
     """국내 급등주 섹션 HTML 생성 (마커 교체용)"""
     html = '<div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2>'
     html += generate_stock_section(kospi_stocks, "📈 KOSPI", "kospi", is_primary=True)
-    html += generate_stock_section(kosdaq_stocks, "🚀 KOSDAQ", "kosdaq", is_primary=True)
     html += '</div>'
     return html
 
