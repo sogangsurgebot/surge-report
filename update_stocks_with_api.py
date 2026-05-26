@@ -56,7 +56,7 @@ def get_access_token():
     }
     
     try:
-        resp = requests.post(url, json=body, timeout=10)
+        resp = requests.post(url, json=body, timeout=30)
         if resp.status_code == 200:
             token = resp.json().get("access_token")
             print(f"✅ 토큰 발급 성공 ({SERVER_TYPE})")
@@ -102,7 +102,7 @@ def get_volume_rank_surge_stocks(token):
     
     try:
         print(f"🔍 거래량 순위 API 호출 ({SERVER_TYPE})...")
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
+        resp = requests.get(url, headers=headers, params=params, timeout=30)
         data = resp.json()
         
         print(f"   응답 코드: {data.get('rt_cd')} | {data.get('msg1', '')}")
@@ -332,7 +332,7 @@ def get_access_token():
     }
     
     try:
-        resp = requests.post(url, json=body, timeout=10)
+        resp = requests.post(url, json=body, timeout=30)
         if resp.status_code == 200:
             token = resp.json().get("access_token")
             print(f"✅ 토큰 발급 성공 ({SERVER_TYPE})")
@@ -378,7 +378,7 @@ def get_volume_rank_surge_stocks(token):
     
     try:
         print(f"🔍 거래량 순위 API 호출 ({SERVER_TYPE})...")
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
+        resp = requests.get(url, headers=headers, params=params, timeout=30)
         data = resp.json()
         
         print(f"   응답 코드: {data.get('rt_cd')} | {data.get('msg1', '')}")

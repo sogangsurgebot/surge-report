@@ -281,7 +281,7 @@ def get_access_token():
     }
 
     try:
-        resp = requests.post(url, json=body, timeout=10)
+        resp = requests.post(url, json=body, timeout=30)
         if resp.status_code == 200:
             token = resp.json().get("access_token")
             if token:
@@ -496,7 +496,7 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
         print(f"🔍 KOSPI/KOSDAQ 거래량 순위 API 호출 ({SERVER_TYPE})...")
 
         # KOSPI 조회
-        resp = requests.get(url, headers=headers, params=params_kospi, timeout=15)
+        resp = requests.get(url, headers=headers, params=params_kospi, timeout=30)
 
         # 응답 검증
         if resp.status_code != 200:
@@ -535,7 +535,7 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
             print(f"❌ KOSPI API 오류: rt_cd={rt_cd}, msg={msg}")
 
         # KOSDAQ 조회
-        resp = requests.get(url, headers=headers, params=params_kosdaq, timeout=15)
+        resp = requests.get(url, headers=headers, params=params_kosdaq, timeout=30)
 
         # 응답 검증
         if resp.status_code != 200:
@@ -602,7 +602,7 @@ def get_nasdaq_surge_stocks(token):
     }
 
     try:
-        resp = requests.get(url, headers=headers, params=params, timeout=15)
+        resp = requests.get(url, headers=headers, params=params, timeout=30)
         data = resp.json()
 
         if data.get("rt_cd") == "0":

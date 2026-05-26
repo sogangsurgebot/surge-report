@@ -44,7 +44,7 @@ def fetch_stock_news(stock_code: str, limit: int = 3) -> List[Dict[str, str]]:
     }
     
     try:
-        resp = requests.get(BASE_URL, params=params, headers=HEADERS, timeout=10)
+        resp = requests.get(BASE_URL, params=params, headers=HEADERS, timeout=30)
         resp.encoding = resp.apparent_encoding  # EUC-KR → UTF-8 자동 감지
         resp.raise_for_status()
     except Exception as e:

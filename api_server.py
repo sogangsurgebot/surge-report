@@ -67,7 +67,7 @@ def get_video_info_youtube_api(url: str) -> dict:
         api_url = f'https://www.googleapis.com/youtube/v3/videos?id={video_id}&key={YOUTUBE_API_KEY}&part=snippet,statistics,contentDetails'
         
         req = urllib.request.Request(api_url)
-        with urllib.request.urlopen(req, timeout=10) as response:
+        with urllib.request.urlopen(req, timeout=30) as response:
             data = json.loads(response.read().decode('utf-8'))
         
         if not data.get('items'):
