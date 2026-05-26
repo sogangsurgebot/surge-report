@@ -1502,6 +1502,35 @@
     color: white;
 }
 
+/* S등급 프리미엄 카드 효과 */
+.s-grade-premium {
+    position: relative;
+    animation: sGradeGlow 2s ease-in-out infinite;
+}
+
+.s-grade-premium::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px; right: -2px; bottom: -2px;
+    background: linear-gradient(135deg, #ffd700, #ff4757, #ff8c00, #ffd700);
+    background-size: 300% 300%;
+    border-radius: 14px;
+    z-index: -1;
+    animation: borderGlow 3s ease infinite;
+    opacity: 0.6;
+}
+
+@keyframes sGradeGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(255,71,87,0.15), 0 4px 15px rgba(0,0,0,0.08); }
+    50% { box-shadow: 0 0 30px rgba(255,71,87,0.25), 0 4px 20px rgba(0,0,0,0.1); }
+}
+
+@keyframes borderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 .badge-normal {
     background: linear-gradient(135deg, #ffa502 0%, #ffb74d 100%);
     color: white;
@@ -2110,7 +2139,7 @@
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
                 <!-- DYNAMIC_VERSION_START -->
-<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.e00f933 | 2026-05-26 16:58</a>
+<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.41b87fe | 2026-05-26 17:27</a>
 <!-- DYNAMIC_VERSION_END -->
             </div>
         </header>
@@ -2421,7 +2450,7 @@
                             📊 급등 watch (점수: 3.5)
                             <div class="score-detail">등락 9.9% / 거래대금 6098억</div>
                         </div>
-                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 외국인 매수세, 대형 수주 계약 체결 소식 등 5가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=한화오션+외국인매수" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#외국인매수</a><a href="https://search.naver.com/search.naver?query=한화오션+매수세" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#매수세</a><a href="https://search.naver.com/search.naver?query=한화오션+대형수주" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#대형수주</a><a href="https://search.naver.com/search.naver?query=한화오션+수주계약" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#수주계약</a></div>
+                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 AI 반도체 수요 확대 및 지분 투자</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=한화오션+투자확대" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#투자확대</a><a href="https://search.naver.com/search.naver?query=한화오션+반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#반도체</a><a href="https://search.naver.com/search.naver?query=한화오션+AI반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#AI반도체</a><a href="https://search.naver.com/search.naver?query=한화오션+지분투자" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#지분투자</a></div>
                         <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
                         <div class="stock-chart">
                             <a href="https://finance.naver.com/item/main.nhn?code=042660" target="_blank" rel="noopener noreferrer">
@@ -2457,7 +2486,7 @@
                             📊 급등 watch (점수: 2.8)
                             <div class="score-detail">등락 6.5% / 거래대금 82926억</div>
                         </div>
-                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 HBM 수요 급증</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=SK하이닉스+HBM" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#HBM</a></div>
+                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 ETF 편입 기대감 및 반도체 수출 호조</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=SK하이닉스+ETF" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+ETF편입" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF편입</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#반도체</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+수출호조" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#수출호조</a></div>
                         <div class="company-info"><div class="company-industry">반도체/전자</div><div class="company-desc">HBM 메모리 전문 글로벌 선도기업</div></div>
                         <div class="stock-chart">
                             <a href="https://finance.naver.com/item/main.nhn?code=000660" target="_blank" rel="noopener noreferrer">
@@ -2480,7 +2509,7 @@
 <div class="update-time-wrapper">
             <div class="update-time">
                 <!-- DYNAMIC_UPDATE_TIME_START -->
-<span data-cache-buster="202605261726">🕐 마지막 업데이트: 2026-05-26 17:26</span>
+<span data-cache-buster="202605261745">🕐 마지막 업데이트: 2026-05-26 17:45</span>
 <!-- DYNAMIC_UPDATE_TIME_END -->
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>

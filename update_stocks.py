@@ -755,17 +755,20 @@ def _generate_stock_card_html(stock, market_type):
     market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
 
     if alert_level == "STRONG":
-        card_style = f'border: 2px solid #ff4757; background: linear-gradient(135deg, rgba(255,71,87,0.05) 0%, rgba(255,71,87,0.1) 100%);'
+        card_style = f'border: 2px solid #ff4757; background: linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,71,87,0.12) 50%, rgba(255,140,0,0.08) 100%); box-shadow: 0 0 20px rgba(255,71,87,0.15), 0 4px 15px rgba(0,0,0,0.08);'
+        card_class = 'card stock-card s-grade-premium'
     elif alert_level == "NORMAL":
         card_style = f'border: 2px solid #ffa502; background: linear-gradient(135deg, rgba(255,165,2,0.05) 0%, rgba(255,165,2,0.1) 100%);'
+        card_class = 'card stock-card'
     else:
         card_style = f'border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);'
+        card_class = 'card stock-card'
 
     score_detail = stock.get('score_details', '')
     news_summary = stock.get("news_summary", "")
     keywords_html = _generate_keyword_tags(news_summary, stock.get("name", ""))
 
-    return f'''<div class="card stock-card" style="{card_style}">
+    return f'''<div class="{card_class}" style="{card_style}">
             <div class="stock-header">
                 <div>
                     <div class="stock-name">{stock["name"]} {market_badge}</div>
