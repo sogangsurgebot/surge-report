@@ -19,6 +19,8 @@ from typing import List, Dict, Optional, Tuple
 from dataclasses import dataclass
 import json
 
+from news_scraper import fetch_stock_news
+
 # .env 파일에서 환경변수 로드
 def load_env():
     """.env 파일에서 환경변수 로드"""
@@ -101,6 +103,68 @@ COMPANY_INFO = {
 }
 
 
+# 뉴스 요약 캐시
+_news_summary_cache: Dict[str, Optional[str]] = {}
+
+
+def generate_news_summary(stock_code: str, stock_name: str) -> Optional[str]:
+    """
+    종목의 최신 뉴스를 수집하고 키워드 기반 1문장 요약을 반환합니다.
+    동일 실행 내 중복 호출 방지를 위해 캐싱합니다.
+    """
+    cache_key = stock_code
+    if cache_key in _news_summary_cache:
+        return _news_summary_cache[cache_key]
+
+    news_list = fetch_stock_news(stock_code, limit=2)
+    if not news_list:
+        _news_summary_cache[cache_key] = None
+        return None
+
+    # 모든 제목을 합쳐서 키워드 추출
+    all_titles = " ".join([n.get("title", "") for n in news_list])
+
+    # 키워드 매핑: (키워드, 요약 문구)
+    keyword_phrases = [
+        ("외국인", "외국인 매수세"),
+        ("매수", "외국인 매수세"),
+        ("수주", "대형 수주 계약 체결 소식"),
+        ("계약", "대형 수주 계약 체결 소식"),
+        ("호실적", "호실적 기대감"),
+        ("실적", "실적 개선 기대감"),
+        ("영업이익", "실적 개선 기대감"),
+        ("매출", "매출 성장 기대감"),
+        ("ETF", "ETF 편입 기대감"),
+        ("편입", "ETF 편입 기대감"),
+        ("공시", "주요 공시 발표"),
+        ("배당", "배당 매력 부각"),
+        ("M&A", "M&A 관련 소식"),
+        ("인수", "M&A 관련 소식"),
+        ("합병", "M&A 관련 소식"),
+        ("투자", "기관 투자 확대 기대감"),
+        ("증자", "유상증자 소식"),
+        ("기대감", "시장 기대감 고조"),
+        ("상승", "가격 상승 모멘텀"),
+        ("하락", "가격 하락 압력"),
+    ]
+
+    matched = []
+    for kw, phrase in keyword_phrases:
+        if kw in all_titles and phrase not in matched:
+            matched.append(phrase)
+
+    if not matched:
+        summary = "관련 뉴스 속보 다수"
+    elif len(matched) == 1:
+        summary = matched[0]
+    else:
+        # 최대 2개까지 연결
+        summary = f"{matched[0]} 및 {matched[1]}"
+
+    _news_summary_cache[cache_key] = summary
+    return summary
+
+
 def get_access_token():
     """Access Token 발급 - 실패 시 None 반환"""
     if not APP_KEY or not APP_SECRET:
@@ -145,15 +209,15 @@ def calculate_stock_score(item: dict, market_type: str = "KOSPI") -> Optional[St
     try:
         code = item.get("mksc_shrn_iscd", "")
         name = item.get("hts_kor_isnm", "")
-        
+
         # 필수 필드 검증
         if not code or not name:
             return None
-            
+
         price_change_raw = item.get("prdy_ctrt", "")
         price_raw = item.get('stck_prpr', "")
         volume_raw = item.get('acml_vol', "")
-        
+
         # 숫자 변환 및 검증
         try:
             price_change = float(price_change_raw)
@@ -162,7 +226,7 @@ def calculate_stock_score(item: dict, market_type: str = "KOSPI") -> Optional[St
         except (ValueError, TypeError):
             print(f"⚠️ 데이터 변환 실패: {name}({code}) - price_change={price_change_raw}, price={price_raw}, volume={volume_raw}")
             return None
-        
+
         # 데이터 sanity check
         if price <= 0:
             print(f"⚠️ 비정상 가격: {name}({code}) - 가격={price}")
@@ -331,12 +395,12 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
 
         # KOSPI 조회
         resp = requests.get(url, headers=headers, params=params_kospi, timeout=15)
-        
+
         # 응답 검증
         if resp.status_code != 200:
             print(f"❌ KOSPI API 응답 오류: HTTP {resp.status_code}")
             return kospi_stocks, kosdaq_stocks
-            
+
         try:
             data = resp.json()
         except json.JSONDecodeError:
@@ -347,7 +411,7 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
             output = data.get("output", [])
             if not output:
                 print("⚠️ KOSPI API 응답: 데이터 없음 (빈 output)")
-            
+
             for item in output:
                 score = calculate_stock_score(item, "KOSPI")
                 if score:
@@ -370,12 +434,12 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
 
         # KOSDAQ 조회
         resp = requests.get(url, headers=headers, params=params_kosdaq, timeout=15)
-        
+
         # 응답 검증
         if resp.status_code != 200:
             print(f"❌ KOSDAQ API 응답 오류: HTTP {resp.status_code}")
             return kospi_stocks, kosdaq_stocks
-            
+
         try:
             data = resp.json()
         except json.JSONDecodeError:
@@ -386,7 +450,7 @@ def get_volume_rank_surge_stocks(token) -> Tuple[List[dict], List[dict]]:
             output = data.get("output", [])
             if not output:
                 print("⚠️ KOSDAQ API 응답: 데이터 없음 (빈 output)")
-                
+
             for item in output:
                 score = calculate_stock_score(item, "KOSDAQ")
                 if score:
@@ -470,7 +534,7 @@ def get_fallback_data():
     if saved:
         print("📂 API 실패 - 이전 저장된 데이터 재사용")
         return saved
-    
+
     return {
         "date": datetime.now().strftime("%Y-%m-%d"),
         "source": "⚠️ 데이터 수집 실패",
@@ -614,6 +678,7 @@ def _generate_stock_card_html(stock, market_type):
                 📊 {stock["reason"]}
                 {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
             </div>
+            {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>') if stock.get("news_summary") else ''}
             {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
             <div class="stock-chart">
                 <a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank" rel="noopener noreferrer">
@@ -680,6 +745,7 @@ def _generate_detail_row_html(stock, market_type, grade):
                             📊 {stock["reason"]}
                             {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
                         </div>
+                        {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>') if stock.get("news_summary") else ''}
                         {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
                         <div class="stock-chart">
                             <a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank" rel="noopener noreferrer">
@@ -873,7 +939,16 @@ def fetch_surge_stocks():
 
     # KOSPI/KOSDAQ 분리 조회
     kospi_stocks, kosdaq_stocks = get_volume_rank_surge_stocks(token)
-    
+
+    # 뉴스 요약 추가 (국내 종목만)
+    for stock in kospi_stocks + kosdaq_stocks:
+        code = stock.get("code", "")
+        name = stock.get("name", "")
+        if code and len(code) == 6:
+            news_summary = generate_news_summary(code, name)
+            if news_summary:
+                stock["news_summary"] = news_summary
+
     # 데이터 무결성 검증: API는 성공했지만 데이터가 비어있는 경우
     total_stocks = len(kospi_stocks) + len(kosdaq_stocks)
     if total_stocks == 0:
@@ -1098,7 +1173,7 @@ def main():
     # 한국 시간(KST) 현재 시간
     kst = timezone(timedelta(hours=9))
     now_kst = datetime.now(kst)
-    
+
     print(f"🚀 {'='*60}")
     print(f"📅 현재 시간: {now_kst.strftime('%Y-%m-%d %H:%M:%S')} (KST)")
     print(f"🏦 장 상태: {'열림' if is_market_open() else '마감'}")
