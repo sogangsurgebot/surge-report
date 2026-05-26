@@ -106,40 +106,48 @@ COMPANY_INFO = {
 # 뉴스 요약 캐시
 _news_summary_cache: Dict[str, Optional[str]] = {}
 
-def _generate_keyword_tags(news_summary: Optional[str]) -> str:
-    """뉴스 요약에서 키워드를 추출하여 HTML 태그 생성"""
+def _generate_keyword_tags(news_summary: Optional[str], stock_name: str = "") -> str:
+    """뉴스 요약에서 키워드를 추출하여 클릭 가능한 HTML 태그 생성"""
     if not news_summary:
         return ''
     keywords = []
     keyword_map = {
-        '외국인': '#외국인매수', '매수': '#매수세', '수주': '#대형수주', '계약': '#수주계약',
-        '실적': '#실적개선', '호실적': '#호실적', '영업이익': '#영업이익', '매출': '#매출성장', '성장': '#성장주',
-        'ETF': '#ETF', '편입': '#ETF편입',
-        '공시': '#공시', '배당': '#배당',
-        'M&A': '#M&A', '인수': '#인수합병', '합병': '#인수합병',
-        '투자': '#투자확대', '증자': '#유상증자', '유상증자': '#유상증자',
-        '기대감': '#기대감', '상승': '#상승모멘텀', '하락': '#하락압력',
-        'HBM': '#HBM', '반도체': '#반도체', 'AI': '#AI반도체', '파운드리': '#파운드리',
-        '수출': '#수출호조', '임상': '#신약임상', '승인': '#규제승인', '허가': '#신약허가',
-        '신약': '#신약개발', '바이오': '#바이오',
-        '유가': '#유가변동', '전기차': '#전기차', '배터리': '#배터리', '태양광': '#태양광',
-        '상장': '#IPO', '공모': '#공모주', '자사주': '#자사주매입',
-        '스톡옵션': '#스톡옵션', '실적발표': '#실적발표', '가이던스': '#가이던스',
-        '전망': '#업황전망', '호재': '#호재', '악재': '#악재',
-        '급등': '#급등', '급락': '#급락조정', '거래재개': '#거래재개', '매매정지': '#매매정지',
-        '지분': '#지분투자', '매각': '#자산매각', '구조조정': '#구조조정',
-        '금리': '#금리인하', '환율': '#환율변동', '원화': '#원화약세', '달러': '#달러강세',
-        '중국': '#중국수출', '미국': '#미국진출', '유럽': '#유럽확대',
-        '정부': '#정부정책', '보조금': '#보조금', '규제': '#규제완화', '관세': '#관세영향',
-        '관망': '#관망세', '우려': '#시장우려', '유출': '#자금유출', '리스크': '#리스크'
+        '외국인': '외국인매수', '매수': '매수세', '수주': '대형수주', '계약': '수주계약',
+        '실적': '실적개선', '호실적': '호실적', '영업이익': '영업이익', '매출': '매출성장', '성장': '성장주',
+        'ETF': 'ETF', '편입': 'ETF편입',
+        '공시': '공시', '배당': '배당',
+        'M&A': 'M&A', '인수': '인수합병', '합병': '인수합병',
+        '투자': '투자확대', '증자': '유상증자', '유상증자': '유상증자',
+        '기대감': '기대감', '상승': '상승모멘텀', '하락': '하락압력',
+        'HBM': 'HBM', '반도체': '반도체', 'AI': 'AI반도체', '파운드리': '파운드리',
+        '수출': '수출호조', '임상': '신약임상', '승인': '규제승인', '허가': '신약허가',
+        '신약': '신약개발', '바이오': '바이오',
+        '유가': '유가변동', '전기차': '전기차', '배터리': '배터리', '태양광': '태양광',
+        '상장': 'IPO', '공모': '공모주', '자사주': '자사주매입',
+        '스톡옵션': '스톡옵션', '실적발표': '실적발표', '가이던스': '가이던스',
+        '전망': '업황전망', '호재': '호재', '악재': '악재',
+        '급등': '급등', '급락': '급락조정', '거래재개': '거래재개', '매매정지': '매매정지',
+        '지분': '지분투자', '매각': '자산매각', '구조조정': '구조조정',
+        '금리': '금리인하', '환율': '환율변동', '원화': '원화약세', '달러': '달러강세',
+        '중국': '중국수출', '미국': '미국진출', '유럽': '유럽확대',
+        '정부': '정부정책', '보조금': '보조금', '규제': '규제완화', '관세': '관세영향',
+        '관망': '관망세', '우려': '시장우려', '유출': '자금유출', '리스크': '리스크'
     }
-    for k, tag in keyword_map.items():
-        if k in news_summary and tag not in keywords:
-            keywords.append(tag)
+    for k, tag_label in keyword_map.items():
+        if k in news_summary and tag_label not in keywords:
+            keywords.append(tag_label)
     if not keywords:
         return ''
-    tags = ''.join([f'<span style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;">{kw}</span>' for kw in keywords])
-    return f'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">{tags}</div>'
+    
+    # 네이버 검색 URL 생성 (종목명 + 키워드)
+    search_name = stock_name.replace(' ', '') if stock_name else ''
+    tags = []
+    for kw in keywords:
+        query = f"{search_name}+{kw}" if search_name else kw
+        url = f"https://search.naver.com/search.naver?query={query}"
+        tags.append(f'<a href="{url}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background=\'rgba(102,126,234,0.25)\'" onmouseleave="this.style.background=\'rgba(102,126,234,0.12)\'">#{kw}</a>')
+    
+    return f'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">{"".join(tags)}</div>'
 
 
 def generate_news_summary(stock_code: str, stock_name: str) -> Optional[str]:
@@ -755,7 +763,7 @@ def _generate_stock_card_html(stock, market_type):
 
     score_detail = stock.get('score_details', '')
     news_summary = stock.get("news_summary", "")
-    keywords_html = _generate_keyword_tags(news_summary)
+    keywords_html = _generate_keyword_tags(news_summary, stock.get("name", ""))
 
     return f'''<div class="card stock-card" style="{card_style}">
             <div class="stock-header">
@@ -841,7 +849,7 @@ def _generate_detail_row_html(stock, market_type, grade):
                             📊 {stock["reason"]}
                             {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
                         </div>
-                        {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>' + _generate_keyword_tags(stock.get("news_summary", ""))) if stock.get("news_summary") else ''}
+                        {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>' + _generate_keyword_tags(stock.get("news_summary", ""), stock.get("name", ""))) if stock.get("news_summary") else ''}
                         {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
                         <div class="stock-chart">
                             <a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank" rel="noopener noreferrer">
