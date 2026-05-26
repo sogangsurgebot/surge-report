@@ -1192,6 +1192,10 @@ def main():
         if saved_data:
             print("📂 장 마감 - 저장된 장중 데이터로 표시")
             fresh_data = saved_data
+            # 저장된 데이터에 news_summary가 없으면 다시 생성
+            for stock in fresh_data.get('kospi_stocks', []):
+                if not stock.get('news_summary') and len(stock.get('code', '')) == 6:
+                    stock['news_summary'] = generate_news_summary(stock['code'], stock.get('name', ''))
         else:
             print("⚠️ 저장된 데이터 없음 - 현재 데이터 사용")
 
