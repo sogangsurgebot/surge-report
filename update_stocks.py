@@ -106,6 +106,26 @@ COMPANY_INFO = {
 # 뉴스 요약 캐시
 _news_summary_cache: Dict[str, Optional[str]] = {}
 
+def _generate_keyword_tags(news_summary: Optional[str]) -> str:
+    """뉴스 요약에서 키워드를 추출하여 HTML 태그 생성"""
+    if not news_summary:
+        return ''
+    keywords = []
+    keyword_map = {
+        '외국인': '#외국인매수', '매수': '#매수세', '수주': '#대형수주',
+        '실적': '#실적개선', 'ETF': '#ETF', '공시': '#공시',
+        '배당': '#배당', 'M&A': '#M&A', '투자': '#투자',
+        '증자': '#증자', '편입': '#ETF편입', '성장': '#성장주',
+        '호전': '#호전', '유출': '#자금유출', '리스크': '#리스크'
+    }
+    for k, tag in keyword_map.items():
+        if k in news_summary and tag not in keywords:
+            keywords.append(tag)
+    if not keywords:
+        return ''
+    tags = ''.join([f'<span style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;">{kw}</span>' for kw in keywords])
+    return f'<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;">{tags}</div>'
+
 
 def generate_news_summary(stock_code: str, stock_name: str) -> Optional[str]:
     """
@@ -660,6 +680,8 @@ def _generate_stock_card_html(stock, market_type):
         card_style = f'border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);'
 
     score_detail = stock.get('score_details', '')
+    news_summary = stock.get("news_summary", "")
+    keywords_html = _generate_keyword_tags(news_summary)
 
     return f'''<div class="card stock-card" style="{card_style}">
             <div class="stock-header">
@@ -678,7 +700,7 @@ def _generate_stock_card_html(stock, market_type):
                 📊 {stock["reason"]}
                 {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
             </div>
-            {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>') if stock.get("news_summary") else ''}
+            {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>' + keywords_html) if stock.get("news_summary") else ''}
             {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
             <div class="stock-chart">
                 <a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank" rel="noopener noreferrer">
@@ -745,7 +767,7 @@ def _generate_detail_row_html(stock, market_type, grade):
                             📊 {stock["reason"]}
                             {f'<div class="score-detail">{score_detail}</div>' if score_detail else ''}
                         </div>
-                        {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>') if stock.get("news_summary") else ''}
+                        {(f'<div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 {stock.get("news_summary", "")}</div>' + _generate_keyword_tags(stock.get("news_summary", ""))) if stock.get("news_summary") else ''}
                         {(f'<div class="company-info"><div class="company-industry">{stock["industry"]}</div><div class="company-desc">{stock["desc"]}</div></div>') if stock.get("industry") else ''}
                         <div class="stock-chart">
                             <a href="https://finance.naver.com/item/main.nhn?code={stock["code"]}" target="_blank" rel="noopener noreferrer">
