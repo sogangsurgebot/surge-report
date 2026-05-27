@@ -217,10 +217,9 @@ def _infer_market(code: str) -> str:
 
 
 def generate_nps_html(records: List[Dict]) -> str:
-    """nps_holdings.html 생성"""
+    """nps_holdings.html 생성 — index.html/gurus.html 동일 디자인 시스템"""
     now_kst = datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M")
 
-    # 상위 30개
     top_n = 30
     top_records = records[:top_n]
 
@@ -228,8 +227,8 @@ def generate_nps_html(records: List[Dict]) -> str:
     for i, r in enumerate(top_records, 1):
         dart_link = f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={r['rcept_no']}"
         naver_link = f"https://finance.naver.com/item/main.nhn?code={r['stock_code']}" if r["stock_code"] else "#"
-
         type_badge_color = "#e67e22" if "변동" in r["report_type"] else "#3498db" if "신규" in r["report_type"] else "#95a5a6"
+        type_label = r["report_type"] if r["report_type"] else "보고"
 
         rows_html += f'''<tr>
             <td class="col-rank">{i}</td>
@@ -238,12 +237,12 @@ def generate_nps_html(records: List[Dict]) -> str:
                 <div class="stock-code">{r["stock_code"]} <span class="market-badge {r["market"].lower()}">{r["market"]}</span></div>
             </td>
             <td class="col-type">
-                <span class="type-badge" style="background:{type_badge_color}15;color:{type_badge_color};border:1px solid {type_badge_color}40">{r["report_type"]}</span>
+                <span class="type-badge" style="background:{type_badge_color}15;color:{type_badge_color};border:1px solid {type_badge_color}40">{type_label}</span>
             </td>
             <td class="col-date">{r["report_date"]}</td>
             <td class="col-link">
-                <a href="{naver_link}" target="_blank" rel="noopener noreferrer">📈</a>
-                <a href="{dart_link}" target="_blank" rel="noopener noreferrer" style="margin-left:8px">📋</a>
+                <a href="{naver_link}" target="_blank" rel="noopener noreferrer" class="link-btn">📈</a>
+                <a href="{dart_link}" target="_blank" rel="noopener noreferrer" class="link-btn" style="margin-left:6px">📋</a>
             </td>
         </tr>\n'''
 
@@ -251,15 +250,14 @@ def generate_nps_html(records: List[Dict]) -> str:
     kospi_count = sum(1 for r in records if r["market"] == "KOSPI")
     kosdaq_count = sum(1 for r in records if r["market"] == "KOSDAQ")
 
-    # TOP3 카드 (최신 3건)
-    top3_cards = ""
     medal = ["🥇", "🥈", "🥉"]
+    top3_cards = ""
     for idx, r in enumerate(records[:3], 0):
-        top3_cards += f'''<div class="nps-top-card">
+        top3_cards += f'''<div class="card nps-top-card">
             <div class="top-rank">{medal[idx]}</div>
             <div class="top-name">{r["stock_name"]}</div>
-            <div class="top-code">{r["stock_code"]} · {r["market"]}</div>
-            <div class="top-type">{r["report_type"]}</div>
+            <div class="top-code">{r["stock_code"]} · <span class="market-badge {r["market"].lower()}">{r["market"]}</span></div>
+            <div class="top-type">{r["report_type"] if r["report_type"] else "보고"}</div>
             <div class="top-date">{r["report_date"]}</div>
         </div>'''
 
@@ -268,207 +266,198 @@ def generate_nps_html(records: List[Dict]) -> str:
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>국민연금 대량보유주식 | Surge Report</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <title>🏛️ 국민연금 대량보유주식 | Surge Report</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
+        :root {{
+            --color-primary: #667eea;
+            --color-secondary: #764ba2;
+            --color-accent: #ff6b6b;
+            --color-bg: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 50%, #fef5f5 100%);
+            --card-bg: rgba(255,255,255,0.75);
+            --card-border: rgba(255,255,255,0.85);
+            --text-primary: #2d3748;
+            --text-secondary: #4a5568;
+            --text-light: #718096;
+            --card-radius: 24px;
+            --shadow-soft: 0 8px 32px rgba(31,38,135,0.08);
+            --shadow-card: 0 4px 24px rgba(0,0,0,0.06);
+        }}
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
-            font-family: 'Noto Sans KR', -apple-system, sans-serif;
-            background: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 50%, #fef5f5 100%);
+            font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-bg);
+            background-attachment: fixed;
             min-height: 100vh;
-            color: #4a5568;
+            color: var(--text-secondary);
             line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
         }}
-        .container {{
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px 20px 40px;
-        }}
-        header {{
-            text-align: center;
-            padding: 40px 0 20px;
-        }}
-        .back-link {{
-            display: inline-block;
-            margin-bottom: 15px;
-            color: #a0aec0;
-            text-decoration: none;
-            font-size: 0.9rem;
-        }}
-        .back-link:hover {{ color: #667eea; }}
+        .container {{ max-width: 900px; margin: 0 auto; padding: 20px 20px 40px; }}
+
+        /* 헤더 */
+        header {{ text-align: center; padding: 40px 0 20px; }}
+        .logo {{ font-size: 3rem; margin-bottom: 12px; display: inline-block; animation: float 3s ease-in-out infinite; }}
+        @keyframes float {{ 0%,100%{{transform:translateY(0)}} 50%{{transform:translateY(-8px)}} }}
         header h1 {{
-            font-size: 1.9rem;
-            font-weight: 700;
+            font-size: 2rem; font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 8px; letter-spacing: -0.5px;
         }}
-        header p {{
-            color: #a0aec0;
-            font-size: 0.95rem;
-            font-weight: 300;
+        header p {{ color: var(--text-light); font-size: 0.95rem; font-weight: 400; }}
+        .version-link {{
+            display: inline-block; margin-top: 10px; color: var(--text-light);
+            font-size: 0.75rem; text-decoration: none; opacity: 0.7; transition: opacity 0.2s;
         }}
-        .update-time {{
-            text-align: center;
-            color: #a0aec0;
-            font-size: 0.8rem;
-            margin: 15px 0 25px;
+        .version-link:hover {{ opacity: 1; }}
+
+        /* 탭 */
+        .tab-nav {{
+            display: flex; justify-content: center; gap: 8px;
+            margin: 20px 0 30px; flex-wrap: wrap;
         }}
-        .summary-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 12px;
-            margin-bottom: 24px;
+        .tab-link {{
+            padding: 10px 20px; border-radius: 20px; text-decoration: none;
+            color: var(--text-light); font-size: 0.85rem; font-weight: 500;
+            background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px); transition: all 0.25s ease; cursor: pointer;
         }}
-        .summary-card {{
-            background: rgba(255,255,255,0.7);
-            border-radius: 16px;
-            padding: 16px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
+        .tab-link:hover {{
+            background: rgba(255,255,255,0.9); color: var(--color-primary);
+            transform: translateY(-1px); box-shadow: var(--shadow-card);
         }}
+        .tab-link.active {{
+            background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(118,75,162,0.15) 100%);
+            color: var(--color-primary); border-color: rgba(102,126,234,0.3); font-weight: 600;
+        }}
+
+        /* 카드 */
+        .card {{
+            background: var(--card-bg); border-radius: var(--card-radius); padding: 24px;
+            margin: 16px 0; border: 1px solid var(--card-border);
+            backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            box-shadow: var(--shadow-soft); transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }}
+        .card:hover {{ transform: translateY(-2px); box-shadow: 0 12px 40px rgba(31,38,135,0.12); }}
+
+        /* 요약 */
+        .summary-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }}
+        .summary-card {{ text-align: center; padding: 20px 16px; }}
         .summary-number {{
-            font-size: 1.6rem;
-            font-weight: 700;
-            color: #667eea;
+            font-size: 1.8rem; font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
         }}
-        .summary-label {{
-            font-size: 0.75rem;
-            color: #a0aec0;
-            margin-top: 4px;
-        }}
-        .top3-grid {{
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 16px;
-            margin-bottom: 28px;
-        }}
-        .nps-top-card {{
-            background: rgba(255,255,255,0.75);
-            border-radius: 20px;
-            padding: 20px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
-        }}
-        .top-rank {{ font-size: 1.4rem; margin-bottom: 8px; }}
-        .top-name {{ font-size: 1.1rem; font-weight: 600; color: #2d3748; }}
-        .top-code {{ font-size: 0.75rem; color: #a0aec0; margin: 4px 0; }}
+        .summary-label {{ font-size: 0.75rem; color: var(--text-light); font-weight: 500; }}
+
+        /* TOP3 */
+        .top3-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }}
+        .nps-top-card {{ text-align: center; padding: 28px 20px; }}
+        .top-rank {{ font-size: 2rem; margin-bottom: 8px; }}
+        .top-name {{ font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }}
+        .top-code {{ font-size: 0.8rem; color: var(--text-light); margin: 6px 0; }}
         .top-type {{
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #e67e22;
-            margin: 8px 0;
-            padding: 2px 10px;
-            background: rgba(230,126,34,0.1);
-            border-radius: 12px;
-            display: inline-block;
+            font-size: 0.8rem; font-weight: 600; color: #e67e22; margin: 8px 0;
+            padding: 3px 12px; background: rgba(230,126,34,0.08); border-radius: 12px; display: inline-block;
         }}
-        .top-date {{ font-size: 0.8rem; color: #718096; }}
+        .top-date {{ font-size: 0.8rem; color: var(--text-light); margin-top: 8px; }}
 
-        .table-card {{
-            background: rgba(255,255,255,0.7);
-            border-radius: 24px;
-            padding: 24px;
-            border: 1px solid rgba(255,255,255,0.8);
-            backdrop-filter: blur(10px);
-            overflow-x: auto;
+        /* 테이블 */
+        .table-card {{ overflow-x: auto; padding: 24px; }}
+        .section-title {{
+            font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
+            margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
         }}
-        .table-title {{
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 16px;
+        .stock-table {{
+            width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9rem;
         }}
-        table {{ width: 100%; border-collapse: collapse; font-size: 0.85rem; }}
-        th {{
-            text-align: left;
-            padding: 10px 8px;
-            color: #a0aec0;
-            font-weight: 500;
-            border-bottom: 1px solid #e2e8f0;
-            white-space: nowrap;
+        .stock-table th {{
+            text-align: left; padding: 12px 10px; color: var(--text-light); font-weight: 600;
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(102,126,234,0.1); white-space: nowrap;
         }}
-        td {{
-            padding: 12px 8px;
-            border-bottom: 1px solid #edf2f7;
-            vertical-align: middle;
+        .stock-table td {{
+            padding: 14px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); vertical-align: middle;
         }}
-        tr:hover td {{ background: rgba(102,126,234,0.03); }}
-
-        .col-rank {{ width: 40px; text-align: center; color: #a0aec0; font-weight: 600; }}
-        .col-name .stock-name {{ font-weight: 600; color: #2d3748; font-size: 0.95rem; }}
-        .col-name .stock-code {{ font-size: 0.75rem; color: #a0aec0; margin-top: 2px; }}
+        .stock-table tr:hover td {{ background: rgba(102,126,234,0.03); }}
+        .stock-table tr:last-child td {{ border-bottom: none; }}
+        .col-rank {{ width: 40px; text-align: center; color: var(--text-light); font-weight: 700; font-size: 0.85rem; }}
+        .col-name .stock-name {{ font-weight: 700; color: var(--text-primary); font-size: 0.95rem; }}
+        .col-name .stock-code {{ font-size: 0.75rem; color: var(--text-light); margin-top: 3px; }}
         .market-badge {{
-            font-size: 0.65rem;
-            padding: 1px 5px;
-            border-radius: 4px;
-            font-weight: 500;
+            font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; margin-left: 4px;
         }}
         .market-badge.kospi {{ background: #e6fffa; color: #319795; }}
         .market-badge.kosdaq {{ background: #fff5f5; color: #e53e3e; }}
-        .col-type {{ min-width: 100px; }}
-        .type-badge {{
-            font-size: 0.75rem;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: 600;
-            white-space: nowrap;
-        }}
-        .col-date {{ color: #718096; font-size: 0.85rem; }}
+        .type-badge {{ font-size: 0.75rem; padding: 4px 10px; border-radius: 10px; font-weight: 600; white-space: nowrap; }}
+        .col-date {{ color: var(--text-light); font-size: 0.85rem; }}
         .col-link {{ text-align: center; font-size: 1.1rem; white-space: nowrap; }}
-        .col-link a {{ text-decoration: none; }}
+        .link-btn {{
+            text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
+            width: 32px; height: 32px; border-radius: 8px; background: rgba(102,126,234,0.08);
+            transition: all 0.2s;
+        }}
+        .link-btn:hover {{ background: rgba(102,126,234,0.15); transform: scale(1.1); }}
 
+        /* 업데이트 시간 */
+        .update-time {{ text-align: center; color: var(--text-light); font-size: 0.8rem; margin: 16px 0 24px; font-weight: 400; }}
+
+        /* 노티스 */
         .notice {{
-            margin-top: 24px;
-            padding: 16px 20px;
-            background: rgba(255,243,205,0.6);
-            border-radius: 12px;
-            border-left: 4px solid #ffc107;
-            font-size: 0.8rem;
-            color: #856404;
-            line-height: 1.5;
+            margin-top: 24px; padding: 20px 24px; background: rgba(255,243,205,0.5);
+            border-radius: 16px; border-left: 4px solid #ffc107; font-size: 0.85rem;
+            color: #856404; line-height: 1.7; backdrop-filter: blur(10px);
         }}
+        .notice strong {{ color: #744210; }}
         .notice code {{
-            background: rgba(0,0,0,0.05);
-            padding: 1px 4px;
-            border-radius: 3px;
-            font-family: monospace;
+            background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px;
+            font-family: 'SF Mono', monospace; font-size: 0.8rem;
         }}
 
+        /* 반응형 */
         @media (max-width: 640px) {{
+            header h1 {{ font-size: 1.6rem; }}
             .top3-grid {{ grid-template-columns: 1fr; }}
-            th, td {{ font-size: 0.8rem; padding: 8px 4px; }}
+            .summary-grid {{ grid-template-columns: repeat(2, 1fr); }}
+            .stock-table {{ font-size: 0.8rem; }}
+            .stock-table th, .stock-table td {{ padding: 10px 6px; }}
+            .tab-link {{ padding: 8px 14px; font-size: 0.8rem; }}
         }}
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="index.html" class="back-link">← 급등주 알림으로 돌아가기</a>
-            <h1>🏛️ 국민연금 대량보유주식</h1>
+            <div class="logo">🏛️</div>
+            <h1>국민연금 대량보유주식</h1>
             <p>DART 공시 기반 — 국민연금공단 대량보유상황보고서 목록</p>
+            <a href="index.html" class="version-link">← 급등주 알림으로 돌아가기</a>
         </header>
 
-        <div class="update-time">📅 업데이트: {now_kst} KST | 총 {total}개 종목 | 최근 1년</div>
+        <nav class="tab-nav">
+            <a href="index.html" class="tab-link">📈 급등주</a>
+            <a href="gurus.html" class="tab-link">🏆 투자고수</a>
+            <a href="nps_holdings.html" class="tab-link active">🏛️ 국민연금</a>
+        </nav>
+
+        <div class="update-time">📅 업데이트: {now_kst} KST | 총 {total}개 종목 | 최근 60일</div>
 
         <div class="summary-grid">
-            <div class="summary-card">
+            <div class="card summary-card">
                 <div class="summary-number">{total}</div>
                 <div class="summary-label">보고 종목 수</div>
             </div>
-            <div class="summary-card">
+            <div class="card summary-card">
                 <div class="summary-number">{kospi_count}</div>
                 <div class="summary-label">KOSPI</div>
             </div>
-            <div class="summary-card">
+            <div class="card summary-card">
                 <div class="summary-number">{kosdaq_count}</div>
                 <div class="summary-label">KOSDAQ</div>
             </div>
-            <div class="summary-card">
+            <div class="card summary-card">
                 <div class="summary-number">{records[0]["report_date"] if records else "-"}</div>
                 <div class="summary-label">최신 보고일</div>
             </div>
@@ -478,9 +467,9 @@ def generate_nps_html(records: List[Dict]) -> str:
             {top3_cards}
         </div>
 
-        <div class="table-card">
-            <div class="table-title">📊 보고 현황 상위 {top_n}개</div>
-            <table>
+        <div class="card table-card">
+            <div class="section-title">📊 보고 현황 상위 {top_n}개</div>
+            <table class="stock-table">
                 <thead>
                     <tr>
                         <th class="col-rank">#</th>
@@ -505,6 +494,15 @@ def generate_nps_html(records: List[Dict]) -> str:
             • DART API 키 발급: <code>https://opendart.fss.or.kr</code>
         </div>
     </div>
+
+    <script>
+    window.addEventListener('pageshow', function(e) {{
+        if (e.persisted) {{ window.location.reload(); }}
+    }});
+    document.querySelectorAll('.tab-link').forEach(function(l) {{
+        l.addEventListener('click', function() {{ this.blur(); }});
+    }});
+    </script>
 </body>
 </html>'''
     return html
