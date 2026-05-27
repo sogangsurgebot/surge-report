@@ -265,23 +265,64 @@ def generate_nps_html(records: List[Dict]) -> str:
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#ff9a9e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>🏛️ 국민연금 대량보유주식 | Surge Report</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {{
-            --color-primary: #667eea;
-            --color-secondary: #764ba2;
-            --color-accent: #ff6b6b;
-            --color-bg: linear-gradient(135deg, #f0f9ff 0%, #f5f3ff 50%, #fef5f5 100%);
-            --card-bg: rgba(255,255,255,0.75);
+            --color-primary: #ff9a9e;
+            --color-secondary: #fad0c4;
+            --color-accent: #a18cd1;
+            --color-text: #4a5568;
+            --color-text-light: #a0aec0;
+            --color-bg: linear-gradient(135deg, #fef5f5 0%, #f5f3ff 50%, #f0f9ff 100%);
+            --card-bg: rgba(255,255,255,0.72);
             --card-border: rgba(255,255,255,0.85);
-            --text-primary: #2d3748;
-            --text-secondary: #4a5568;
-            --text-light: #718096;
-            --card-radius: 24px;
+            --space-xs: 8px;
+            --space-sm: 12px;
+            --space-md: 16px;
+            --space-lg: 20px;
+            --space-xl: 28px;
+            --font-xs: 0.75rem;
+            --font-sm: 0.85rem;
+            --font-md: 0.95rem;
+            --font-lg: 1.1rem;
+            --font-xl: 1.6rem;
+            --font-2xl: 2rem;
+            --card-radius: 20px;
+            --card-padding: 20px;
+            --container-max: 720px;
+            --grid-gap: 16px;
             --shadow-soft: 0 8px 32px rgba(31,38,135,0.08);
             --shadow-card: 0 4px 24px rgba(0,0,0,0.06);
+        }}
+        @media (min-width: 640px) {{
+            :root {{
+                --space-xs: 10px;
+                --space-sm: 14px;
+                --space-md: 20px;
+                --space-lg: 28px;
+                --space-xl: 32px;
+                --font-xs: 0.8rem;
+                --font-sm: 0.9rem;
+                --font-md: 1rem;
+                --font-lg: 1.2rem;
+                --font-xl: 1.8rem;
+                --font-2xl: 2.2rem;
+                --card-radius: 24px;
+                --card-padding: 28px;
+                --grid-gap: 20px;
+                --container-max: 900px;
+            }}
+        }}
+        @media (min-width: 1024px) {{
+            :root {{ --container-max: 1200px; }}
         }}
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         body {{
@@ -289,37 +330,37 @@ def generate_nps_html(records: List[Dict]) -> str:
             background: var(--color-bg);
             background-attachment: fixed;
             min-height: 100vh;
-            color: var(--text-secondary);
+            color: var(--color-text);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }}
-        .container {{ max-width: 900px; margin: 0 auto; padding: 20px 20px 40px; }}
+        .container {{ max-width: var(--container-max); margin: 0 auto; padding: var(--space-md) var(--space-md) var(--space-xl); }}
 
         /* 헤더 */
-        header {{ text-align: center; padding: 40px 0 20px; }}
-        .logo {{ font-size: 3rem; margin-bottom: 12px; display: inline-block; animation: float 3s ease-in-out infinite; }}
+        header {{ text-align: center; padding: var(--space-xl) 0 var(--space-lg); }}
+        .logo {{ font-size: var(--font-2xl); margin-bottom: var(--space-sm); display: inline-block; animation: float 3s ease-in-out infinite; }}
         @keyframes float {{ 0%,100%{{transform:translateY(0)}} 50%{{transform:translateY(-8px)}} }}
         header h1 {{
-            font-size: 2rem; font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-size: var(--font-xl); font-weight: 800;
+            background: linear-gradient(135deg, #ff9a9e 0%, #a18cd1 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 8px; letter-spacing: -0.5px;
+            margin-bottom: var(--space-xs); letter-spacing: -0.5px;
         }}
-        header p {{ color: var(--text-light); font-size: 0.95rem; font-weight: 400; }}
+        header p {{ color: var(--text-light); font-size: var(--font-sm); font-weight: 400; }}
         .version-link {{
-            display: inline-block; margin-top: 10px; color: var(--text-light);
-            font-size: 0.75rem; text-decoration: none; opacity: 0.7; transition: opacity 0.2s;
+            display: inline-block; margin-top: var(--space-sm); color: var(--color-text-light);
+            font-size: var(--font-xs); text-decoration: none; opacity: 0.7; transition: opacity 0.2s;
         }}
         .version-link:hover {{ opacity: 1; }}
 
         /* 탭 */
         .tab-nav {{
-            display: flex; justify-content: center; gap: 8px;
-            margin: 20px 0 30px; flex-wrap: wrap;
+            display: flex; justify-content: center; gap: var(--space-xs);
+            margin: var(--space-lg) 0 var(--space-xl); flex-wrap: wrap;
         }}
         .tab-link {{
             padding: 10px 20px; border-radius: 20px; text-decoration: none;
-            color: var(--text-light); font-size: 0.85rem; font-weight: 500;
+            color: var(--text-light); font-size: var(--font-sm); font-weight: 500;
             background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.8);
             backdrop-filter: blur(10px); transition: all 0.25s ease; cursor: pointer;
         }}
@@ -328,102 +369,102 @@ def generate_nps_html(records: List[Dict]) -> str:
             transform: translateY(-1px); box-shadow: var(--shadow-card);
         }}
         .tab-link.active {{
-            background: linear-gradient(135deg, rgba(102,126,234,0.15) 0%, rgba(118,75,162,0.15) 100%);
+            background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(118,75,162,0.15) 100%);
             color: var(--color-primary); border-color: rgba(102,126,234,0.3); font-weight: 600;
         }}
 
         /* 카드 */
         .card {{
-            background: var(--card-bg); border-radius: var(--card-radius); padding: 24px;
-            margin: 16px 0; border: 1px solid var(--card-border);
+            background: var(--card-bg); border-radius: var(--card-radius); padding: var(--card-padding);
+            margin: var(--space-md) 0; border: 1px solid var(--card-border);
             backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
             box-shadow: var(--shadow-soft); transition: transform 0.3s ease, box-shadow 0.3s ease;
         }}
         .card:hover {{ transform: translateY(-2px); box-shadow: 0 12px 40px rgba(31,38,135,0.12); }}
 
         /* 요약 */
-        .summary-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 24px; }}
-        .summary-card {{ text-align: center; padding: 20px 16px; }}
+        .summary-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: var(--space-sm); margin-bottom: var(--space-lg); }}
+        .summary-card {{ text-align: center; padding: var(--space-md) var(--space-sm); }}
         .summary-number {{
             font-size: 1.8rem; font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #ff9a9e 0%, #a18cd1 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: 4px;
         }}
-        .summary-label {{ font-size: 0.75rem; color: var(--text-light); font-weight: 500; }}
+        .summary-label {{ font-size: var(--font-xs); color: var(--color-text-light); font-weight: 500; }}
 
         /* TOP3 */
-        .top3-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin-bottom: 28px; }}
-        .nps-top-card {{ text-align: center; padding: 28px 20px; }}
+        .top3-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-lg); }}
+        .nps-top-card {{ text-align: center; padding: var(--space-lg) var(--space-md); }}
         .top-rank {{ font-size: 2rem; margin-bottom: 8px; }}
-        .top-name {{ font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }}
-        .top-code {{ font-size: 0.8rem; color: var(--text-light); margin: 6px 0; }}
+        .top-name {{ font-size: var(--font-lg); font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }}
+        .top-code {{ font-size: var(--font-xs); color: var(--color-text-light); margin: var(--space-xs) 0; }}
         .top-type {{
-            font-size: 0.8rem; font-weight: 600; color: #e67e22; margin: 8px 0;
+            font-size: var(--font-xs); font-weight: 600; color: #e67e22; margin: var(--space-xs) 0;
             padding: 3px 12px; background: rgba(230,126,34,0.08); border-radius: 12px; display: inline-block;
         }}
-        .top-date {{ font-size: 0.8rem; color: var(--text-light); margin-top: 8px; }}
+        .top-date {{ font-size: var(--font-xs); color: var(--color-text-light); margin-top: var(--space-xs); }}
 
         /* 테이블 */
-        .table-card {{ overflow-x: auto; padding: 24px; }}
+        .table-card {{ overflow-x: auto; padding: var(--card-padding); }}
         .section-title {{
-            font-size: 1.1rem; font-weight: 700; color: var(--text-primary);
-            margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+            font-size: var(--font-lg); font-weight: 700; color: var(--text-primary);
+            margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-xs);
         }}
         .stock-table {{
-            width: 100%; border-collapse: separate; border-spacing: 0; font-size: 0.9rem;
+            width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--font-sm);
         }}
         .stock-table th {{
             text-align: left; padding: 12px 10px; color: var(--text-light); font-weight: 600;
-            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px;
-            border-bottom: 2px solid rgba(102,126,234,0.1); white-space: nowrap;
+            font-size: var(--font-xs); text-transform: uppercase; letter-spacing: 0.5px;
+            border-bottom: 2px solid rgba(255,154,158,0.12); white-space: nowrap;
         }}
         .stock-table td {{
             padding: 14px 10px; border-bottom: 1px solid rgba(0,0,0,0.04); vertical-align: middle;
         }}
-        .stock-table tr:hover td {{ background: rgba(102,126,234,0.03); }}
+        .stock-table tr:hover td {{ background: rgba(255,154,158,0.03); }}
         .stock-table tr:last-child td {{ border-bottom: none; }}
-        .col-rank {{ width: 40px; text-align: center; color: var(--text-light); font-weight: 700; font-size: 0.85rem; }}
-        .col-name .stock-name {{ font-weight: 700; color: var(--text-primary); font-size: 0.95rem; }}
-        .col-name .stock-code {{ font-size: 0.75rem; color: var(--text-light); margin-top: 3px; }}
+        .col-rank {{ width: 40px; text-align: center; color: var(--text-light); font-weight: 700; font-size: var(--font-sm); }}
+        .col-name .stock-name {{ font-weight: 700; color: var(--color-text); font-size: var(--font-sm); }}
+        .col-name .stock-code {{ font-size: var(--font-xs); color: var(--color-text-light); margin-top: 3px; }}
         .market-badge {{
             font-size: 0.65rem; padding: 2px 6px; border-radius: 4px; font-weight: 600; margin-left: 4px;
         }}
         .market-badge.kospi {{ background: #e6fffa; color: #319795; }}
         .market-badge.kosdaq {{ background: #fff5f5; color: #e53e3e; }}
-        .type-badge {{ font-size: 0.75rem; padding: 4px 10px; border-radius: 10px; font-weight: 600; white-space: nowrap; }}
-        .col-date {{ color: var(--text-light); font-size: 0.85rem; }}
-        .col-link {{ text-align: center; font-size: 1.1rem; white-space: nowrap; }}
+        .type-badge {{ font-size: var(--font-xs); padding: 4px 10px; border-radius: 10px; font-weight: 600; white-space: nowrap; }}
+        .col-date {{ color: var(--text-light); font-size: var(--font-sm); }}
+        .col-link {{ text-align: center; font-size: var(--font-lg); white-space: nowrap; }}
         .link-btn {{
             text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
-            width: 32px; height: 32px; border-radius: 8px; background: rgba(102,126,234,0.08);
+            width: 32px; height: 32px; border-radius: 8px; background: rgba(255,154,158,0.08);
             transition: all 0.2s;
         }}
-        .link-btn:hover {{ background: rgba(102,126,234,0.15); transform: scale(1.1); }}
+        .link-btn:hover {{ background: rgba(255,154,158,0.15); transform: scale(1.1); }}
 
         /* 업데이트 시간 */
-        .update-time {{ text-align: center; color: var(--text-light); font-size: 0.8rem; margin: 16px 0 24px; font-weight: 400; }}
+        .update-time {{ text-align: center; color: var(--text-light); font-size: var(--font-xs); margin: var(--space-md) 0 var(--space-lg); font-weight: 400; }}
 
         /* 노티스 */
         .notice {{
-            margin-top: 24px; padding: 20px 24px; background: rgba(255,243,205,0.5);
-            border-radius: 16px; border-left: 4px solid #ffc107; font-size: 0.85rem;
+            margin-top: var(--space-lg); padding: var(--space-md) var(--space-lg); background: rgba(255,243,205,0.5);
+            border-radius: var(--card-radius); border-left: 4px solid #ffc107; font-size: var(--font-sm);
             color: #856404; line-height: 1.7; backdrop-filter: blur(10px);
         }}
         .notice strong {{ color: #744210; }}
         .notice code {{
             background: rgba(0,0,0,0.05); padding: 2px 6px; border-radius: 4px;
-            font-family: 'SF Mono', monospace; font-size: 0.8rem;
+            font-family: 'SF Mono', monospace; font-size: var(--font-xs);
         }}
 
         /* 반응형 */
         @media (max-width: 640px) {{
-            header h1 {{ font-size: 1.6rem; }}
+            header h1 {{ font-size: var(--font-xl); }}
             .top3-grid {{ grid-template-columns: 1fr; }}
             .summary-grid {{ grid-template-columns: repeat(2, 1fr); }}
-            .stock-table {{ font-size: 0.8rem; }}
+            .stock-table {{ font-size: var(--font-xs); }}
             .stock-table th, .stock-table td {{ padding: 10px 6px; }}
-            .tab-link {{ padding: 8px 14px; font-size: 0.8rem; }}
+            .tab-link {{ padding: 8px 14px; font-size: var(--font-xs); }}
         }}
     </style>
 </head>
