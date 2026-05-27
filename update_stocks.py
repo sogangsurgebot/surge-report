@@ -748,21 +748,13 @@ def generate_stock_section(stocks, title, market_type, is_primary=False):
 
 
 def _generate_stock_card_html(stock, market_type):
-    """S등급 카드 HTML (기존 스타일 유지)"""
+    """S등급 카드 HTML (프리미엄 스타일)"""
     change_class = "up" if "+" in stock["change"] else "down"
-    badge = stock.get("badge", "급등")
-    alert_level = stock.get("alert_level", "NORMAL")
     market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
 
-    if alert_level == "STRONG":
-        card_style = f'border: 2px solid #ff4757; background: linear-gradient(135deg, rgba(255,215,0,0.08) 0%, rgba(255,71,87,0.12) 50%, rgba(255,140,0,0.08) 100%); box-shadow: 0 0 20px rgba(255,71,87,0.15), 0 4px 15px rgba(0,0,0,0.08);'
-        card_class = 'card stock-card s-grade-premium'
-    elif alert_level == "NORMAL":
-        card_style = f'border: 2px solid #ffa502; background: linear-gradient(135deg, rgba(255,165,2,0.05) 0%, rgba(255,165,2,0.1) 100%);'
-        card_class = 'card stock-card'
-    else:
-        card_style = f'border: 2px solid #747d8c; background: linear-gradient(135deg, rgba(116,125,140,0.05) 0%, rgba(116,125,140,0.1) 100%);'
-        card_class = 'card stock-card'
+    # S등급 항상 프리미엄 스타일 적용
+    card_style = 'border: 3px solid transparent; background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,71,87,0.15) 50%, rgba(255,140,0,0.1) 100%); box-shadow: 0 0 30px rgba(255,71,87,0.2), 0 4px 20px rgba(0,0,0,0.1);'
+    card_class = 'card stock-card s-grade-premium'
 
     score_detail = stock.get('score_details', '')
     news_summary = stock.get("news_summary", "")
@@ -774,7 +766,7 @@ def _generate_stock_card_html(stock, market_type):
                     <div class="stock-name">{stock["name"]} {market_badge}</div>
                     <div class="stock-code">{stock["code"]}</div>
                 </div>
-                <span class="surge-badge badge-{alert_level.lower()}">{badge}</span>
+                <span class="surge-badge badge-s-grade">👑 S-GRADE</span>
             </div>
             <div class="price-info">
                 <div class="price-item"><div class="price-label">현재가</div><div class="price-value">{stock["price"]}</div></div>
