@@ -53,5 +53,49 @@
     "flr_nm": "국민연금공단",
     "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
     "market": "KOSDAQ"
+  },
+  {
+    "stock_name": "IPARK현대산업개발",
+    "stock_code": "294870",
+    "corp_name": "IPARK현대산업개발",
+    "report_type": "",
+    "report_date": "2026-05-19",
+    "rcept_no": "20260519000156",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSPI"
+  },
+  {
+    "stock_name": "한화엔진",
+    "stock_code": "082740",
+    "corp_name": "한화엔진",
+    "report_type": "",
+    "report_date": "2026-05-19",
+    "rcept_no": "20260519000155",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSDAQ"
+  },
+  {
+    "stock_name": "한국카본",
+    "stock_code": "017960",
+    "corp_name": "한국카본",
+    "report_type": "",
+    "report_date": "2026-05-19",
+    "rcept_no": "20260519000152",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSDAQ"
+  },
+  {
+    "stock_name": "달바글로벌",
+    "stock_code": "483650",
+    "corp_name": "달바글로벌",
+    "report_type": "",
+    "report_date": "2026-05-19",
+    "rcept_no": "20260519000149",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSPI"
   }
 ]

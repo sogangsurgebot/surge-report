@@ -247,19 +247,6 @@ def generate_nps_html(records: List[Dict]) -> str:
         </tr>\n'''
 
     total = len(records)
-    kospi_count = sum(1 for r in records if r["market"] == "KOSPI")
-    kosdaq_count = sum(1 for r in records if r["market"] == "KOSDAQ")
-
-    medal = ["🥇", "🥈", "🥉"]
-    top3_cards = ""
-    for idx, r in enumerate(records[:3], 0):
-        top3_cards += f'''<div class="card nps-top-card">
-            <div class="top-rank">{medal[idx]}</div>
-            <div class="top-name">{r["stock_name"]}</div>
-            <div class="top-code">{r["stock_code"]} · <span class="market-badge {r["market"].lower()}">{r["market"]}</span></div>
-            <div class="top-type">{r["report_type"] if r["report_type"] else "보고"}</div>
-            <div class="top-date">{r["report_date"]}</div>
-        </div>'''
 
     html = f'''<!DOCTYPE html>
 <html lang="ko">
@@ -485,31 +472,8 @@ def generate_nps_html(records: List[Dict]) -> str:
 
         <div class="update-time">📅 업데이트: {now_kst} KST | 총 {total}개 종목 | 최근 60일</div>
 
-        <div class="summary-grid">
-            <div class="card summary-card">
-                <div class="summary-number">{total}</div>
-                <div class="summary-label">보고 종목 수</div>
-            </div>
-            <div class="card summary-card">
-                <div class="summary-number">{kospi_count}</div>
-                <div class="summary-label">KOSPI</div>
-            </div>
-            <div class="card summary-card">
-                <div class="summary-number">{kosdaq_count}</div>
-                <div class="summary-label">KOSDAQ</div>
-            </div>
-            <div class="card summary-card">
-                <div class="summary-number">{records[0]["report_date"] if records else "-"}</div>
-                <div class="summary-label">최신 보고일</div>
-            </div>
-        </div>
-
-        <div class="top3-grid">
-            {top3_cards}
-        </div>
-
         <div class="card table-card">
-            <div class="section-title">📊 보고 현황 상위 {top_n}개</div>
+            <div class="section-title">📊 보고 현황 (최신 {top_n}개)</div>
             <table class="stock-table">
                 <thead>
                     <tr>

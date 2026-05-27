@@ -83,7 +83,7 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             margin-bottom: var(--space-xs); letter-spacing: -0.5px;
         }
-        header p { color: var(--color-text-light); font-size: var(--font-sm); font-weight: 400; }
+        header p { color: var(--text-light); font-size: var(--font-sm); font-weight: 400; }
         .version-link {
             display: inline-block; margin-top: var(--space-sm); color: var(--color-text-light);
             font-size: var(--font-xs); text-decoration: none; opacity: 0.7; transition: opacity 0.2s;
@@ -97,7 +97,7 @@
         }
         .tab-link {
             padding: 10px 20px; border-radius: 20px; text-decoration: none;
-            color: var(--color-text-light); font-size: var(--font-sm); font-weight: 500;
+            color: var(--text-light); font-size: var(--font-sm); font-weight: 500;
             background: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.8);
             backdrop-filter: blur(10px); transition: all 0.25s ease; cursor: pointer;
         }
@@ -106,8 +106,8 @@
             transform: translateY(-1px); box-shadow: var(--shadow-card);
         }
         .tab-link.active {
-            background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(161,140,209,0.15) 100%);
-            color: #ff6b81; border-color: rgba(255,154,158,0.35); font-weight: 600;
+            background: linear-gradient(135deg, rgba(255,154,158,0.15) 0%, rgba(118,75,162,0.15) 100%);
+            color: var(--color-primary); border-color: rgba(102,126,234,0.3); font-weight: 600;
         }
 
         /* 카드 */
@@ -133,8 +133,8 @@
         /* TOP3 */
         .top3-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: var(--space-md); margin-bottom: var(--space-lg); }
         .nps-top-card { text-align: center; padding: var(--space-lg) var(--space-md); }
-        .top-rank { font-size: 2rem; margin-bottom: var(--space-xs); }
-        .top-name { font-size: var(--font-lg); font-weight: 700; color: var(--color-text); margin-bottom: 4px; }
+        .top-rank { font-size: 2rem; margin-bottom: 8px; }
+        .top-name { font-size: var(--font-lg); font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
         .top-code { font-size: var(--font-xs); color: var(--color-text-light); margin: var(--space-xs) 0; }
         .top-type {
             font-size: var(--font-xs); font-weight: 600; color: #e67e22; margin: var(--space-xs) 0;
@@ -145,14 +145,14 @@
         /* 테이블 */
         .table-card { overflow-x: auto; padding: var(--card-padding); }
         .section-title {
-            font-size: var(--font-lg); font-weight: 700; color: var(--color-text);
+            font-size: var(--font-lg); font-weight: 700; color: var(--text-primary);
             margin-bottom: var(--space-md); display: flex; align-items: center; gap: var(--space-xs);
         }
         .stock-table {
             width: 100%; border-collapse: separate; border-spacing: 0; font-size: var(--font-sm);
         }
         .stock-table th {
-            text-align: left; padding: 12px 10px; color: var(--color-text-light); font-weight: 600;
+            text-align: left; padding: 12px 10px; color: var(--text-light); font-weight: 600;
             font-size: var(--font-xs); text-transform: uppercase; letter-spacing: 0.5px;
             border-bottom: 2px solid rgba(255,154,158,0.12); white-space: nowrap;
         }
@@ -161,7 +161,7 @@
         }
         .stock-table tr:hover td { background: rgba(255,154,158,0.03); }
         .stock-table tr:last-child td { border-bottom: none; }
-        .col-rank { width: 40px; text-align: center; color: var(--color-text-light); font-weight: 700; font-size: var(--font-xs); }
+        .col-rank { width: 40px; text-align: center; color: var(--text-light); font-weight: 700; font-size: var(--font-sm); }
         .col-name .stock-name { font-weight: 700; color: var(--color-text); font-size: var(--font-sm); }
         .col-name .stock-code { font-size: var(--font-xs); color: var(--color-text-light); margin-top: 3px; }
         .market-badge {
@@ -170,8 +170,8 @@
         .market-badge.kospi { background: #e6fffa; color: #319795; }
         .market-badge.kosdaq { background: #fff5f5; color: #e53e3e; }
         .type-badge { font-size: var(--font-xs); padding: 4px 10px; border-radius: 10px; font-weight: 600; white-space: nowrap; }
-        .col-date { color: var(--color-text-light); font-size: var(--font-xs); }
-        .col-link { text-align: center; font-size: 1.1rem; white-space: nowrap; }
+        .col-date { color: var(--text-light); font-size: var(--font-sm); }
+        .col-link { text-align: center; font-size: var(--font-lg); white-space: nowrap; }
         .link-btn {
             text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
             width: 32px; height: 32px; border-radius: 8px; background: rgba(255,154,158,0.08);
@@ -180,12 +180,11 @@
         .link-btn:hover { background: rgba(255,154,158,0.15); transform: scale(1.1); }
 
         /* 업데이트 시간 */
-        .update-time { text-align: center; color: var(--color-text-light); font-size: var(--font-xs); margin: var(--space-md) 0 var(--space-lg); font-weight: 400; }
+        .update-time { text-align: center; color: var(--text-light); font-size: var(--font-xs); margin: var(--space-md) 0 var(--space-lg); font-weight: 400; }
 
         /* 노티스 */
         .notice {
-            margin-top: var(--space-lg); padding: var(--space-md) var(--space-lg);
-            background: rgba(255,243,205,0.5);
+            margin-top: var(--space-lg); padding: var(--space-md) var(--space-lg); background: rgba(255,243,205,0.5);
             border-radius: var(--card-radius); border-left: 4px solid #ffc107; font-size: var(--font-sm);
             color: #856404; line-height: 1.7; backdrop-filter: blur(10px);
         }
@@ -221,51 +220,10 @@
             <a href="nps_holdings.html" class="tab-link active">🏛️ 국민연금</a>
         </nav>
 
-        <div class="update-time">📅 업데이트: 2026-05-27 15:44 KST | 총 9개 종목 | 최근 60일</div>
-
-        <div class="summary-grid">
-            <div class="card summary-card">
-                <div class="summary-number">9</div>
-                <div class="summary-label">보고 종목 수</div>
-            </div>
-            <div class="card summary-card">
-                <div class="summary-number">5</div>
-                <div class="summary-label">KOSPI</div>
-            </div>
-            <div class="card summary-card">
-                <div class="summary-number">4</div>
-                <div class="summary-label">KOSDAQ</div>
-            </div>
-            <div class="card summary-card">
-                <div class="summary-number">2026-05-22</div>
-                <div class="summary-label">최신 보고일</div>
-            </div>
-        </div>
-
-        <div class="top3-grid">
-            <div class="card nps-top-card">
-            <div class="top-rank">🥇</div>
-            <div class="top-name">한미약품</div>
-            <div class="top-code">128940 · <span class="market-badge kospi">KOSPI</span></div>
-            <div class="top-type">보고</div>
-            <div class="top-date">2026-05-22</div>
-        </div><div class="card nps-top-card">
-            <div class="top-rank">🥈</div>
-            <div class="top-name">금호석유화학</div>
-            <div class="top-code">011780 · <span class="market-badge kosdaq">KOSDAQ</span></div>
-            <div class="top-type">보고</div>
-            <div class="top-date">2026-05-22</div>
-        </div><div class="card nps-top-card">
-            <div class="top-rank">🥉</div>
-            <div class="top-name">케이씨씨</div>
-            <div class="top-code">002380 · <span class="market-badge kospi">KOSPI</span></div>
-            <div class="top-type">보고</div>
-            <div class="top-date">2026-05-22</div>
-        </div>
-        </div>
+        <div class="update-time">📅 업데이트: 2026-05-27 16:46 KST | 총 9개 종목 | 최근 60일</div>
 
         <div class="card table-card">
-            <div class="section-title">📊 보고 현황 상위 30개</div>
+            <div class="section-title">📊 보고 현황 (최신 30개)</div>
             <table class="stock-table">
                 <thead>
                     <tr>
