@@ -1520,16 +1520,19 @@
 /* S등급 프리미엄 카드 효과 */
 .s-grade-premium {
     position: relative;
+    z-index: 1;
+    overflow: visible !important;
     animation: sGradeGlow 1.5s ease-in-out infinite;
+    margin-top: 16px;
 }
 
 .s-grade-premium::before {
     content: '';
     position: absolute;
-    top: -3px; left: -3px; right: -3px; bottom: -3px;
+    top: -4px; left: -4px; right: -4px; bottom: -4px;
     background: linear-gradient(135deg, #ffd700, #ff4757, #ff8c00, #ffd700, #ff6b81, #ffd700);
     background-size: 400% 400%;
-    border-radius: 16px;
+    border-radius: 24px;
     z-index: -1;
     animation: borderGlow 2s ease infinite;
     opacity: 0.9;
@@ -1538,19 +1541,26 @@
 .s-grade-premium::after {
     content: '👑 S-GRADE TOP PICK';
     position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
+    top: -12px;
+    right: 12px;
     background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%);
     color: #fff;
     font-size: 0.65rem;
     font-weight: 800;
-    padding: 3px 14px;
+    padding: 3px 12px;
     border-radius: 20px;
-    letter-spacing: 1px;
-    box-shadow: 0 2px 10px rgba(255, 140, 0, 0.4);
-    z-index: 2;
+    letter-spacing: 0.8px;
+    box-shadow: 0 2px 12px rgba(255, 140, 0, 0.5);
+    z-index: 3;
     text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    white-space: nowrap;
+    transform: translateY(0);
+    animation: sBadgeFloat 2s ease-in-out infinite;
+}
+
+@keyframes sBadgeFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
 }
 
 @keyframes sGradeGlow {
@@ -1562,6 +1572,12 @@
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
+}
+
+/* S등급 카드 그리드 오버플로우 허용 */
+.s-grade-grid {
+    overflow: visible;
+    padding-top: 8px;
 }
 
 .badge-normal {
@@ -2172,7 +2188,7 @@
             <p>실시간 급등 종목 정보</p>
             <div class="version-info">
                 <!-- DYNAMIC_VERSION_START -->
-<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.e096bff | 2026-05-27 10:19</a>
+<a href="https://github.com/sogangsurgebot/surge-report/commits/main" target="_blank">📌 v.846a1aa | 2026-05-27 10:20</a>
 <!-- DYNAMIC_VERSION_END -->
             </div>
         </header>
@@ -2188,10 +2204,10 @@
         <!-- DYNAMIC_STOCK_CARDS_START -->
 <div class="domestic-section"><h2 class="section-main-title">🇰🇷 국내 급등주</h2><div class="market-section market-section-primary" data-market="kospi">
     <div class="market-header" style="border-left: 4px solid #ff6b6b;">
-        <h3 class="market-title">📈 KOSPI <span class="market-count">10개</span></h3>
+        <h3 class="market-title">📈 KOSPI <span class="market-count">9개</span></h3>
     </div>
-    <div class="grade-tabs"><button class="grade-tab active" data-grade="ALL" style="border-bottom-color:#95a5a6"><span>전체</span><span class="tab-count">10</span></button><button class="grade-tab" data-grade="S" style="border-bottom-color:#ff4757"><span>S</span><span class="tab-count">1</span></button><button class="grade-tab" data-grade="A" style="border-bottom-color:#e67e22"><span>A</span><span class="tab-count">1</span></button><button class="grade-tab" data-grade="B" style="border-bottom-color:#f39c12"><span>B</span><span class="tab-count">5</span></button><button class="grade-tab" data-grade="C" style="border-bottom-color:#2ecc71"><span>C</span><span class="tab-count">3</span></button><button class="grade-tab disabled" data-grade="D" style="border-bottom-color:#3498db"><span>D</span><span class="tab-count">0</span></button></div>
-    <div class="market-content"><div class="grade-content" data-grade="S"><div class="s-grade-grid"><div class="card stock-card s-grade-premium" style="border: 3px solid transparent; background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,71,87,0.15) 50%, rgba(255,140,0,0.1) 100%); box-shadow: 0 0 30px rgba(255,71,87,0.2), 0 4px 20px rgba(0,0,0,0.1);">
+    <div class="grade-tabs"><button class="grade-tab active" data-grade="ALL" style="border-bottom-color:#95a5a6"><span>전체</span><span class="tab-count">9</span></button><button class="grade-tab" data-grade="S" style="border-bottom-color:#ff4757"><span>S</span><span class="tab-count">1</span></button><button class="grade-tab" data-grade="A" style="border-bottom-color:#e67e22"><span>A</span><span class="tab-count">1</span></button><button class="grade-tab" data-grade="B" style="border-bottom-color:#f39c12"><span>B</span><span class="tab-count">4</span></button><button class="grade-tab" data-grade="C" style="border-bottom-color:#2ecc71"><span>C</span><span class="tab-count">3</span></button><button class="grade-tab disabled" data-grade="D" style="border-bottom-color:#3498db"><span>D</span><span class="tab-count">0</span></button></div>
+    <div class="market-content"><div class="grade-content" data-grade="S"><div class="s-grade-grid"><div class="card stock-card s-grade-premium" style="background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,240,240,0.9) 50%, rgba(255,250,235,0.85) 100%); box-shadow: 0 0 30px rgba(255,71,87,0.2), 0 4px 20px rgba(0,0,0,0.1);">
             <div class="stock-header">
                 <div>
                     <div class="stock-name">삼화전자 <span class="market-badge kospi">KOSPI</span></div>
@@ -2202,11 +2218,11 @@
             <div class="price-info">
                 <div class="price-item"><div class="price-label">현재가</div><div class="price-value">4,520</div></div>
                 <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+29.89%</div></div>
-                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">10,024,294</div></div>
+                <div class="price-item"><div class="price-label">거래량</div><div class="price-value">10,080,051</div></div>
             </div>
             <div class="stock-reason">
                 📊 급등 watch (점수: 3.9)
-                <div class="score-detail">등락 29.9% / 거래대금 453억</div>
+                <div class="score-detail">등락 29.9% / 거래대금 456억</div>
             </div>
             <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 외국인 매수세 및 반도체 수출 호조</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=삼화전자+외국인매수" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#외국인매수</a><a href="https://search.naver.com/search.naver?query=삼화전자+매수세" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#매수세</a><a href="https://search.naver.com/search.naver?query=삼화전자+반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#반도체</a><a href="https://search.naver.com/search.naver?query=삼화전자+수출호조" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#수출호조</a></div>
             <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
@@ -2216,47 +2232,11 @@
                 </a>
                 <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
             </div>
-        </div></div></div><div class="grade-content" data-grade="A"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="009190">
-                <td class="col-name"><div><div>대양금속</div><div class="col-code">009190</div></div></td>
-                <td class="col-change up">+20.83%</td>
-                <td><span class="surge-badge" style="background:#e67e22;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">A</span></td>
-                <td class="col-amount">123억</td>
-                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=009190" target="_blank">📈</a></td>
-                <td><span class="expand-icon">▼</span></td>
-            </tr><tr class="stock-detail-row" data-stock="009190">
-                <td colspan="6" class="stock-detail-cell">
-                    <div class="stock-detail-card">
-                        <div class="stock-header">
-                            <div>
-                                <div class="stock-name">대양금속 <span class="market-badge kospi">KOSPI</span></div>
-                                <div class="stock-code">009190</div>
-                            </div>
-                            <span class="surge-badge badge-watch">👀 WATCH</span>
-                        </div>
-                        <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">2,175</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+20.83%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,645,127</div></div>
-                        </div>
-                        <div class="stock-reason">
-                            📊 급등 watch (점수: 2.9)
-                            <div class="score-detail">등락 20.8% / 거래대금 123억</div>
-                        </div>
-                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 실적 개선 기대감, 주요 공시 발표 등 4가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=대양금속+실적개선" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#실적개선</a><a href="https://search.naver.com/search.naver?query=대양금속+공시" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#공시</a><a href="https://search.naver.com/search.naver?query=대양금속+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
-                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
-                        <div class="stock-chart">
-                            <a href="https://finance.naver.com/item/main.nhn?code=009190" target="_blank" rel="noopener noreferrer">
-                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/009190.png" alt="대양금속 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
-                            </a>
-                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
-                        </div>
-                    </div>
-                </td>
-            </tr></tbody></table></div></div><div class="grade-content" data-grade="B"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="001740">
+        </div></div></div><div class="grade-content" data-grade="A"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="001740">
                 <td class="col-name"><div><div>SK네트웍스</div><div class="col-code">001740</div></div></td>
-                <td class="col-change up">+17.86%</td>
-                <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
-                <td class="col-amount">5953억</td>
+                <td class="col-change up">+20.05%</td>
+                <td><span class="surge-badge" style="background:#e67e22;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">A</span></td>
+                <td class="col-amount">6194억</td>
                 <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=001740" target="_blank">📈</a></td>
                 <td><span class="expand-icon">▼</span></td>
             </tr><tr class="stock-detail-row" data-stock="001740">
@@ -2270,13 +2250,13 @@
                             <span class="surge-badge badge-watch">👀 WATCH</span>
                         </div>
                         <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">12,870</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+17.86%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">46,251,163</div></div>
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">13,110</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+20.05%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">47,246,705</div></div>
                         </div>
                         <div class="stock-reason">
                             📊 급등 watch (점수: 4.0)
-                            <div class="score-detail">등락 17.9% / 거래대금 5953억</div>
+                            <div class="score-detail">등락 20.1% / 거래대금 6194억</div>
                         </div>
                         <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 실시간 뉴스 분석 중</div>
                         <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
@@ -2288,11 +2268,47 @@
                         </div>
                     </div>
                 </td>
+            </tr></tbody></table></div></div><div class="grade-content" data-grade="B"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="009190">
+                <td class="col-name"><div><div>대양금속</div><div class="col-code">009190</div></div></td>
+                <td class="col-change up">+18.06%</td>
+                <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
+                <td class="col-amount">126억</td>
+                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=009190" target="_blank">📈</a></td>
+                <td><span class="expand-icon">▼</span></td>
+            </tr><tr class="stock-detail-row" data-stock="009190">
+                <td colspan="6" class="stock-detail-cell">
+                    <div class="stock-detail-card">
+                        <div class="stock-header">
+                            <div>
+                                <div class="stock-name">대양금속 <span class="market-badge kospi">KOSPI</span></div>
+                                <div class="stock-code">009190</div>
+                            </div>
+                            <span class="surge-badge badge-watch">👀 WATCH</span>
+                        </div>
+                        <div class="price-info">
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">2,125</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+18.06%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">5,940,401</div></div>
+                        </div>
+                        <div class="stock-reason">
+                            📊 급등 watch (점수: 2.9)
+                            <div class="score-detail">등락 18.1% / 거래대금 126억</div>
+                        </div>
+                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 실적 개선 기대감, 주요 공시 발표 등 4가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=대양금속+실적개선" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#실적개선</a><a href="https://search.naver.com/search.naver?query=대양금속+공시" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#공시</a><a href="https://search.naver.com/search.naver?query=대양금속+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
+                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
+                        <div class="stock-chart">
+                            <a href="https://finance.naver.com/item/main.nhn?code=009190" target="_blank" rel="noopener noreferrer">
+                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/009190.png" alt="대양금속 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
+                            </a>
+                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
+                        </div>
+                    </div>
+                </td>
             </tr><tr data-stock="000660">
                 <td class="col-name"><div><div>SK하이닉스</div><div class="col-code">000660</div></div></td>
-                <td class="col-change up">+12.33%</td>
+                <td class="col-change up">+13.26%</td>
                 <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
-                <td class="col-amount">78208억</td>
+                <td class="col-amount">84515억</td>
                 <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=000660" target="_blank">📈</a></td>
                 <td><span class="expand-icon">▼</span></td>
             </tr><tr class="stock-detail-row" data-stock="000660">
@@ -2306,15 +2322,15 @@
                             <span class="surge-badge badge-watch">👀 WATCH</span>
                         </div>
                         <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">2,305,000</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+12.33%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">3,392,993</div></div>
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">2,324,000</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+13.26%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">3,636,617</div></div>
                         </div>
                         <div class="stock-reason">
                             📊 급등 watch (점수: 4.0)
-                            <div class="score-detail">등락 12.3% / 거래대금 78208억</div>
+                            <div class="score-detail">등락 13.3% / 거래대금 84515억</div>
                         </div>
-                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 ETF 편입 기대감, 기업 공개(IPO) 기대감 등 3가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=SK하이닉스+ETF" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+ETF편입" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF편입</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
+                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 매출 성장 기대감, ETF 편입 기대감 등 4가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=SK하이닉스+매출성장" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#매출성장</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+성장주" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#성장주</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+ETF" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+ETF편입" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF편입</a><a href="https://search.naver.com/search.naver?query=SK하이닉스+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
                         <div class="company-info"><div class="company-industry">반도체/전자</div><div class="company-desc">HBM 메모리 전문 글로벌 선도기업</div></div>
                         <div class="stock-chart">
                             <a href="https://finance.naver.com/item/main.nhn?code=000660" target="_blank" rel="noopener noreferrer">
@@ -2326,9 +2342,9 @@
                 </td>
             </tr><tr data-stock="001820">
                 <td class="col-name"><div><div>삼화콘덴서</div><div class="col-code">001820</div></div></td>
-                <td class="col-change up">+14.25%</td>
+                <td class="col-change up">+11.69%</td>
                 <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
-                <td class="col-amount">2837억</td>
+                <td class="col-amount">2872억</td>
                 <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=001820" target="_blank">📈</a></td>
                 <td><span class="expand-icon">▼</span></td>
             </tr><tr class="stock-detail-row" data-stock="001820">
@@ -2342,13 +2358,13 @@
                             <span class="surge-badge badge-watch">👀 WATCH</span>
                         </div>
                         <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">151,500</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+14.25%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">1,872,727</div></div>
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">148,100</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+11.69%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">1,939,382</div></div>
                         </div>
                         <div class="stock-reason">
-                            📊 급등 watch (점수: 4.0)
-                            <div class="score-detail">등락 14.2% / 거래대금 2837억</div>
+                            📊 급등 watch (점수: 3.8)
+                            <div class="score-detail">등락 11.7% / 거래대금 2872억</div>
                         </div>
                         <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 AI 반도체 수요 확대</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=삼화콘덴서+반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#반도체</a><a href="https://search.naver.com/search.naver?query=삼화콘덴서+AI반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#AI반도체</a></div>
                         <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
@@ -2362,9 +2378,9 @@
                 </td>
             </tr><tr data-stock="018260">
                 <td class="col-name"><div><div>삼성에스디에스</div><div class="col-code">018260</div></div></td>
-                <td class="col-change up">+18.11%</td>
+                <td class="col-change up">+18.36%</td>
                 <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
-                <td class="col-amount">3938억</td>
+                <td class="col-amount">4022억</td>
                 <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=018260" target="_blank">📈</a></td>
                 <td><span class="expand-icon">▼</span></td>
             </tr><tr class="stock-detail-row" data-stock="018260">
@@ -2378,13 +2394,13 @@
                             <span class="surge-badge badge-watch">👀 WATCH</span>
                         </div>
                         <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">238,000</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+18.11%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">1,654,506</div></div>
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">238,500</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+18.36%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">1,686,469</div></div>
                         </div>
                         <div class="stock-reason">
                             📊 급등 watch (점수: 4.0)
-                            <div class="score-detail">등락 18.1% / 거래대금 3938억</div>
+                            <div class="score-detail">등락 18.4% / 거래대금 4022억</div>
                         </div>
                         <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 AI 반도체 수요 확대 및 지분 투자</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=삼성에스디에스+투자확대" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#투자확대</a><a href="https://search.naver.com/search.naver?query=삼성에스디에스+반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#반도체</a><a href="https://search.naver.com/search.naver?query=삼성에스디에스+AI반도체" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#AI반도체</a><a href="https://search.naver.com/search.naver?query=삼성에스디에스+지분투자" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#지분투자</a></div>
                         <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
@@ -2396,47 +2412,11 @@
                         </div>
                     </div>
                 </td>
-            </tr><tr data-stock="009420">
-                <td class="col-name"><div><div>한올바이오파마</div><div class="col-code">009420</div></div></td>
-                <td class="col-change up">+19.63%</td>
-                <td><span class="surge-badge" style="background:#f39c12;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">B</span></td>
-                <td class="col-amount">1077억</td>
-                <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=009420" target="_blank">📈</a></td>
-                <td><span class="expand-icon">▼</span></td>
-            </tr><tr class="stock-detail-row" data-stock="009420">
-                <td colspan="6" class="stock-detail-cell">
-                    <div class="stock-detail-card">
-                        <div class="stock-header">
-                            <div>
-                                <div class="stock-name">한올바이오파마 <span class="market-badge kospi">KOSPI</span></div>
-                                <div class="stock-code">009420</div>
-                            </div>
-                            <span class="surge-badge badge-watch">👀 WATCH</span>
-                        </div>
-                        <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">70,700</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+19.63%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">1,523,440</div></div>
-                        </div>
-                        <div class="stock-reason">
-                            📊 급등 watch (점수: 4.0)
-                            <div class="score-detail">등락 19.6% / 거래대금 1077억</div>
-                        </div>
-                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 실적 개선 기대감, 시장 기대감 고조 등 7가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=한올바이오파마+실적개선" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#실적개선</a><a href="https://search.naver.com/search.naver?query=한올바이오파마+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
-                        <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
-                        <div class="stock-chart">
-                            <a href="https://finance.naver.com/item/main.nhn?code=009420" target="_blank" rel="noopener noreferrer">
-                                <img src="https://ssl.pstatic.net/imgfinance/chart/item/area/day/009420.png" alt="한올바이오파마 일봉 차트" loading="lazy" onerror="this.parentElement.style.display='none'">
-                            </a>
-                            <div class="stock-chart-label">📊 네이버 금융 일봉 차트</div>
-                        </div>
-                    </div>
-                </td>
             </tr></tbody></table></div></div><div class="grade-content" data-grade="C"><div class="stock-table-wrap"><table class="stock-table"><thead><tr><th>종목</th><th>등락률</th><th>등급</th><th>거래대금</th><th>네이버</th><th></th></tr></thead><tbody><tr data-stock="018880">
                 <td class="col-name"><div><div>한온시스템</div><div class="col-code">018880</div></div></td>
                 <td class="col-change up">+4.96%</td>
                 <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
-                <td class="col-amount">3873억</td>
+                <td class="col-amount">3923억</td>
                 <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=018880" target="_blank">📈</a></td>
                 <td><span class="expand-icon">▼</span></td>
             </tr><tr class="stock-detail-row" data-stock="018880">
@@ -2452,11 +2432,11 @@
                         <div class="price-info">
                             <div class="price-item"><div class="price-label">현재가</div><div class="price-value">5,500</div></div>
                             <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+4.96%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">70,417,163</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">71,325,537</div></div>
                         </div>
                         <div class="stock-reason">
                             📊 급등 watch (점수: 2.5)
-                            <div class="score-detail">등락 5.0% / 거래대금 3873억</div>
+                            <div class="score-detail">등락 5.0% / 거래대금 3923억</div>
                         </div>
                         <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 실적 개선 기대감, 매출 성장 기대감 등 4가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=한온시스템+실적개선" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#실적개선</a><a href="https://search.naver.com/search.naver?query=한온시스템+매출성장" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#매출성장</a><a href="https://search.naver.com/search.naver?query=한온시스템+성장주" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#성장주</a><a href="https://search.naver.com/search.naver?query=한온시스템+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
                         <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
@@ -2470,9 +2450,9 @@
                 </td>
             </tr><tr data-stock="005930">
                 <td class="col-name"><div><div>삼성전자</div><div class="col-code">005930</div></div></td>
-                <td class="col-change up">+6.52%</td>
+                <td class="col-change up">+7.02%</td>
                 <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
-                <td class="col-amount">48867억</td>
+                <td class="col-amount">50545억</td>
                 <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=005930" target="_blank">📈</a></td>
                 <td><span class="expand-icon">▼</span></td>
             </tr><tr class="stock-detail-row" data-stock="005930">
@@ -2486,15 +2466,15 @@
                             <span class="surge-badge badge-watch">👀 WATCH</span>
                         </div>
                         <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">318,500</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+6.52%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">15,342,967</div></div>
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">320,000</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+7.02%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">15,795,356</div></div>
                         </div>
                         <div class="stock-reason">
-                            📊 급등 watch (점수: 2.8)
-                            <div class="score-detail">등락 6.5% / 거래대금 48867억</div>
+                            📊 급등 watch (점수: 2.9)
+                            <div class="score-detail">등락 7.0% / 거래대금 50545억</div>
                         </div>
-                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 ETF 편입 기대감, 기업 공개(IPO) 기대감 등 3가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=삼성전자+ETF" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF</a><a href="https://search.naver.com/search.naver?query=삼성전자+ETF편입" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF편입</a><a href="https://search.naver.com/search.naver?query=삼성전자+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
+                        <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 매출 성장 기대감, ETF 편입 기대감 등 3가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=삼성전자+매출성장" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#매출성장</a><a href="https://search.naver.com/search.naver?query=삼성전자+성장주" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#성장주</a><a href="https://search.naver.com/search.naver?query=삼성전자+ETF" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF</a><a href="https://search.naver.com/search.naver?query=삼성전자+ETF편입" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF편입</a><a href="https://search.naver.com/search.naver?query=삼성전자+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a></div>
                         <div class="company-info"><div class="company-industry">반도체/전자</div><div class="company-desc">세계 최대 메모리 반도체 기업</div></div>
                         <div class="stock-chart">
                             <a href="https://finance.naver.com/item/main.nhn?code=005930" target="_blank" rel="noopener noreferrer">
@@ -2506,9 +2486,9 @@
                 </td>
             </tr><tr data-stock="005935">
                 <td class="col-name"><div><div>삼성전자우</div><div class="col-code">005935</div></div></td>
-                <td class="col-change up">+5.40%</td>
+                <td class="col-change up">+5.34%</td>
                 <td><span class="surge-badge" style="background:#2ecc71;color:white;font-size:0.7rem;padding:2px 8px;border-radius:6px;">C</span></td>
-                <td class="col-amount">7773억</td>
+                <td class="col-amount">7870억</td>
                 <td class="col-link"><a href="https://finance.naver.com/item/main.nhn?code=005935" target="_blank">📈</a></td>
                 <td><span class="expand-icon">▼</span></td>
             </tr><tr class="stock-detail-row" data-stock="005935">
@@ -2522,13 +2502,13 @@
                             <span class="surge-badge badge-watch">👀 WATCH</span>
                         </div>
                         <div class="price-info">
-                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">197,300</div></div>
-                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+5.40%</div></div>
-                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">3,939,936</div></div>
+                            <div class="price-item"><div class="price-label">현재가</div><div class="price-value">197,200</div></div>
+                            <div class="price-item"><div class="price-label">등락률</div><div class="price-value up">+5.34%</div></div>
+                            <div class="price-item"><div class="price-label">거래량</div><div class="price-value">3,990,633</div></div>
                         </div>
                         <div class="stock-reason">
                             📊 급등 watch (점수: 2.6)
-                            <div class="score-detail">등락 5.4% / 거래대금 7773억</div>
+                            <div class="score-detail">등락 5.3% / 거래대금 7870억</div>
                         </div>
                         <div class="news-summary" style="margin-top:0.5rem;font-size:0.8rem;color:#667eea;">📰 ETF 편입 기대감, 급등 모멘텀 등 3가지 긍정적 동향</div><div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px;"><a href="https://search.naver.com/search.naver?query=삼성전자우+ETF" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF</a><a href="https://search.naver.com/search.naver?query=삼성전자우+ETF편입" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#ETF편입</a><a href="https://search.naver.com/search.naver?query=삼성전자우+기대감" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#기대감</a><a href="https://search.naver.com/search.naver?query=삼성전자우+급등" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:3px 8px;border-radius:8px;background:rgba(102,126,234,0.12);color:#667eea;font-size:0.72rem;font-weight:600;margin-right:4px;margin-bottom:3px;text-decoration:none;transition:background 0.2s;" onmouseenter="this.style.background='rgba(102,126,234,0.25)'" onmouseleave="this.style.background='rgba(102,126,234,0.12)'">#급등</a></div>
                         <div class="company-info"><div class="company-industry">기타</div><div class="company-desc"></div></div>
@@ -2553,7 +2533,7 @@
 <div class="update-time-wrapper">
             <div class="update-time">
                 <!-- DYNAMIC_UPDATE_TIME_START -->
-<span data-cache-buster="202605271020">🕐 마지막 업데이트: 2026-05-27 10:20</span>
+<span data-cache-buster="202605271030">🕐 마지막 업데이트: 2026-05-27 10:30</span>
 <!-- DYNAMIC_UPDATE_TIME_END -->
                 <span class="data-source real">🔴 실제 데이터 | 실전</span>
             </div>
