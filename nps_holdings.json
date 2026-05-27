@@ -1,0 +1,57 @@
+[
+  {
+    "stock_name": "한미약품",
+    "stock_code": "128940",
+    "corp_name": "한미약품",
+    "report_type": "",
+    "report_date": "2026-05-22",
+    "rcept_no": "20260522000355",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSPI"
+  },
+  {
+    "stock_name": "금호석유화학",
+    "stock_code": "011780",
+    "corp_name": "금호석유화학",
+    "report_type": "",
+    "report_date": "2026-05-22",
+    "rcept_no": "20260522000352",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSDAQ"
+  },
+  {
+    "stock_name": "케이씨씨",
+    "stock_code": "002380",
+    "corp_name": "케이씨씨",
+    "report_type": "",
+    "report_date": "2026-05-22",
+    "rcept_no": "20260522000350",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSPI"
+  },
+  {
+    "stock_name": "이수페타시스",
+    "stock_code": "007660",
+    "corp_name": "이수페타시스",
+    "report_type": "",
+    "report_date": "2026-05-22",
+    "rcept_no": "20260522000346",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSPI"
+  },
+  {
+    "stock_name": "롯데관광개발",
+    "stock_code": "032350",
+    "corp_name": "롯데관광개발",
+    "report_type": "",
+    "report_date": "2026-05-22",
+    "rcept_no": "20260522000340",
+    "flr_nm": "국민연금공단",
+    "report_nm": "임원ㆍ주요주주특정증권등소유상황보고서",
+    "market": "KOSDAQ"
+  }
+]

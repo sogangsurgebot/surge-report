@@ -753,7 +753,7 @@ def _generate_stock_card_html(stock, market_type):
     market_badge = f'<span class="market-badge {stock.get("market", "").lower()}">{stock.get("market", "")}</span>' if stock.get("market") else ""
 
     # S등급 항상 프리미엄 스타일 적용
-    card_style = 'border: 3px solid transparent; background: linear-gradient(135deg, rgba(255,215,0,0.1) 0%, rgba(255,71,87,0.15) 50%, rgba(255,140,0,0.1) 100%); box-shadow: 0 0 30px rgba(255,71,87,0.2), 0 4px 20px rgba(0,0,0,0.1);'
+    card_style = 'background: linear-gradient(135deg, rgba(255,255,255,0.85) 0%, rgba(255,240,240,0.9) 50%, rgba(255,250,235,0.85) 100%); box-shadow: 0 0 30px rgba(255,71,87,0.2), 0 4px 20px rgba(0,0,0,0.1);'
     card_class = 'card stock-card s-grade-premium'
 
     score_detail = stock.get('score_details', '')

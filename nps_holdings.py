@@ -72,7 +72,7 @@ def dart_list(params: Dict) -> Optional[Dict]:
 
 def fetch_nps_reports() -> Optional[List[Dict]]:
     """
-    DART에서 국민연금공단 대량보유상황보고서 목록 수집
+    DART에서 국민연금공단 보고서 목록 수집 (모든 공시 유형)
     최근 1년간, 100개씩 페이지 순회
     """
     if not DART_API_KEY:
@@ -81,7 +81,7 @@ def fetch_nps_reports() -> Optional[List[Dict]]:
         return None
 
     end_dt = datetime.now()
-    bgn_dt = end_dt - timedelta(days=365)
+    bgn_dt = end_dt - timedelta(days=60)  # DART: corp_code 없으면 ~60일 제한
 
     all_items: List[Dict] = []
     page_no = 1
@@ -92,7 +92,6 @@ def fetch_nps_reports() -> Optional[List[Dict]]:
             "crtfc_key": DART_API_KEY,
             "bgn_de": bgn_dt.strftime("%Y%m%d"),
             "end_de": end_dt.strftime("%Y%m%d"),
-            "pblntf_detail_ty": "C",      # 대량보유상황보고서
             "page_count": page_count,
             "page_no": page_no,
         }
@@ -125,7 +124,7 @@ def fetch_nps_reports() -> Optional[List[Dict]]:
             break
         page_no += 1
 
-        if page_no > 20:
+        if page_no > 50:
             print("⚠️ 페이지 상한 도달")
             break
 
