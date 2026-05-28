@@ -1328,7 +1328,7 @@ def main():
         nps_script = Path(__file__).parent / "nps_holdings.py"
         result = subprocess.run(
             [sys.executable, str(nps_script)],
-            capture_output=True, text=True, timeout=60
+            capture_output=True, text=True, timeout=180
         )
         if result.returncode == 0:
             print("🏛️ 국민연금 페이지 갱신 완료")
