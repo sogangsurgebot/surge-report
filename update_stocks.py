@@ -833,7 +833,7 @@ def _generate_detail_row_html(stock, market_type, grade):
                                 <div class="stock-name">{stock["name"]} {market_badge}</div>
                                 <div class="stock-code">{stock["code"]}</div>
                             </div>
-                            <span class="surge-badge badge-{alert_level.lower()}">{badge}</span>
+                            {'<a href="https://finance.naver.com/item/main.nhn?code=' + stock["code"] + '" target="_blank" rel="noopener noreferrer" style="text-decoration:none;">' if alert_level == "WATCH" else ''}<span class="surge-badge badge-{alert_level.lower()}">{badge}</span>{'</a>' if alert_level == "WATCH" else ''}
                         </div>
                         <div class="price-info">
                             <div class="price-item"><div class="price-label">현재가</div><div class="price-value">{stock["price"]}</div></div>
