@@ -226,7 +226,7 @@ def generate_nps_html(records: List[Dict]) -> str:
     rows_html = ""
     for i, r in enumerate(top_records, 1):
         dart_link = f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={r['rcept_no']}"
-        naver_link = f"https://finance.naver.com/item/main.nhn?code={r['stock_code']}" if r["stock_code"] else "#"
+        naver_link = f"https://m.stock.naver.com/domestic/stock/{r['stock_code']}" if r["stock_code"] else "#"
         type_badge_color = "#e67e22" if "변동" in r["report_type"] else "#3498db" if "신규" in r["report_type"] else "#95a5a6"
         type_label = r["report_type"] if r["report_type"] else "보고"
 
