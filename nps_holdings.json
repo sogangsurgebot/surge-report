@@ -1,1 +1,35 @@
-[]
+[
+  {
+    "stock_name": "하나머티리얼즈",
+    "stock_code": "166090",
+    "corp_name": "하나머티리얼즈",
+    "report_type": "약식",
+    "report_date": "2026-05-06",
+    "rcept_no": "20260506000282",
+    "flr_nm": "국민연금공단",
+    "report_nm": "주식등의대량보유상황보고서(약식)",
+    "market": "KOSPI"
+  },
+  {
+    "stock_name": "현대글로비스",
+    "stock_code": "086280",
+    "corp_name": "현대글로비스",
+    "report_type": "약식",
+    "report_date": "2026-05-06",
+    "rcept_no": "20260506000274",
+    "flr_nm": "국민연금공단",
+    "report_nm": "주식등의대량보유상황보고서(약식)",
+    "market": "KOSDAQ"
+  },
+  {
+    "stock_name": "CJ대한통운",
+    "stock_code": "000120",
+    "corp_name": "CJ대한통운",
+    "report_type": "약식",
+    "report_date": "2026-05-06",
+    "rcept_no": "20260506000268",
+    "flr_nm": "국민연금공단",
+    "report_nm": "주식등의대량보유상황보고서(약식)",
+    "market": "KOSPI"
+  }
+]

@@ -92,6 +92,7 @@ def fetch_nps_reports() -> Optional[List[Dict]]:
             "crtfc_key": DART_API_KEY,
             "bgn_de": bgn_dt.strftime("%Y%m%d"),
             "end_de": end_dt.strftime("%Y%m%d"),
+            "pblntf_detail_ty": "D001",
             "page_count": page_count,
             "page_no": page_no,
         }
@@ -143,7 +144,7 @@ def parse_report_name(report_nm: str) -> Dict[str, str]:
 
     # 괄호 안 내용이 종목명인지 사유인지 추론
     # 사유 패턴: 임의변경, 변동보고, 처분보고, 신규보고 등
-    reason_keywords = ["변동", "신규", "처분", "임의변경", "변경", "보고"]
+    reason_keywords = ["변동", "신규", "처분", "임의변경", "변경", "보고", "약식", "일반"]
     is_reason = any(k in inner for k in reason_keywords) and len(inner) <= 10
 
     if is_reason:
