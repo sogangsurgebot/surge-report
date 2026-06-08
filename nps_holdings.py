@@ -445,7 +445,48 @@ def generate_nps_html(records: List[Dict]) -> str:
             font-family: 'SF Mono', monospace; font-size: var(--font-xs);
         }}
 
-        /* 반응형 */
+        /* 수집 기준 */
+        .criteria-card {{
+            background: linear-gradient(135deg, rgba(161,140,209,0.08) 0%, rgba(255,154,158,0.08) 100%);
+            border: 1px solid rgba(161,140,209,0.15);
+        }}
+        .criteria-list {{
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }}
+        .criteria-list li {{
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.04);
+            font-size: var(--font-sm);
+            color: var(--color-text);
+            line-height: 1.6;
+        }}
+        .criteria-list li:last-child {{
+            border-bottom: none;
+            padding-bottom: 0;
+        }}
+        .criteria-list li:first-child {{
+            padding-top: 0;
+        }}
+        .criteria-icon {{
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }}
+        .criteria-text strong {{
+            display: block;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: 2px;
+        }}
+        .criteria-text span {{
+            color: var(--color-text-light);
+            font-size: var(--font-xs);
+        }}
         @media (max-width: 640px) {{
             header h1 {{ font-size: var(--font-xl); }}
             .top3-grid {{ grid-template-columns: 1fr; }}
@@ -472,6 +513,54 @@ def generate_nps_html(records: List[Dict]) -> str:
         </nav>
 
         <div class="update-time">📅 업데이트: {now_kst} KST | 총 {total}개 종목 | 최근 60일</div>
+
+        <div class="card criteria-card">
+            <div class="section-title">🔍 수집 기준</div>
+            <ul class="criteria-list">
+                <li>
+                    <span class="criteria-icon">🏛️</span>
+                    <div class="criteria-text">
+                        <strong>데이터 출처</strong>
+                        <span>금융감독원 전자공시시스템 DART OpenAPI</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="criteria-icon">📋</span>
+                    <div class="criteria-text">
+                        <strong>공시 유형</strong>
+                        <span>주식등의대량보유상황보고서 (D001) — 보고의무자 대량보유 상황 공시</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="criteria-icon">🔎</span>
+                    <div class="criteria-text">
+                        <strong>필터 조건</strong>
+                        <span>보고자명(fl_r_nm)에 '국민연금' 또는 'NPS' 포함 건만 수집</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="criteria-icon">📅</span>
+                    <div class="criteria-text">
+                        <strong>수집 기간</strong>
+                        <span>최근 60일 접수분 (DART API 제한: corp_code 미지정 시 ~60일)</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="criteria-icon">🔄</span>
+                    <div class="criteria-text">
+                        <strong>중복 처리</strong>
+                        <span>동일 종목코드 중복 시 최신 접수일(rcept_dt) 기준 1건만 유지</span>
+                    </div>
+                </li>
+                <li>
+                    <span class="criteria-icon">⚠️</span>
+                    <div class="criteria-text">
+                        <strong>데이터 한계</strong>
+                        <span>목록 API에는 지분율 미포함 — 상세 지분은 📋 버튼(원문 보고서)에서 확인</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
         <div class="card table-card">
             <div class="section-title">📊 보고 현황 (최신 {top_n}개)</div>
