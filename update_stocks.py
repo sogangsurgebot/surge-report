@@ -128,6 +128,7 @@ def _generate_keyword_tags(news_summary: Optional[str], stock_name: str = "") ->
         '전망': '업황전망', '호재': '호재', '악재': '악재',
         '급등': '급등', '급락': '급락조정', '거래재개': '거래재개', '매매정지': '매매정지',
         '지분': '지분투자', '매각': '자산매각', '구조조정': '구조조정',
+        '강관': '강관', '파이프': '파이프라인', '배관': '배관', '철강': '철강', '에너지': '에너지',
         '금리': '금리인하', '환율': '환율변동', '원화': '원화약세', '달러': '달러강세',
         '중국': '중국수출', '미국': '미국진출', '유럽': '유럽확대',
         '정부': '정부정책', '보조금': '보조금', '규제': '규제완화', '관세': '관세영향',
@@ -196,6 +197,11 @@ def generate_news_summary(stock_code: str, stock_name: str) -> Optional[str]:
         ("파운드리", "파운드리 공급 확대"),
         ("공정", "공정 기술 개선"),
         ("수출", "수출 호조"),
+        ("강관", "강관 수요 확대"),
+        ("파이프", "파이프라인 투자 확대"),
+        ("배관", "배관 수주 증가"),
+        ("철강", "철강 업황 개선"),
+        ("에너지", "에너지 인프라 투자"),
         ("임상", "신약 임상 진행"),
         ("승인", "규제 승인 기대감"),
         ("허가", "신약 허가 소식"),
@@ -1293,6 +1299,9 @@ def main():
             fresh_data = saved_data
             # 저장된 데이터에 news_summary가 없으면 다시 생성
             for stock in fresh_data.get('kospi_stocks', []):
+                if not stock.get('news_summary') and len(stock.get('code', '')) == 6:
+                    stock['news_summary'] = generate_news_summary(stock['code'], stock.get('name', ''))
+            for stock in fresh_data.get('kosdaq_stocks', []):
                 if not stock.get('news_summary') and len(stock.get('code', '')) == 6:
                     stock['news_summary'] = generate_news_summary(stock['code'], stock.get('name', ''))
         else:
